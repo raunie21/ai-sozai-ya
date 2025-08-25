@@ -81,4 +81,17 @@ export const illustrations: Illustration[] = [
   { id: 18, title: "フルーツ盛り合わせ", emoji: "🍎", category: "food", tags: ["食べ物", "果物", "健康"], downloads: 1200 },
   { id: 19, title: "雲と太陽", emoji: "☀️", category: "nature", tags: ["自然", "太陽", "天気"], downloads: 1780 },
   { id: 20, title: "お金のアイコン", emoji: "💰", category: "icons", tags: ["アイコン", "お金", "金融"], downloads: 2150 },
+  { 
+    id: 21, 
+    title: "仲良し兄弟", 
+    emoji: "👦", 
+    imageUrl: "/images/illustrations/boy-friend.png",
+    thumbnailUrl: "/images/thumbnails/boy-friend-thumb.png",
+    originalUrl: "/images/originals/boy-friend.png",
+    category: "people", 
+    tags: ["子供", "兄弟", "友情", "笑顔"], 
+    downloads: 0,
+    fileSize: "3.2MB",
+    dimensions: "実写写真"
+  },
 ];
