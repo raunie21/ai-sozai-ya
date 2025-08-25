@@ -24,7 +24,24 @@ export default function IllustrationCard({ illustration, onClick }: Illustration
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl" />
       
       <div className="w-full h-56 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl flex items-center justify-center text-6xl mb-5 relative overflow-hidden border border-gray-200/80 shimmer-effect">
-        <span>{illustration.emoji}</span>
+        {illustration.imageUrl ? (
+          <img 
+            src={illustration.thumbnailUrl || illustration.imageUrl} 
+            alt={illustration.title}
+            className="w-full h-full object-cover rounded-2xl"
+            onError={(e) => {
+              // フォールバック: 画像が読み込めない場合は絵文字を表示
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.nextElementSibling!.style.display = 'flex';
+            }}
+          />
+        ) : null}
+        <span 
+          className="absolute inset-0 flex items-center justify-center text-6xl"
+          style={{ display: illustration.imageUrl ? 'none' : 'flex' }}
+        >
+          {illustration.emoji}
+        </span>
       </div>
       
       <div className="text-center relative">
