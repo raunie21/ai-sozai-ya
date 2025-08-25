@@ -24,24 +24,37 @@ export default function IllustrationCard({ illustration, onClick }: Illustration
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl" />
       
       <div className="w-full h-56 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl flex items-center justify-center text-6xl mb-5 relative overflow-hidden border border-gray-200/80 shimmer-effect">
-        {illustration.imageUrl ? (
-          <img 
-            src={illustration.thumbnailUrl || illustration.imageUrl} 
-            alt={illustration.title}
-            className="w-full h-full object-cover rounded-2xl"
-            onError={(e) => {
-              // フォールバック: 画像が読み込めない場合は絵文字を表示
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.nextElementSibling!.style.display = 'flex';
-            }}
-          />
-        ) : null}
-        <span 
-          className="absolute inset-0 flex items-center justify-center text-6xl"
-          style={{ display: illustration.imageUrl ? 'none' : 'flex' }}
-        >
-          {illustration.emoji}
-        </span>
+        {illustration.thumbnailUrl ? (
+          <>
+            <img 
+              src={illustration.thumbnailUrl.replace('.png', '.webp')} 
+              alt={illustration.title}
+              className="w-full h-full object-cover rounded-2xl transition-opacity duration-300"
+              onError={(e) => {
+                // WebPが失敗した場合はPNGにフォールバック
+                const target = e.currentTarget as HTMLImageElement;
+                if (target.src.includes('.webp')) {
+                  target.src = illustration.thumbnailUrl!;
+                } else {
+                  // PNG も失敗した場合は絵文字を表示
+                  target.style.display = 'none';
+                  const emojiSpan = target.nextElementSibling as HTMLElement;
+                  if (emojiSpan) emojiSpan.style.display = 'flex';
+                }
+              }}
+            />
+            <span 
+              className="absolute inset-0 flex items-center justify-center text-6xl bg-gray-100 rounded-2xl"
+              style={{ display: 'none' }}
+            >
+              {illustration.emoji}
+            </span>
+          </>
+        ) : (
+          <span className="text-6xl">
+            {illustration.emoji}
+          </span>
+        )}
       </div>
       
       <div className="text-center relative">
