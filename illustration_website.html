@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIそざいや - 無料イラスト配布サイト</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+            line-height: 1.6;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            z-index: -1;
+            animation: gradientShift 15s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo::before {
+            content: "🤖";
+            font-size: 2rem;
+            filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.5));
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff, #f0f8ff, #ffffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+            letter-spacing: -1px;
+            animation: fadeInUp 1s ease-out, textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)); }
+            to { filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.6)); }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            position: relative;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1.2rem 1.8rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 60px;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .search-box:focus {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50px;
+            padding: 0.8rem 1.8rem;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) translateY(-1px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .category-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.7rem 1.8rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            margin: 2rem 0;
+            padding: 4rem 0;
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 2rem;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: white;
+            transform: translateY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-item:hover::before {
+            left: 100%;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .illustration-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 1.2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .illustration-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(240, 147, 251, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .illustration-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .illustration-card:hover::before {
+            opacity: 1;
+        }
+
+        .illustration-placeholder {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0, #f1f5f9);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .illustration-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .illustration-info {
+            text-align: center;
+            position: relative;
+        }
+
+        .download-counter {
+            position: absolute;
+            top: -8px;
+            right: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            padding: 0.3rem 0.7rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .illustration-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.6rem;
+            color: #1a202c;
+            letter-spacing: -0.2px;
+        }
+
+        .illustration-tags {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem;
+            border-radius: 25px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #1a202c, #2d3748);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 4rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            margin: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .ranking-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .ranking-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 1rem;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .ranking-number.gold {
+            color: #ffd700;
+        }
+
+        .ranking-number.silver {
+            color: #c0c0c0;
+        }
+
+        .ranking-number.bronze {
+            color: #cd7f32;
+        }
+
+        .ranking-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #f0f2f5, #e1e8ed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-right: 1rem;
+        }
+
+        .ranking-info {
+            flex: 1;
+        }
+
+        .ranking-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .ranking-downloads {
+            color: #667eea;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .ranking-downloads::before {
+            content: "📥";
+            margin-right: 0.5rem;
+        }
+
+        .download-count {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">AIそざいや</a>
+                <nav>
+                    <ul>
+                        <li><a href="#home">ホーム</a></li>
+                        <li><a href="#illustrations">イラスト</a></li>
+                        <li><a href="#ranking">人気ランキング</a></li>
+                        <li><a href="#categories">カテゴリ</a></li>
+                        <li><a href="#about">このサイトについて</a></li>
+                        <li><a href="#contact">お問い合わせ</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>無料イラスト配布サイト</h1>
+            <p>商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード</p>
+            
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="キーワードを入力してイラストを検索...">
+                <button class="search-btn">🔍</button>
+            </div>
+
+            <div class="categories">
+                <button class="category-btn active" data-category="all">すべて</button>
+                <button class="category-btn" data-category="ranking">人気ランキング</button>
+                <button class="category-btn" data-category="people">人物</button>
+                <button class="category-btn" data-category="animals">動物</button>
+                <button class="category-btn" data-category="business">ビジネス</button>
+                <button class="category-btn" data-category="food">食べ物</button>
+                <button class="category-btn" data-category="nature">自然</button>
+                <button class="category-btn" data-category="icons">アイコン</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">15,000+</span>
+                    <span>イラスト総数</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span>毎月更新</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span>商用利用OK</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0円</span>
+                    <span>完全無料</span>
+                </div>
+            </div>
+
+            <h2 style="text-align: center; margin: 2rem 0; font-size: 2rem; color: #333;" id="gallery-title">人気のイラスト</h2>
+            
+            <div class="gallery" id="gallery">
+                <!-- JavaScript will populate this -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="downloadModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>ダウンロード</h2>
+            <div id="modalImage" style="margin: 2rem 0; font-size: 4rem;"></div>
+            <p id="modalTitle"></p>
+            <p id="modalDownloadCount" style="color: #667eea; font-weight: 500; margin: 0.5rem 0;"></p>
+            <p style="color: #666; margin: 1rem 0;">このイラストは商用利用可能です。クレジット表記は不要です。</p>
+            <button class="download-btn" onclick="downloadImage()">PNG形式でダウンロード</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>利用について</h3>
+                    <a href="#">利用規約</a>
+                    <a href="#">よくある質問</a>
+                    <a href="#">ライセンスについて</a>
+                </div>
+                <div class="footer-section">
+                    <h3>カテゴリ</h3>
+                    <a href="#">人物イラスト</a>
+                    <a href="#">動物イラスト</a>
+                    <a href="#">ビジネスイラスト</a>
+                    <a href="#">アイコン素材</a>
+                </div>
+                <div class="footer-section">
+                    <h3>サポート</h3>
+                    <a href="#">お問い合わせ</a>
+                    <a href="#">リクエスト</a>
+                    <a href="#">不具合報告</a>
+                </div>
+                <div class="footer-section">
+                    <h3>SNS</h3>
+                    <a href="#">Twitter</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Facebook</a>
+                </div>
+            </div>
+            <p>&copy; 2025 AIそざいや. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample illustration data with download counts
+        const illustrations = [
+            { id: 1, title: "笑顔のビジネスマン", emoji: "👨‍💼", category: "people", tags: ["ビジネス", "男性", "笑顔"], downloads: 1250 },
+            { id: 2, title: "かわいい猫", emoji: "🐱", category: "animals", tags: ["動物", "猫", "ペット"], downloads: 2100 },
+            { id: 3, title: "コーヒーカップ", emoji: "☕", category: "food", tags: ["飲み物", "コーヒー", "カップ"], downloads: 890 },
+            { id: 4, title: "桜の木", emoji: "🌸", category: "nature", tags: ["自然", "桜", "春"], downloads: 1650 },
+            { id: 5, title: "ハートアイコン", emoji: "❤️", category: "icons", tags: ["アイコン", "ハート", "愛"], downloads: 3200 },
+            { id: 6, title: "働く女性", emoji: "👩‍💻", category: "people", tags: ["ビジネス", "女性", "PC"], downloads: 1450 },
+            { id: 7, title: "犬の散歩", emoji: "🐕", category: "animals", tags: ["動物", "犬", "散歩"], downloads: 750 },
+            { id: 8, title: "お寿司", emoji: "🍣", category: "food", tags: ["食べ物", "寿司", "和食"], downloads: 980 },
+            { id: 9, title: "山の風景", emoji: "🏔️", category: "nature", tags: ["自然", "山", "風景"], downloads: 1100 },
+            { id: 10, title: "スターアイコン", emoji: "⭐", category: "icons", tags: ["アイコン", "星", "評価"], downloads: 2800 },
+            { id: 11, title: "家族の団らん", emoji: "👨‍👩‍👧‍👦", category: "people", tags: ["家族", "子供", "団らん"], downloads: 1850 },
+            { id: 12, title: "パンダ", emoji: "🐼", category: "animals", tags: ["動物", "パンダ", "中国"], downloads: 2350 }
+        ];
+
+        let currentCategory = 'all';
+        let currentSearch = '';
+        let currentIllustrationId = null;
+
+        function formatDownloads(count) {
+            if (count >= 1000) {
+                return (count / 1000).toFixed(1) + 'k';
+            }
+            return count.toString();
+        }
+
+        function renderIllustrations() {
+            const gallery = document.getElementById('gallery');
+            const galleryTitle = document.getElementById('gallery-title');
+            let filteredIllustrations = [...illustrations];
+
+            // Set title based on category
+            if (currentCategory === 'ranking') {
+                galleryTitle.textContent = '人気ランキング TOP 12';
+                filteredIllustrations = filteredIllustrations.sort((a, b) => b.downloads - a.downloads);
+                renderRanking(filteredIllustrations);
+                return;
+            } else if (currentCategory === 'all') {
+                galleryTitle.textContent = '人気のイラスト';
+            } else {
+                const categoryNames = {
+                    people: '人物イラスト',
+                    animals: '動物イラスト',
+                    business: 'ビジネスイラスト',
+                    food: '食べ物イラスト',
+                    nature: '自然イラスト',
+                    icons: 'アイコン素材'
+                };
+                galleryTitle.textContent = categoryNames[currentCategory] || 'イラスト一覧';
+            }
+
+            // Filter by category
+            if (currentCategory !== 'all') {
+                filteredIllustrations = filteredIllustrations.filter(ill => ill.category === currentCategory);
+            }
+
+            // Filter by search
+            if (currentSearch) {
+                filteredIllustrations = filteredIllustrations.filter(ill => 
+                    ill.title.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                    ill.tags.some(tag => tag.toLowerCase().includes(currentSearch.toLowerCase()))
+                );
+            }
+
+            gallery.innerHTML = filteredIllustrations.map(illustration => `
+                <div class="illustration-card" onclick="openModal(${illustration.id})">
+                    <div class="illustration-placeholder">
+                        <span style="font-size: 4rem;">${illustration.emoji}</span>
+                    </div>
+                    <div class="illustration-info">
+                        <div class="download-counter">${formatDownloads(illustration.downloads)}</div>
+                        <div class="illustration-title">${illustration.title}</div>
+                        <div class="illustration-tags">${illustration.tags.join(', ')}</div>
+                        <button class="download-btn" onclick="event.stopPropagation(); openModal(${illustration.id})">
+                            ダウンロード
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderRanking(rankedIllustrations) {
+            const gallery = document.getElementById('gallery');
+            
+            gallery.innerHTML = rankedIllustrations.map((illustration, index) => {
+                const rank = index + 1;
+                let rankClass = '';
+                if (rank === 1) rankClass = 'gold';
+                else if (rank === 2) rankClass = 'silver';
+                else if (rank === 3) rankClass = 'bronze';
+
+                return `
+                    <div class="ranking-item" onclick="openModal(${illustration.id})" style="grid-column: 1 / -1;">
+                        <div class="ranking-number ${rankClass}">${rank}</div>
+                        <div class="ranking-image">
+                            <span>${illustration.emoji}</span>
+                        </div>
+                        <div class="ranking-info">
+                            <div class="ranking-title">${illustration.title}</div>
+                            <div class="ranking-downloads">
+                                ${illustration.downloads.toLocaleString()} ダウンロード
+                                <span class="download-count">${formatDownloads(illustration.downloads)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openModal(id) {
+            const illustration = illustrations.find(ill => ill.id === id);
+            if (!illustration) return;
+
+            currentIllustrationId = id;
+            document.getElementById('modalImage').innerHTML = illustration.emoji;
+            document.getElementById('modalTitle').textContent = illustration.title;
+            document.getElementById('modalDownloadCount').textContent = `${illustration.downloads.toLocaleString()} ダウンロード`;
+            document.getElementById('downloadModal').style.display = 'block';
+        }
+
+        function downloadImage() {
+            if (!currentIllustrationId) return;
+            
+            // Find and update download count
+            const illustration = illustrations.find(ill => ill.id === currentIllustrationId);
+            if (illustration) {
+                illustration.downloads++;
+                
+                // Show download success message
+                alert(`「${illustration.title}」をPNG形式でダウンロードしました！\nダウンロード数: ${illustration.downloads.toLocaleString()}`);
+                
+                // Update modal display
+                document.getElementById('modalDownloadCount').textContent = `${illustration.downloads.toLocaleString()} ダウンロード`;
+                
+                // Close modal
+                document.getElementById('downloadModal').style.display = 'none';
+                
+                // Re-render gallery to update download counts
+                renderIllustrations();
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            renderIllustrations();
+
+            // Category buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCategory = this.dataset.category;
+                    renderIllustrations();
+                });
+            });
+
+            // Search functionality
+            const searchBox = document.querySelector('.search-box');
+            const searchBtn = document.querySelector('.search-btn');
+
+            function performSearch() {
+                currentSearch = searchBox.value.trim();
+                renderIllustrations();
+            }
+
+            searchBtn.addEventListener('click', performSearch);
+            searchBox.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // Modal close
+            document.querySelector('.close').addEventListener('click', function() {
+                document.getElementById('downloadModal').style.display = 'none';
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                const modal = document.getElementById('downloadModal');
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Smooth scrolling for navigation
+            document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

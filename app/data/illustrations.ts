@@ -1,0 +1,24 @@
+import { Illustration } from '../types/illustration';
+
+export const illustrations: Illustration[] = [
+  { id: 1, title: "笑顔のビジネスマン", emoji: "👨‍💼", category: "people", tags: ["ビジネス", "男性", "笑顔"], downloads: 1250 },
+  { id: 2, title: "かわいい猫", emoji: "🐱", category: "animals", tags: ["動物", "猫", "ペット"], downloads: 2100 },
+  { id: 3, title: "コーヒーカップ", emoji: "☕", category: "food", tags: ["飲み物", "コーヒー", "カップ"], downloads: 890 },
+  { id: 4, title: "桜の木", emoji: "🌸", category: "nature", tags: ["自然", "桜", "春"], downloads: 1650 },
+  { id: 5, title: "ハートアイコン", emoji: "❤️", category: "icons", tags: ["アイコン", "ハート", "愛"], downloads: 3200 },
+  { id: 6, title: "働く女性", emoji: "👩‍💻", category: "people", tags: ["ビジネス", "女性", "PC"], downloads: 1450 },
+  { id: 7, title: "犬の散歩", emoji: "🐕", category: "animals", tags: ["動物", "犬", "散歩"], downloads: 750 },
+  { id: 8, title: "お寿司", emoji: "🍣", category: "food", tags: ["食べ物", "寿司", "和食"], downloads: 980 },
+  { id: 9, title: "山の風景", emoji: "🏔️", category: "nature", tags: ["自然", "山", "風景"], downloads: 1100 },
+  { id: 10, title: "スターアイコン", emoji: "⭐", category: "icons", tags: ["アイコン", "星", "評価"], downloads: 2800 },
+  { id: 11, title: "家族の団らん", emoji: "👨‍👩‍👧‍👦", category: "people", tags: ["家族", "子供", "団らん"], downloads: 1850 },
+  { id: 12, title: "パンダ", emoji: "🐼", category: "animals", tags: ["動物", "パンダ", "中国"], downloads: 2350 },
+  { id: 13, title: "プレゼンテーション", emoji: "📊", category: "business", tags: ["ビジネス", "プレゼン", "グラフ"], downloads: 1320 },
+  { id: 14, title: "美味しいラーメン", emoji: "🍜", category: "food", tags: ["食べ物", "ラーメン", "和食"], downloads: 1680 },
+  { id: 15, title: "青い海", emoji: "🌊", category: "nature", tags: ["自然", "海", "波"], downloads: 1890 },
+  { id: 16, title: "チェックマーク", emoji: "✅", category: "icons", tags: ["アイコン", "チェック", "完了"], downloads: 2450 },
+  { id: 17, title: "会議中の人々", emoji: "👥", category: "business", tags: ["ビジネス", "会議", "チーム"], downloads: 1560 },
+  { id: 18, title: "フルーツ盛り合わせ", emoji: "🍎", category: "food", tags: ["食べ物", "果物", "健康"], downloads: 1200 },
+  { id: 19, title: "雲と太陽", emoji: "☀️", category: "nature", tags: ["自然", "太陽", "天気"], downloads: 1780 },
+  { id: 20, title: "お金のアイコン", emoji: "💰", category: "icons", tags: ["アイコン", "お金", "金融"], downloads: 2150 },
+];
