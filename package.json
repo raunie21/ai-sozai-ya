@@ -10,9 +10,11 @@
     "start:nodemon": "nodemon --exec \"next start\"",
     "lint": "next lint",
     "resize-images": "node scripts/resize-images.js",
+    "resize-images:smart": "node scripts/resize-images-smart.js",
+    "resize-images:force": "node scripts/resize-images-smart.js --force",
     "resize-images:help": "node scripts/resize-images.js --help",
     "create-samples": "node scripts/create-sample-images.js",
-    "process-all": "npm run create-samples && npm run resize-images"
+    "process-all": "npm run create-samples && npm run resize-images:smart"
   },
   "dependencies": {
     "lucide-react": "^0.303.0",
