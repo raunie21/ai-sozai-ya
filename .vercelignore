@@ -1,9 +1,23 @@
-# 基本的な除外設定
+# 最小限の除外設定（micromatchの問題を回避）
 node_modules
 .next
 .git
 *.log
 .env*
+
+# 画像ディレクトリ（ビルドトレースの問題を防ぐ）
+public/images
+public/images/originals
+public/images/thumbnails
+public/images/illustrations
+
+# 画像ファイル（具体的な拡張子）
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.webp
 
 # 開発用ファイル
 scripts
@@ -14,3 +28,5 @@ env.example
 # キャッシュファイル
 .resize-cache.json
 *.cache
+*.tmp
+*.temp
