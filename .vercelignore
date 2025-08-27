@@ -9,6 +9,7 @@ node_modules
 .env.production.local
 
 # 画像ファイル（ビルドトレースの問題を防ぐ）
+public/images
 public/images/originals
 public/images/thumbnails
 public/images/illustrations
@@ -22,3 +23,17 @@ scripts
 *.md
 *.html
 env.example
+
+# ビルドトレースの問題を防ぐ追加設定
+public/images/**/*.png
+public/images/**/*.jpg
+public/images/**/*.jpeg
+public/images/**/*.gif
+public/images/**/*.svg
+public/images/**/*.webp
+
+# 一時ファイル
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
