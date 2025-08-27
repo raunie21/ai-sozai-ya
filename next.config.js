@@ -12,6 +12,20 @@ const nextConfig = {
       },
     ];
   },
+  // ビルドトレースの無限ループを防ぐ
+  experimental: {
+    buildTraces: false,
+  },
+  // 画像ファイルの除外
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    }
+    return config;
+  },
 }
 
 module.exports = nextConfig
