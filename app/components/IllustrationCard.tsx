@@ -24,6 +24,16 @@ export default function IllustrationCard({ illustration, onClick }: Illustration
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl" />
       
       <div className="w-full h-56 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl flex items-center justify-center text-6xl mb-5 relative overflow-hidden border border-gray-200/80 shimmer-effect">
+        {/* ダウンロード数表示 - 右上に配置 */}
+        <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg border border-gray-200/50 flex items-center gap-1.5 z-10">
+          <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          <span className="text-sm font-semibold text-gray-800">
+            {formatDownloads(illustration.downloads)}
+          </span>
+        </div>
+        
         {illustration.thumbnailUrl ? (
           <>
             <img 
@@ -36,10 +46,10 @@ export default function IllustrationCard({ illustration, onClick }: Illustration
                 if (target.src.includes('.webp')) {
                   target.src = illustration.thumbnailUrl!;
                 } else {
-                  // PNG も失敗した場合は絵文字を表示
+                  // PNG も失敗した場合はプレースホルダーを表示
                   target.style.display = 'none';
-                  const emojiSpan = target.nextElementSibling as HTMLElement;
-                  if (emojiSpan) emojiSpan.style.display = 'flex';
+                  const placeholderSpan = target.nextElementSibling as HTMLElement;
+                  if (placeholderSpan) placeholderSpan.style.display = 'flex';
                 }
               }}
             />
@@ -47,21 +57,17 @@ export default function IllustrationCard({ illustration, onClick }: Illustration
               className="absolute inset-0 flex items-center justify-center text-6xl bg-gray-100 rounded-2xl"
               style={{ display: 'none' }}
             >
-              {illustration.emoji}
+              📷
             </span>
           </>
         ) : (
           <span className="text-6xl">
-            {illustration.emoji}
+            📷
           </span>
         )}
       </div>
       
       <div className="text-center relative">
-        <div className="absolute -top-2 right-3 button-gradient text-white rounded-xl px-3 py-1 text-sm font-semibold shadow-lg shadow-indigo-500/30 border-2 border-white/90">
-          {formatDownloads(illustration.downloads)}
-        </div>
-        
         <div className="font-bold text-lg mb-2 text-gray-800 tracking-tight">
           {illustration.title}
         </div>

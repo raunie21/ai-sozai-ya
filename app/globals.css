@@ -66,3 +66,41 @@ body::before {
   background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
   animation: shimmer 3s infinite;
 }
+
+/* Swiper カスタムスタイル */
+.swiper-container {
+  padding-bottom: 40px;
+}
+
+/* 基本的なスライドスタイル */
+.swiper-container .swiper-slide {
+  width: 100%;
+}
+
+.swiper-pagination {
+  bottom: 0 !important;
+}
+
+.swiper-pagination-bullet {
+  background: #d1d5db !important;
+  opacity: 0.5 !important;
+  width: 8px !important;
+  height: 8px !important;
+  margin: 0 4px !important;
+  transition: all 0.3s ease !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: #3b82f6 !important;
+  opacity: 1 !important;
+  transform: scale(1.2) !important;
+}
+
+.swiper-button-disabled {
+  opacity: 0.3 !important;
+  cursor: not-allowed !important;
+}
+
+.swiper-button-disabled:hover {
+  transform: scale(1) !important;
+}

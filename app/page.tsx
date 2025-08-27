@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import Header from './components/Header';
 import Hero from './components/Hero';
 import Stats from './components/Stats';
 import Gallery from './components/Gallery';
@@ -99,17 +98,33 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      <Header onNavigate={handleNavigate} />
-      
       <Hero 
         onSearch={handleSearch}
         onCategoryChange={handleCategoryChange}
         currentCategory={currentCategory}
+        illustrations={illustrationData}
       />
       
-      <main className="bg-white/95 backdrop-blur-xl mt-8 py-16 rounded-t-3xl shadow-xl shadow-black/10 border-t border-white/20">
+      <main className="bg-white py-16">
         <div className="max-w-6xl mx-auto px-4">
           <Stats />
+          
+          {/* セクションタイトル */}
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+              {currentCategory === 'all' ? 'すべてのイラスト' : 
+               currentCategory === 'ranking' ? '人気ランキング' :
+               currentCategory === 'people' ? '人物' :
+               currentCategory === 'animals' ? '動物' :
+               currentCategory === 'business' ? 'ビジネス' :
+               currentCategory === 'food' ? '食べ物' :
+               currentCategory === 'nature' ? '自然' :
+               currentCategory === 'icons' ? 'アイコン' : 'イラスト'}
+            </h2>
+            <p className="text-gray-600">
+              {filteredIllustrations.length}件のイラストが見つかりました
+            </p>
+          </div>
           
           <Gallery
             illustrations={filteredIllustrations}

@@ -17,7 +17,6 @@ module.exports = {
         'shimmer': 'shimmer 3s infinite',
         'text-glow': 'text-glow 3s ease-in-out infinite alternate',
         'fade-in-up': 'fade-in-up 1s ease-out',
-        'modal-slide-in': 'modal-slide-in 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
       },
       keyframes: {
         'gradient-shift': {
@@ -40,16 +39,6 @@ module.exports = {
           'to': {
             opacity: '1',
             transform: 'translateY(0)',
-          },
-        },
-        'modal-slide-in': {
-          'from': {
-            opacity: '0',
-            transform: 'translate(-50%, -50%) scale(0.8)',
-          },
-          'to': {
-            opacity: '1',
-            transform: 'translate(-50%, -50%) scale(1)',
           },
         },
       },

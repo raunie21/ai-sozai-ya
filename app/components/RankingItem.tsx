@@ -32,8 +32,25 @@ export default function RankingItem({ illustration, rank, onClick }: RankingItem
         {rank}
       </div>
       
-      <div className="w-20 h-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center text-3xl mr-4 border border-gray-200">
-        <span>{illustration.emoji}</span>
+      <div className="w-20 h-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center text-3xl mr-4 border border-gray-200 overflow-hidden">
+        {illustration.thumbnailUrl ? (
+          <img
+            src={illustration.thumbnailUrl}
+            alt={illustration.title}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              // 画像読み込みエラー時のフォールバック
+              const target = e.currentTarget as HTMLImageElement;
+              target.style.display = 'none';
+              const fallback = document.createElement('span');
+              fallback.textContent = '📷';
+              fallback.className = 'text-3xl text-gray-400';
+              target.parentNode?.appendChild(fallback);
+            }}
+          />
+        ) : (
+          <span className="text-3xl text-gray-400">📷</span>
+        )}
       </div>
       
       <div className="flex-1">
