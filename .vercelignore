@@ -9,6 +9,7 @@ node_modules
 .env.production.local
 
 # 画像ファイル（ビルドトレースの問題を防ぐ）
+public
 public/images
 public/images/originals
 public/images/thumbnails
@@ -37,3 +38,30 @@ public/images/**/*.webp
 *.temp
 .DS_Store
 Thumbs.db
+
+# ビルド関連ファイル
+.next
+.nextignore
+.vercelignore
+vercel.json
+
+# 開発環境ファイル
+.env*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# テストファイル
+**/*.test.js
+**/*.test.ts
+**/*.spec.js
+**/*.spec.ts
+test/
+tests/
+__tests__/
+
+# ドキュメントファイル
+README.md
+*.md
+docs/
+documentation/

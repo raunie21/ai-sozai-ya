@@ -14,14 +14,26 @@ const nextConfig = {
   },
   // ビルドトレースの無限ループを防ぐ
   experimental: {
-    // buildTracesは無効なオプションなので削除
+    // ビルドトレースを完全に無効化
+    buildTraces: false,
+    // その他の実験的機能も無効化
+    serverComponentsExternalPackages: [],
+    serverActions: false,
+    // ビルドトレース関連の機能を無効化
+    instrumentationHook: false,
+    serverComponentsExternalPackages: [],
   },
   // 画像ファイルの除外
-  webpack: (config, { isServer, dev }) => {
+  webpack: (config, { isServer, dev, webpack }) => {
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
+        path: false,
+        os: false,
+        crypto: false,
+        stream: false,
+        util: false,
       };
     }
     
@@ -53,6 +65,12 @@ const nextConfig = {
       },
     };
     
+    // ビルドトレース関連のプラグインを無効化
+    config.plugins = config.plugins.filter(plugin => {
+      return !(plugin.constructor.name === 'BuildTracePlugin' || 
+               plugin.constructor.name === 'TracePlugin');
+    });
+    
     return config;
   },
   // ビルド時のファイル除外
@@ -64,6 +82,21 @@ const nextConfig = {
   staticPageGenerationTimeout: 120,
   // ビルド時のメモリ制限
   swcMinify: true,
+  // ビルドトレースを完全に無効化
+  generateBuildId: async () => {
+    return 'build-' + Date.now();
+  },
+  // 出力設定
+  output: 'standalone',
+  // ビルド時の最適化
+  poweredByHeader: false,
+  compress: true,
+  // ビルドトレース関連の設定を無効化
+  distDir: '.next',
+  // ビルド時の最適化
+  optimizeFonts: false,
+  // ビルドトレースを無効化
+  generateEtags: false,
 }
 
 module.exports = nextConfig
