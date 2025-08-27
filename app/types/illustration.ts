@@ -1,7 +1,6 @@
 export interface Illustration {
   id: number;
   title: string;
-  emoji: string; // 絵文字（フォールバック用）
   imageUrl?: string; // 実際の画像URL
   thumbnailUrl?: string; // サムネイル画像URL
   originalUrl?: string; // ダウンロード用高解像度画像URL
