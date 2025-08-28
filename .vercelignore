@@ -7,26 +7,3 @@ node_modules
 
 # 画像ディレクトリ（ビルドトレースの問題を防ぐ）
 public/images
-public/images/originals
-public/images/thumbnails
-public/images/illustrations
-
-# 画像ファイル（具体的な拡張子）
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.svg
-*.webp
-
-# 開発用ファイル
-scripts
-*.md
-*.html
-env.example
-
-# キャッシュファイル
-.resize-cache.json
-*.cache
-*.tmp
-*.temp

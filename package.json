@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:nodemon": "nodemon --exec \"next dev\"",
-    "build": "next build",
+    "build": "NEXT_DISABLE_BUILD_TRACES=true NEXT_DISABLE_COLLECT_BUILD_TRACES=true next build",
     "start": "next start",
     "start:nodemon": "nodemon --exec \"next start\"",
     "lint": "next lint",
