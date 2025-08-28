@@ -81,6 +81,13 @@ const nextConfig = {
   },
   // 出力設定
   output: 'standalone',
+  // ビルド時の最適化
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
 }
 
 module.exports = nextConfig
