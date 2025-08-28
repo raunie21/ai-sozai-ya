@@ -39,6 +39,24 @@ const nextConfig = {
       return true;
     });
     
+    // ビルドトレース関連の最適化を無効化
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
+        ...config.optimization.splitChunks,
+        cacheGroups: {
+          ...config.optimization.splitChunks.cacheGroups,
+          default: false,
+          vendors: false,
+        },
+      },
+    };
+    
+    // ビルドトレース関連の設定を無効化
+    config.infrastructureLogging = {
+      level: 'error',
+    };
+    
     return config;
   },
   // 基本的な設定
@@ -57,6 +75,12 @@ const nextConfig = {
   // ビルドトレースを無効化
   distDir: '.next',
   optimizeFonts: false,
+  // ビルドトレースを無効化
+  generateBuildId: async () => {
+    return 'build-' + Date.now();
+  },
+  // 出力設定
+  output: 'standalone',
   // ビルド時の最適化
   typescript: {
     ignoreBuildErrors: false,
