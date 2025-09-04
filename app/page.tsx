@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Hero from './components/Hero';
 import Stats from './components/Stats';
 import Gallery from './components/Gallery';
@@ -16,6 +16,36 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [illustrationData, setIllustrationData] = useState(illustrations);
+
+  // アプリケーション起動時にダウンロード数を読み込む
+  useEffect(() => {
+    const loadDownloadCounts = async () => {
+      try {
+        const response = await fetch('/api/downloads');
+        if (response.ok) {
+          const data = await response.json();
+          const downloadCounts = data.downloads || {};
+          
+          // イラストデータにダウンロード数を適用
+          const updatedIllustrations = illustrations.map(illustration => ({
+            ...illustration,
+            downloads: downloadCounts[illustration.id.toString()] || 0
+          }));
+          
+          setIllustrationData(updatedIllustrations);
+        } else {
+          // APIが失敗した場合はデフォルトのイラストデータを使用
+          setIllustrationData(illustrations);
+        }
+      } catch (error) {
+        console.error('Failed to load download counts:', error);
+        // エラーの場合はデフォルトのイラストデータを使用
+        setIllustrationData(illustrations);
+      }
+    };
+
+    loadDownloadCounts();
+  }, []);
 
   const filteredIllustrations = useMemo(() => {
     let filtered = [...illustrationData];

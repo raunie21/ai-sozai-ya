@@ -24,6 +24,31 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
     setUpdatedIllustrations(illustrations);
   }, [illustrations]);
 
+  // コンポーネント初期化時にダウンロード数を読み込む
+  useEffect(() => {
+    const loadDownloadCounts = async () => {
+      try {
+        const response = await fetch('/api/downloads');
+        if (response.ok) {
+          const data = await response.json();
+          const downloadCounts = data.downloads || {};
+          
+          // イラストデータにダウンロード数を適用
+          const updatedIllustrations = illustrations.map(illustration => ({
+            ...illustration,
+            downloads: downloadCounts[illustration.id.toString()] || 0
+          }));
+          
+          setUpdatedIllustrations(updatedIllustrations);
+        }
+      } catch (error) {
+        console.error('Failed to load download counts in slideshow:', error);
+      }
+    };
+
+    loadDownloadCounts();
+  }, [illustrations]);
+
   // 最近追加された10個の画像を取得（IDが大きい順）
   const recentImages = updatedIllustrations
     .sort((a, b) => b.id - a.id)
