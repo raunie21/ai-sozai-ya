@@ -91,37 +91,65 @@ export default function Home() {
     setIsDownloading(true);
     
     try {
-      // ダウンロード数を更新
-      const downloadResponse = await fetch('/api/downloads', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          illustrationId: selectedIllustration.id,
-        }),
-      });
+      // ダウンロード数を更新（APIが利用できない場合はスキップ）
+      try {
+        const downloadResponse = await fetch('/api/downloads', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            illustrationId: selectedIllustration.id,
+          }),
+        });
 
-      if (downloadResponse.ok) {
-        const downloadData = await downloadResponse.json();
-        
-        // ローカルのイラストデータを即座に更新
+        if (downloadResponse.ok) {
+          const downloadData = await downloadResponse.json();
+          
+          // ローカルのイラストデータを即座に更新
+          setIllustrationData(prevIllustrations => 
+            prevIllustrations.map(illustration => 
+              illustration.id === selectedIllustration.id
+                ? { ...illustration, downloads: downloadData.newDownloadCount }
+                : illustration
+            )
+          );
+          
+          // 選択中のイラストも即座に更新
+          setSelectedIllustration(prev => 
+            prev ? { ...prev, downloads: downloadData.newDownloadCount } : null
+          );
+          
+          console.log(`Download count updated: ${downloadData.previousCount} → ${downloadData.newDownloadCount}`);
+        } else {
+          console.warn('Failed to update download count:', downloadResponse.status);
+          // ローカルでダウンロード数を増加
+          setIllustrationData(prevIllustrations => 
+            prevIllustrations.map(illustration => 
+              illustration.id === selectedIllustration.id
+                ? { ...illustration, downloads: illustration.downloads + 1 }
+                : illustration
+            )
+          );
+          
+          setSelectedIllustration(prev => 
+            prev ? { ...prev, downloads: prev.downloads + 1 } : null
+          );
+        }
+      } catch (apiError) {
+        console.warn('API call failed, using local count update:', apiError);
+        // ローカルでダウンロード数を増加
         setIllustrationData(prevIllustrations => 
           prevIllustrations.map(illustration => 
             illustration.id === selectedIllustration.id
-              ? { ...illustration, downloads: downloadData.newDownloadCount }
+              ? { ...illustration, downloads: illustration.downloads + 1 }
               : illustration
           )
         );
         
-        // 選択中のイラストも即座に更新
         setSelectedIllustration(prev => 
-          prev ? { ...prev, downloads: downloadData.newDownloadCount } : null
+          prev ? { ...prev, downloads: prev.downloads + 1 } : null
         );
-        
-        console.log(`Download count updated: ${downloadData.previousCount} → ${downloadData.newDownloadCount}`);
-      } else {
-        console.error('Failed to update download count:', downloadResponse.status);
       }
 
       // 実際にファイルをダウンロード

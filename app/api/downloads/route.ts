@@ -33,12 +33,19 @@ export async function POST(request: NextRequest) {
     fs.writeFileSync(downloadsFilePath, JSON.stringify(downloadsData, null, 2), 'utf-8');
     console.log('Download count updated successfully');
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       illustrationId: illustrationId,
       newDownloadCount: newCount,
       previousCount: currentCount
     });
+
+    // CORSヘッダーを追加
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+
+    return response;
   } catch (error) {
     console.error('Error updating download count:', error);
     return NextResponse.json({ error: 'Failed to update download count' }, { status: 500 });
@@ -51,9 +58,28 @@ export async function GET() {
     const fileContent = fs.readFileSync(downloadsFilePath, 'utf-8');
     const downloadsData = JSON.parse(fileContent);
     console.log('Returning download counts:', downloadsData.downloads);
-    return NextResponse.json({ success: true, downloads: downloadsData.downloads });
+    
+    const response = NextResponse.json({ success: true, downloads: downloadsData.downloads });
+    
+    // CORSヘッダーを追加
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    
+    return response;
   } catch (error) {
     console.error('Error reading download counts:', error);
     return NextResponse.json({ error: 'Failed to read download counts' }, { status: 500 });
   }
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  });
 }
