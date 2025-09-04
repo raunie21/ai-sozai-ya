@@ -9,15 +9,18 @@ interface ModalProps {
   illustration: Illustration | null;
   onDownload: () => void;
   isDownloading?: boolean;
+  justDownloaded?: boolean;
 }
 
-export default function Modal({ isOpen, onClose, illustration, onDownload, isDownloading = false }: ModalProps) {
+export default function Modal({ isOpen, onClose, illustration, onDownload, isDownloading = false, justDownloaded = false }: ModalProps) {
   const [downloadCount, setDownloadCount] = useState<number>(0);
   const [showCountUpdate, setShowCountUpdate] = useState(false);
+  const [lastIllustrationId, setLastIllustrationId] = useState<number | null>(null);
 
   useEffect(() => {
     if (illustration) {
       setDownloadCount(illustration.downloads);
+      setLastIllustrationId(illustration.id);
     }
   }, [illustration]);
 
@@ -33,6 +36,8 @@ export default function Modal({ isOpen, onClose, illustration, onDownload, isDow
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
+      // モーダルが閉じられた時に「+1」表示をリセット
+      setShowCountUpdate(false);
     }
 
     return () => {
@@ -41,14 +46,24 @@ export default function Modal({ isOpen, onClose, illustration, onDownload, isDow
     };
   }, [isOpen, onClose]);
 
-  // ダウンロード数が更新された時の視覚的フィードバック
+  // ダウンロード数が更新された時の視覚的フィードバック（同じイラストのみ）
   useEffect(() => {
-    if (illustration && illustration.downloads !== downloadCount) {
+    if (illustration && 
+        illustration.id === lastIllustrationId && 
+        illustration.downloads !== downloadCount) {
       setDownloadCount(illustration.downloads);
       setShowCountUpdate(true);
       setTimeout(() => setShowCountUpdate(false), 2000);
     }
-  }, [illustration, downloadCount]);
+  }, [illustration, downloadCount, lastIllustrationId]);
+
+  // ダウンロード完了時の「+1」表示
+  useEffect(() => {
+    if (justDownloaded && illustration) {
+      setShowCountUpdate(true);
+      setTimeout(() => setShowCountUpdate(false), 2000);
+    }
+  }, [justDownloaded, illustration]);
 
   if (!isOpen || !illustration) {
     return null;

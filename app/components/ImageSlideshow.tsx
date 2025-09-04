@@ -17,6 +17,7 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
   const [selectedIllustration, setSelectedIllustration] = useState<Illustration | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [justDownloaded, setJustDownloaded] = useState(false);
   const [updatedIllustrations, setUpdatedIllustrations] = useState<Illustration[]>(illustrations);
 
   // propsが変更された時にローカル状態を更新
@@ -60,12 +61,14 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
 
   const handleImageClick = (illustration: Illustration) => {
     setSelectedIllustration(illustration);
+    setJustDownloaded(false); // 新しいイラストを選択した時にリセット
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedIllustration(null);
+    setJustDownloaded(false);
   };
 
   const handleDownload = async () => {
@@ -154,6 +157,9 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
         
+        // ダウンロード完了フラグを設定
+        setJustDownloaded(true);
+        
         // モーダルを閉じる
         handleCloseModal();
       } catch (error) {
@@ -235,13 +241,14 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
       </div>
       
       {/* モーダル */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        illustration={selectedIllustration}
-        onDownload={handleDownload}
-        isDownloading={isDownloading}
-      />
+              <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          illustration={selectedIllustration}
+          onDownload={handleDownload}
+          isDownloading={isDownloading}
+          justDownloaded={justDownloaded}
+        />
     </section>
   );
 }

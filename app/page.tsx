@@ -15,6 +15,7 @@ export default function Home() {
   const [selectedIllustration, setSelectedIllustration] = useState<Illustration | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [justDownloaded, setJustDownloaded] = useState(false);
   const [illustrationData, setIllustrationData] = useState(illustrations);
 
   // アプリケーション起動時にダウンロード数を読み込む
@@ -82,6 +83,7 @@ export default function Home() {
 
   const handleIllustrationClick = (illustration: Illustration) => {
     setSelectedIllustration(illustration);
+    setJustDownloaded(false); // 新しいイラストを選択した時にリセット
     setIsModalOpen(true);
   };
 
@@ -172,6 +174,9 @@ export default function Home() {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
       
+      // ダウンロード完了フラグを設定
+      setJustDownloaded(true);
+      
       // モーダルを閉じる
       setIsModalOpen(false);
     } catch (error) {
@@ -248,10 +253,14 @@ export default function Home() {
 
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setJustDownloaded(false);
+        }}
         illustration={selectedIllustration}
         onDownload={handleDownload}
         isDownloading={isDownloading}
+        justDownloaded={justDownloaded}
       />
       
       <Footer />
