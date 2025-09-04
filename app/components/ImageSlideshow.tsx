@@ -62,7 +62,7 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
         if (downloadResponse.ok) {
           const downloadData = await downloadResponse.json();
           
-          // ローカルのイラストデータを更新
+          // ローカルのイラストデータを即座に更新
           setUpdatedIllustrations(prevIllustrations => 
             prevIllustrations.map(illustration => 
               illustration.id === selectedIllustration.id
@@ -71,10 +71,14 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
             )
           );
           
-          // 選択中のイラストも更新
+          // 選択中のイラストも即座に更新
           setSelectedIllustration(prev => 
             prev ? { ...prev, downloads: downloadData.newDownloadCount } : null
           );
+          
+          console.log(`Download count updated: ${downloadData.previousCount} → ${downloadData.newDownloadCount}`);
+        } else {
+          console.error('Failed to update download count:', downloadResponse.status);
         }
 
         // 実際にファイルをダウンロード

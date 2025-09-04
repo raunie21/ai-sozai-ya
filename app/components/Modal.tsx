@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Illustration } from '../types/illustration';
 
 interface ModalProps {
@@ -12,6 +12,15 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, illustration, onDownload, isDownloading = false }: ModalProps) {
+  const [downloadCount, setDownloadCount] = useState<number>(0);
+  const [showCountUpdate, setShowCountUpdate] = useState(false);
+
+  useEffect(() => {
+    if (illustration) {
+      setDownloadCount(illustration.downloads);
+    }
+  }, [illustration]);
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -31,6 +40,15 @@ export default function Modal({ isOpen, onClose, illustration, onDownload, isDow
       document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
+
+  // ダウンロード数が更新された時の視覚的フィードバック
+  useEffect(() => {
+    if (illustration && illustration.downloads !== downloadCount) {
+      setDownloadCount(illustration.downloads);
+      setShowCountUpdate(true);
+      setTimeout(() => setShowCountUpdate(false), 2000);
+    }
+  }, [illustration, downloadCount]);
 
   if (!isOpen || !illustration) {
     return null;
@@ -84,8 +102,18 @@ export default function Modal({ isOpen, onClose, illustration, onDownload, isDow
           {illustration.title}
         </p>
         
-        <p className="text-indigo-600 font-medium mb-6">
-          {illustration.downloads.toLocaleString()} ダウンロード
+        <p className={`text-indigo-600 font-medium mb-6 transition-all duration-300 ${showCountUpdate ? 'scale-110 text-green-600' : ''}`}>
+          <span className="inline-flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            {illustration.downloads.toLocaleString()} ダウンロード
+            {showCountUpdate && (
+              <span className="ml-2 text-green-600 font-bold animate-pulse">
+                +1
+              </span>
+            )}
+          </span>
         </p>
         
         <p className="text-gray-600 mb-8 leading-relaxed">
