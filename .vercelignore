@@ -63,3 +63,7 @@ Thumbs.db
 
 # Git
 .git/
+.gitignore
+
+# Package files
+package-lock.json
