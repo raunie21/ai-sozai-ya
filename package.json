@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "20.x"
+    "node": "18.x"
   },
   "scripts": {
     "dev": "next dev",
-    "build": "NEXT_DISABLE_BUILD_TRACES=true NEXT_DISABLE_COLLECT_BUILD_TRACES=true next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },

@@ -1,20 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost', 'your-bucket.r2.cloudflarestorage.com'],
-    unoptimized: false,
+    domains: ['localhost'],
+    unoptimized: true,
   },
-  // ビルドトレースを無効化
+  // ビルドトレースを完全に無効化
   experimental: {
     buildTrace: false,
+    serverComponentsExternalPackages: [],
   },
-  // 基本的な設定
+  // 基本的な設定のみ
   swcMinify: true,
-  compress: true,
   poweredByHeader: false,
-  generateEtags: false,
-  // 静的ファイルの最適化
-  staticPageGenerationTimeout: 120,
   // ビルド時の最適化
   typescript: {
     ignoreBuildErrors: false,
