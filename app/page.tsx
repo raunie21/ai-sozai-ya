@@ -14,6 +14,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIllustration, setSelectedIllustration] = useState<Illustration | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [illustrationData, setIllustrationData] = useState(illustrations);
 
   const filteredIllustrations = useMemo(() => {
@@ -54,23 +55,71 @@ export default function Home() {
     setIsModalOpen(true);
   };
 
-  const handleDownload = () => {
-    if (!selectedIllustration) return;
+  const handleDownload = async () => {
+    if (!selectedIllustration?.originalUrl) return;
+    
+    setIsDownloading(true);
+    
+    try {
+      // ダウンロード数を更新
+      const downloadResponse = await fetch('/api/downloads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          illustrationId: selectedIllustration.id,
+        }),
+      });
 
-    // Update download count
-    setIllustrationData(prev => 
-      prev.map(ill => 
-        ill.id === selectedIllustration.id 
-          ? { ...ill, downloads: ill.downloads + 1 }
-          : ill
-      )
-    );
+      if (downloadResponse.ok) {
+        const downloadData = await downloadResponse.json();
+        
+        // ローカルのイラストデータを更新
+        setIllustrationData(prevIllustrations => 
+          prevIllustrations.map(illustration => 
+            illustration.id === selectedIllustration.id
+              ? { ...illustration, downloads: downloadData.newDownloadCount }
+              : illustration
+          )
+        );
+        
+        // 選択中のイラストも更新
+        setSelectedIllustration(prev => 
+          prev ? { ...prev, downloads: downloadData.newDownloadCount } : null
+        );
+      }
 
-    // Show success message
-    alert(`「${selectedIllustration.title}」をPNG形式でダウンロードしました！\nダウンロード数: ${(selectedIllustration.downloads + 1).toLocaleString()}`);
-
-    // Close modal
-    setIsModalOpen(false);
+      // 実際にファイルをダウンロード
+      const response = await fetch(selectedIllustration.originalUrl);
+      if (!response.ok) {
+        throw new Error('Failed to fetch image');
+      }
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      
+      // ダウンロードリンクを作成
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${selectedIllustration.title}.png`;
+      document.body.appendChild(link);
+      link.click();
+      
+      // クリーンアップ
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      // モーダルを閉じる
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Download error:', error);
+      // エラーが発生した場合は新しいタブで開く
+      window.open(selectedIllustration.originalUrl, '_blank');
+      setIsModalOpen(false);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const handleNavigate = (section: string) => {
@@ -140,6 +189,7 @@ export default function Home() {
         onClose={() => setIsModalOpen(false)}
         illustration={selectedIllustration}
         onDownload={handleDownload}
+        isDownloading={isDownloading}
       />
       
       <Footer />
