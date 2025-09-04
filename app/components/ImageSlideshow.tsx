@@ -16,6 +16,7 @@ interface ImageSlideshowProps {
 export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
   const [selectedIllustration, setSelectedIllustration] = useState<Illustration | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   // 最近追加された10個の画像を取得（IDが大きい順）
   const recentImages = illustrations
@@ -38,6 +39,8 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
 
   const handleDownload = async () => {
     if (selectedIllustration?.originalUrl) {
+      setIsDownloading(true);
+      
       try {
         // ダウンロード数を更新
         await fetch('/api/downloads', {
@@ -50,16 +53,35 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
           }),
         });
 
-        // 新しいタブでダウンロードリンクを開く
-        window.open(selectedIllustration.originalUrl, '_blank');
+        // 実際にファイルをダウンロード
+        const response = await fetch(selectedIllustration.originalUrl);
+        if (!response.ok) {
+          throw new Error('Failed to fetch image');
+        }
+        
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        
+        // ダウンロードリンクを作成
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${selectedIllustration.title}.png`;
+        document.body.appendChild(link);
+        link.click();
+        
+        // クリーンアップ
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
         
         // モーダルを閉じる
         handleCloseModal();
       } catch (error) {
         console.error('Download error:', error);
-        // エラーが発生してもダウンロードは実行
+        // エラーが発生した場合は新しいタブで開く
         window.open(selectedIllustration.originalUrl, '_blank');
         handleCloseModal();
+      } finally {
+        setIsDownloading(false);
       }
     }
   };
@@ -137,6 +159,7 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
         onClose={handleCloseModal}
         illustration={selectedIllustration}
         onDownload={handleDownload}
+        isDownloading={isDownloading}
       />
     </section>
   );

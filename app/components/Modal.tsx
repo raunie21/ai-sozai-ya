@@ -8,9 +8,10 @@ interface ModalProps {
   onClose: () => void;
   illustration: Illustration | null;
   onDownload: () => void;
+  isDownloading?: boolean;
 }
 
-export default function Modal({ isOpen, onClose, illustration, onDownload }: ModalProps) {
+export default function Modal({ isOpen, onClose, illustration, onDownload, isDownloading = false }: ModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -93,11 +94,27 @@ export default function Modal({ isOpen, onClose, illustration, onDownload }: Mod
         </p>
         
         <button 
-          className="button-gradient text-white border-none px-8 py-4 rounded-full cursor-pointer font-semibold text-lg transition-all duration-300 shadow-lg shadow-indigo-500/30 relative overflow-hidden group hover:-translate-y-1 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40"
+          className={`button-gradient text-white border-none px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 shadow-lg shadow-indigo-500/30 relative overflow-hidden group ${
+            isDownloading 
+              ? 'cursor-not-allowed opacity-70' 
+              : 'cursor-pointer hover:-translate-y-1 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40'
+          }`}
           onClick={onDownload}
+          disabled={isDownloading}
         >
-          <span className="relative z-10">高解像度画像をダウンロード</span>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
+          <span className="relative z-10 flex items-center justify-center gap-2">
+            {isDownloading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                ダウンロード中...
+              </>
+            ) : (
+              '高解像度画像をダウンロード'
+            )}
+          </span>
+          {!isDownloading && (
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
+          )}
         </button>
       </div>
     </div>
