@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import { Illustration } from '../types/illustration';
+import Modal from './Modal';
 
 // Swiper CSS
 import 'swiper/css';
@@ -12,6 +14,9 @@ interface ImageSlideshowProps {
 }
 
 export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
+  const [selectedIllustration, setSelectedIllustration] = useState<Illustration | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // 最近追加された10個の画像を取得（IDが大きい順）
   const recentImages = illustrations
     .sort((a, b) => b.id - a.id)
@@ -20,6 +25,44 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
   if (recentImages.length === 0) {
     return null;
   }
+
+  const handleImageClick = (illustration: Illustration) => {
+    setSelectedIllustration(illustration);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedIllustration(null);
+  };
+
+  const handleDownload = async () => {
+    if (selectedIllustration?.originalUrl) {
+      try {
+        // ダウンロード数を更新
+        await fetch('/api/downloads', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            illustrationId: selectedIllustration.id,
+          }),
+        });
+
+        // 新しいタブでダウンロードリンクを開く
+        window.open(selectedIllustration.originalUrl, '_blank');
+        
+        // モーダルを閉じる
+        handleCloseModal();
+      } catch (error) {
+        console.error('Download error:', error);
+        // エラーが発生してもダウンロードは実行
+        window.open(selectedIllustration.originalUrl, '_blank');
+        handleCloseModal();
+      }
+    }
+  };
 
   // 4個ずつのグループに分割
   const imageGroups = [];
@@ -49,14 +92,15 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
                 {group.map((illustration) => (
                   <div
                     key={illustration.id}
-                    className="relative bg-white rounded-xl overflow-hidden shadow-md border border-gray-200 transition-all duration-200 hover:shadow-lg hover:-translate-y-1"
+                    className="relative bg-white rounded-xl overflow-hidden shadow-md border border-gray-200 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 cursor-pointer"
+                    onClick={() => handleImageClick(illustration)}
                   >
                     <div className="aspect-square relative">
                       {illustration.imageUrl ? (
                         <img
                           src={illustration.imageUrl}
                           alt={illustration.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
@@ -73,6 +117,11 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
                           {illustration.tags?.slice(0, 2).join(' • ')}
                         </p>
                       </div>
+                      
+                      {/* クリックヒント */}
+                      <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-200">
+                        クリック
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -81,6 +130,14 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
           ))}
         </Swiper>
       </div>
+      
+      {/* モーダル */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        illustration={selectedIllustration}
+        onDownload={handleDownload}
+      />
     </section>
   );
 }
