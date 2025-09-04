@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import { Illustration } from '../types/illustration';
@@ -17,9 +17,15 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
   const [selectedIllustration, setSelectedIllustration] = useState<Illustration | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [updatedIllustrations, setUpdatedIllustrations] = useState<Illustration[]>(illustrations);
+
+  // propsが変更された時にローカル状態を更新
+  useEffect(() => {
+    setUpdatedIllustrations(illustrations);
+  }, [illustrations]);
 
   // 最近追加された10個の画像を取得（IDが大きい順）
-  const recentImages = illustrations
+  const recentImages = updatedIllustrations
     .sort((a, b) => b.id - a.id)
     .slice(0, 10);
 
@@ -43,7 +49,7 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
       
       try {
         // ダウンロード数を更新
-        await fetch('/api/downloads', {
+        const downloadResponse = await fetch('/api/downloads', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -52,6 +58,24 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
             illustrationId: selectedIllustration.id,
           }),
         });
+
+        if (downloadResponse.ok) {
+          const downloadData = await downloadResponse.json();
+          
+          // ローカルのイラストデータを更新
+          setUpdatedIllustrations(prevIllustrations => 
+            prevIllustrations.map(illustration => 
+              illustration.id === selectedIllustration.id
+                ? { ...illustration, downloads: downloadData.newDownloadCount }
+                : illustration
+            )
+          );
+          
+          // 選択中のイラストも更新
+          setSelectedIllustration(prev => 
+            prev ? { ...prev, downloads: downloadData.newDownloadCount } : null
+          );
+        }
 
         // 実際にファイルをダウンロード
         const response = await fetch(selectedIllustration.originalUrl);
