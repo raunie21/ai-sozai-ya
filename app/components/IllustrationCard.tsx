@@ -1,6 +1,7 @@
 'use client';
 
 import { Illustration } from '../types/illustration';
+import OptimizedImage from './OptimizedImage';
 
 interface IllustrationCardProps {
   illustration: Illustration;
@@ -35,31 +36,15 @@ export default function IllustrationCard({ illustration, onClick }: Illustration
         </div>
         
         {illustration.thumbnailUrl ? (
-          <>
-            <img 
-              src={illustration.thumbnailUrl.replace('.png', '.webp')} 
-              alt={illustration.title}
-              className="w-full h-full object-cover rounded-2xl transition-opacity duration-300"
-              onError={(e) => {
-                // WebPが失敗した場合はPNGにフォールバック
-                const target = e.currentTarget as HTMLImageElement;
-                if (target.src.includes('.webp')) {
-                  target.src = illustration.thumbnailUrl!;
-                } else {
-                  // PNG も失敗した場合はプレースホルダーを表示
-                  target.style.display = 'none';
-                  const placeholderSpan = target.nextElementSibling as HTMLElement;
-                  if (placeholderSpan) placeholderSpan.style.display = 'flex';
-                }
-              }}
-            />
-            <span 
-              className="absolute inset-0 flex items-center justify-center text-6xl bg-gray-100 rounded-2xl"
-              style={{ display: 'none' }}
-            >
-              📷
-            </span>
-          </>
+          <OptimizedImage
+            src={illustration.thumbnailUrl}
+            alt={illustration.title}
+            className="w-full h-full object-cover rounded-2xl transition-opacity duration-300"
+            onError={() => {
+              // 画像読み込みエラー時の処理
+              console.warn(`Failed to load image: ${illustration.thumbnailUrl}`);
+            }}
+          />
         ) : (
           <span className="text-6xl">
             📷

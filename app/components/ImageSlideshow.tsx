@@ -5,6 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import { Illustration } from '../types/illustration';
 import Modal from './Modal';
+import OptimizedImage from './OptimizedImage';
+import { getImageUrl } from '../utils/imageUrl';
 
 // Swiper CSS
 import 'swiper/css';
@@ -206,10 +208,13 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
                   >
                     <div className="aspect-square relative">
                       {illustration.imageUrl ? (
-                        <img
-                          src={illustration.imageUrl}
+                        <OptimizedImage
+                          src={getImageUrl(illustration.imageUrl, { width: 600, height: 600 })}
                           alt={illustration.title}
                           className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
+                          width={600}
+                          height={600}
+                          priority={false}
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">

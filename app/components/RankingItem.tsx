@@ -1,6 +1,8 @@
 'use client';
 
 import { Illustration } from '../types/illustration';
+import OptimizedImage from './OptimizedImage';
+import { getImageUrl } from '../utils/imageUrl';
 
 interface RankingItemProps {
   illustration: Illustration;
@@ -34,19 +36,12 @@ export default function RankingItem({ illustration, rank, onClick }: RankingItem
       
       <div className="w-20 h-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center text-3xl mr-4 border border-gray-200 overflow-hidden">
         {illustration.thumbnailUrl ? (
-          <img
-            src={illustration.thumbnailUrl}
+          <OptimizedImage
+            src={getImageUrl(illustration.thumbnailUrl, { width: 200, height: 200 })}
             alt={illustration.title}
             className="w-full h-full object-cover"
-            onError={(e) => {
-              // 画像読み込みエラー時のフォールバック
-              const target = e.currentTarget as HTMLImageElement;
-              target.style.display = 'none';
-              const fallback = document.createElement('span');
-              fallback.textContent = '📷';
-              fallback.className = 'text-3xl text-gray-400';
-              target.parentNode?.appendChild(fallback);
-            }}
+            width={200}
+            height={200}
           />
         ) : (
           <span className="text-3xl text-gray-400">📷</span>

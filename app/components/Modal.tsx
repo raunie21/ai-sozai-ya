@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { Illustration } from '../types/illustration';
+import OptimizedImage from './OptimizedImage';
+import { getImageUrl } from '../utils/imageUrl';
 
 interface ModalProps {
   isOpen: boolean;
@@ -92,18 +94,14 @@ export default function Modal({ isOpen, onClose, illustration, onDownload, isDow
         
         <div className="w-80 h-80 mx-auto mb-6 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative">
           {illustration.imageUrl ? (
-            <img
-              src={illustration.imageUrl}
+            <OptimizedImage
+              src={getImageUrl(illustration.imageUrl, { width: 800, height: 800 })}
               alt={illustration.title}
               className="w-full h-full object-cover transition-opacity duration-300"
-              onError={(e) => {
-                // 画像読み込みエラー時のフォールバック
-                const target = e.currentTarget as HTMLImageElement;
-                target.style.display = 'none';
-                const fallback = document.createElement('div');
-                fallback.innerHTML = '<span class="text-6xl text-gray-400">📷</span>';
-                fallback.className = 'flex items-center justify-center w-full h-full';
-                target.parentNode?.appendChild(fallback);
+              width={800}
+              height={800}
+              onError={() => {
+                console.warn(`Failed to load modal image: ${illustration.imageUrl}`);
               }}
             />
           ) : (
