@@ -95,7 +95,7 @@ export default function Modal({ isOpen, onClose, illustration, onDownload, isDow
         <div className="w-80 h-80 mx-auto mb-6 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative">
           {illustration.imageUrl ? (
             <OptimizedImage
-              src={getImageUrl(illustration.imageUrl, { width: 800, height: 800 })}
+              src={illustration.imageUrl}
               alt={illustration.title}
               className="w-full h-full object-cover transition-opacity duration-300"
               width={800}

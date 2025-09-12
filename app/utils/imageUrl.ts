@@ -3,9 +3,15 @@
  * 段階的にCloudflare R2のURLに移行するためのヘルパー関数
  */
 
-// 環境変数からR2のベースURLを取得
-const R2_BASE_URL = process.env.CLOUDFLARE_R2_PUBLIC_URL || 
-  `https://${process.env.CLOUDFLARE_R2_BUCKET_NAME}.${process.env.CLOUDFLARE_R2_ACCOUNT_ID}.r2.cloudflarestorage.com`;
+// 環境変数からR2のベースURLを取得（未設定時は安全にフォールバック）
+const computedBaseUrl = process.env.CLOUDFLARE_R2_PUBLIC_URL ||
+  (process.env.CLOUDFLARE_R2_BUCKET_NAME && process.env.CLOUDFLARE_R2_ACCOUNT_ID
+    ? `https://${process.env.CLOUDFLARE_R2_BUCKET_NAME}.${process.env.CLOUDFLARE_R2_ACCOUNT_ID}.r2.cloudflarestorage.com`
+    : undefined);
+
+// undefined や "undefined.undefined" の誤設定を検知
+const isInvalidBase = !computedBaseUrl || /undefined\./.test(computedBaseUrl);
+const R2_BASE_URL = isInvalidBase ? null : computedBaseUrl;
 
 // 移行対象の画像ファイル（全画像をR2に移行）
 const MIGRATED_IMAGES = new Set([
@@ -83,8 +89,8 @@ export function getImageUrl(imagePath: string, options: {
     return imagePath; // ファイル名が取得できない場合は元のパスを返す
   }
 
-  // 移行済みの画像かチェック
-  if (MIGRATED_IMAGES.has(fileName)) {
+  // 移行済みの画像かチェック（かつ有効なR2ベースURLがある）
+  if (MIGRATED_IMAGES.has(fileName) && R2_BASE_URL) {
     const r2Path = imagePath.replace(/^\//, '');
     
     // リサイズが必要な場合
