@@ -26,7 +26,10 @@ export default function OptimizedImage({
   format = 'auto',
   quality = 'auto',
 }: OptimizedImageProps) {
-  const [currentSrc, setCurrentSrc] = useState(getImageUrl(src, { width, height, format, quality }));
+  // src が既に /cdn-cgi/image を含む完全URLならそのまま使い、
+  // そうでなければ getImageUrl でR2用URLを生成
+  const initialSrc = src.includes('/cdn-cgi/image/') ? src : getImageUrl(src, { width, height, format, quality });
+  const [currentSrc, setCurrentSrc] = useState(initialSrc);
   const [hasError, setHasError] = useState(false);
   const fallbackUrls = getImageFallbackUrls(src);
 

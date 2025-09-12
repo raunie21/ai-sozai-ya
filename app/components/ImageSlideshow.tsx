@@ -209,7 +209,7 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
                     <div className="aspect-square relative">
                       {illustration.imageUrl ? (
                         <OptimizedImage
-                          src={getImageUrl(illustration.imageUrl, { width: 600, height: 600 })}
+                          src={illustration.imageUrl}
                           alt={illustration.title}
                           className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
                           width={600}
