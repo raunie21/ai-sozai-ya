@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-
-const downloadsFilePath = path.join(process.cwd(), 'app/data/downloads.json');
+import { kv } from '@vercel/kv';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,30 +11,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Illustration ID is required' }, { status: 400 });
     }
 
-    let downloadsData;
-    try {
-      const fileContent = fs.readFileSync(downloadsFilePath, 'utf-8');
-      downloadsData = JSON.parse(fileContent);
-      console.log('Current downloads data:', downloadsData);
-    } catch (error) {
-      console.log('Creating new downloads data file');
-      downloadsData = { downloads: {} };
-    }
-
-    const currentCount = downloadsData.downloads[illustrationId] || 0;
-    const newCount = currentCount + 1;
-    downloadsData.downloads[illustrationId] = newCount;
+    // Vercel KVから現在のダウンロード数を取得
+    const currentCount = await kv.get(`downloads:${illustrationId}`) || 0;
+    const newCount = Number(currentCount) + 1;
+    
+    // Vercel KVに新しいダウンロード数を保存
+    await kv.set(`downloads:${illustrationId}`, newCount);
     
     console.log(`Updating download count for ID ${illustrationId}: ${currentCount} → ${newCount}`);
-    
-    fs.writeFileSync(downloadsFilePath, JSON.stringify(downloadsData, null, 2), 'utf-8');
-    console.log('Download count updated successfully');
 
     const response = NextResponse.json({
       success: true,
       illustrationId: illustrationId,
       newDownloadCount: newCount,
-      previousCount: currentCount
+      previousCount: Number(currentCount)
     });
 
     // CORSヘッダーを追加
@@ -55,11 +42,17 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     console.log('GET /api/downloads called');
-    const fileContent = fs.readFileSync(downloadsFilePath, 'utf-8');
-    const downloadsData = JSON.parse(fileContent);
-    console.log('Returning download counts:', downloadsData.downloads);
     
-    const response = NextResponse.json({ success: true, downloads: downloadsData.downloads });
+    // 全イラストのダウンロード数を取得（ID 1-13）
+    const downloads: Record<string, number> = {};
+    for (let id = 1; id <= 13; id++) {
+      const count = await kv.get(`downloads:${id}`) || 0;
+      downloads[id.toString()] = Number(count);
+    }
+    
+    console.log('Returning download counts:', downloads);
+    
+    const response = NextResponse.json({ success: true, downloads });
     
     // CORSヘッダーを追加
     response.headers.set('Access-Control-Allow-Origin', '*');
