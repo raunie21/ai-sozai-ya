@@ -10,11 +10,10 @@ export default function Header({ onNavigate }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { id: 'home', label: 'ホーム' },
+    { id: 'request', label: 'リクエスト' },
     { id: 'illustrations', label: 'イラスト' },
     { id: 'ranking', label: '人気ランキング' },
     { id: 'categories', label: 'カテゴリ' },
-    { id: 'about', label: 'このサイトについて' },
     { id: 'contact', label: 'お問い合わせ' },
   ];
 
@@ -37,7 +36,15 @@ export default function Header({ onNavigate }: HeaderProps) {
               {navItems.map((item) => (
                 <li key={item.id}>
                   <button
-                    onClick={() => onNavigate(item.id)}
+                    onClick={() => {
+                      if (item.id === 'request') {
+                        window.location.href = '/request';
+                      } else if (item.id === 'contact') {
+                        window.location.href = 'mailto:aisozaiya@ai-sozaiya.com';
+                      } else {
+                        onNavigate(item.id);
+                      }
+                    }}
                     className="text-white/90 font-semibold transition-all duration-300 px-4 py-2 rounded-lg hover:text-white hover:bg-white/10 hover:-translate-y-0.5"
                   >
                     {item.label}
