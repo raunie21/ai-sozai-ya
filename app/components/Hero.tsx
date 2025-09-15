@@ -52,18 +52,22 @@ export default function Hero({ onSearch, onCategoryChange, currentCategory, illu
 
             {/* ナビゲーション */}
             <nav className="flex items-center space-x-4 lg:space-x-6">
-              <Link href="/" className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors duration-200">
-                <span className="text-lg">🏠</span>
-                <span className="hidden lg:inline">ホーム</span>
-              </Link>
-              <Link href="/about" className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors duration-200">
-                <span className="text-lg">ℹ️</span>
-                <span className="hidden lg:inline">このサイトについて</span>
-              </Link>
-              <Link href="/contact" className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors duration-200">
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSfRhZemBKWEHMdUH4rdFgAWc4jtkvqKrzhUe_74Boy0bWz5Rg/viewform?usp=header"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors duration-200"
+              >
+                <span className="text-lg">📝</span>
+                <span className="hidden lg:inline">リクエスト</span>
+              </a>
+              <a
+                href="mailto:aisozaiya@ai-sozai.com?subject=%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B&body=%E3%81%8A%E5%90%8D%E5%89%8D%EF%BC%9A%0A%E3%81%94%E7%94%A8%E4%BB%B6%EF%BC%9A"
+                className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors duration-200"
+              >
                 <span className="text-lg">📧</span>
                 <span className="hidden lg:inline">お問い合わせ</span>
-              </Link>
+              </a>
             </nav>
           </div>
         </div>
