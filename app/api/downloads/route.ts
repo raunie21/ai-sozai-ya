@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
+
+// Upstash Redis クライアント（環境変数から自動読み込み）
+const redis = Redis.fromEnv();
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,12 +14,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Illustration ID is required' }, { status: 400 });
     }
 
-    // Vercel KVから現在のダウンロード数を取得
-    const currentCount = await kv.get(`downloads:${illustrationId}`) || 0;
-    const newCount = Number(currentCount) + 1;
-    
-    // Vercel KVに新しいダウンロード数を保存
-    await kv.set(`downloads:${illustrationId}`, newCount);
+    // 原子的にカウントアップ（存在しなければ1から）
+    const newCount = await redis.incr(`downloads:${illustrationId}`);
+    const currentCount = newCount - 1;
     
     console.log(`Updating download count for ID ${illustrationId}: ${currentCount} → ${newCount}`);
 
@@ -42,13 +42,15 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     console.log('GET /api/downloads called');
-    
     // 全イラストのダウンロード数を取得（ID 1-13）
+    const ids = Array.from({ length: 13 }, (_, i) => i + 1);
+    const keys = ids.map((id) => `downloads:${id}`);
+    const values = await redis.mget<number[]>(...keys);
     const downloads: Record<string, number> = {};
-    for (let id = 1; id <= 13; id++) {
-      const count = await kv.get(`downloads:${id}`) || 0;
-      downloads[id.toString()] = Number(count);
-    }
+    ids.forEach((id, idx) => {
+      const v = (values?.[idx] ?? 0) as number;
+      downloads[id.toString()] = Number(v || 0);
+    });
     
     console.log('Returning download counts:', downloads);
     
