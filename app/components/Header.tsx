@@ -71,7 +71,13 @@ export default function Header({ onNavigate }: HeaderProps) {
                 <li key={item.id}>
                   <button
                     onClick={() => {
-                      onNavigate(item.id);
+                      if (item.id === 'request') {
+                        window.location.href = '/request';
+                      } else if (item.id === 'contact') {
+                        window.location.href = 'mailto:aisozaiya@ai-sozaiya.com';
+                      } else {
+                        onNavigate(item.id);
+                      }
                       setIsMobileMenuOpen(false);
                     }}
                     className="w-full text-left text-white/90 font-semibold py-2 px-4 rounded-lg hover:text-white hover:bg-white/10 transition-all duration-300"
