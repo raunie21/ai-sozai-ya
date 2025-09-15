@@ -1,3 +1,46 @@
+# 画像追加フロー（Cloudflare R2 + 画像リサイズ）
+
+このプロジェクトでは、画像配信は Cloudflare R2 + `/cdn-cgi/image`（Cloudflare Images Resizing）で行います。サムネイルや表示サイズはURLパラメータで動的リサイズされるため、ローカルに縮小版を作る必要はありません。
+
+## 手順
+1. 画像ファイルを用意（推奨: PNG、必要に応じて WebP も可）
+2. R2 にアップロード
+   - `.env.local` に R2 接続情報を設定済みなら、以下で一括アップロードできます。
+   - `npm run upload-images`（`scripts/upload-to-r2.js`）
+   - 配置先パス規約:
+     - 原稿: `images/originals/<file>.png`
+     - 表示用: `images/illustrations/<file>.png`
+     - サムネ: `images/thumbnails/<file>-thumb.png`（任意。なければ表示時に動的リサイズ）
+3. `app/data/illustrations.ts` にレコードを追加
+   ```ts
+   {
+     id: 14,
+     title: 'タイトル',
+     imageUrl: '/images/illustrations/<file>.png',
+     thumbnailUrl: '/images/thumbnails/<file>-thumb.png',
+     originalUrl: '/images/originals/<file>.png',
+     category: 'people',
+     tags: ['タグ1','タグ2'],
+     downloads: 0,
+     fileSize: '2.1MB',
+     dimensions: '1920x1080'
+   }
+   ```
+4. ブラウザで確認
+   - 一覧（サムネ）: `width=200`
+   - スライド: `width=600`
+   - モーダル: `width=800`
+
+## 表示時のリサイズ例
+実際の配信URLは自動的に以下の形式に変換されます。
+```
+https://img.ai-sozaiya.com/cdn-cgi/image/width=600,fit=cover,gravity=center/images/illustrations/<file>.png
+```
+
+## SEOの基本設定
+- ページメタ/OGP/Twitterカードを `app/layout.tsx` に設定
+- サイトマップ/robots は `next-sitemap`（`postbuild`で自動生成）
+
 # AIそざいや - 無料イラスト配布サイト
 
 商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロードできるWebサイトです。
