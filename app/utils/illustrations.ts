@@ -1,11 +1,9 @@
 import { Illustration } from '@/app/types/illustration';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-
 // 全イラスト取得
 export async function fetchIllustrations(): Promise<Illustration[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/illustrations`);
+    const response = await fetch(`/api/illustrations`);
     const data = await response.json();
     
     if (data.success) {
@@ -23,7 +21,7 @@ export async function fetchIllustrations(): Promise<Illustration[]> {
 // 個別イラスト取得
 export async function fetchIllustration(id: number): Promise<Illustration | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/illustrations/${id}`);
+    const response = await fetch(`/api/illustrations/${id}`);
     const data = await response.json();
     
     if (data.success) {
@@ -41,7 +39,7 @@ export async function fetchIllustration(id: number): Promise<Illustration | null
 // 新規イラスト作成
 export async function createIllustration(illustrationData: Omit<Illustration, 'id' | 'downloads'>): Promise<Illustration | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/illustrations`, {
+    const response = await fetch(`/api/illustrations`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +64,7 @@ export async function createIllustration(illustrationData: Omit<Illustration, 'i
 // イラスト更新
 export async function updateIllustration(id: number, updates: Partial<Illustration>): Promise<Illustration | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/illustrations/${id}`, {
+    const response = await fetch(`/api/illustrations/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -91,7 +89,7 @@ export async function updateIllustration(id: number, updates: Partial<Illustrati
 // イラスト削除
 export async function deleteIllustration(id: number): Promise<boolean> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/illustrations/${id}`, {
+    const response = await fetch(`/api/illustrations/${id}`, {
       method: 'DELETE',
     });
     
