@@ -6,7 +6,7 @@ import Stats from './components/Stats';
 import Gallery from './components/Gallery';
 import Modal from './components/Modal';
 import Footer from './components/Footer';
-import { illustrations } from './data/illustrations';
+import { fetchIllustrations } from './utils/illustrations';
 import { Illustration, Category } from './types/illustration';
 
 export default function Home() {
@@ -16,36 +16,25 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [justDownloaded, setJustDownloaded] = useState(false);
-  const [illustrationData, setIllustrationData] = useState(illustrations);
+  const [illustrationData, setIllustrationData] = useState<Illustration[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // アプリケーション起動時にダウンロード数を読み込む
+  // アプリケーション起動時にUpstashからイラストデータを読み込む
   useEffect(() => {
-    const loadDownloadCounts = async () => {
+    const loadIllustrations = async () => {
       try {
-        const response = await fetch('/api/downloads');
-        if (response.ok) {
-          const data = await response.json();
-          const downloadCounts = data.downloads || {};
-          
-          // イラストデータにダウンロード数を適用
-          const updatedIllustrations = illustrations.map(illustration => ({
-            ...illustration,
-            downloads: downloadCounts[illustration.id.toString()] || 0
-          }));
-          
-          setIllustrationData(updatedIllustrations);
-        } else {
-          // APIが失敗した場合はデフォルトのイラストデータを使用
-          setIllustrationData(illustrations);
-        }
-      } catch (error) {
-        console.error('Failed to load download counts:', error);
-        // エラーの場合はデフォルトのイラストデータを使用
+        setIsLoading(true);
+        const illustrations = await fetchIllustrations();
         setIllustrationData(illustrations);
+      } catch (error) {
+        console.error('Failed to load illustrations:', error);
+        setIllustrationData([]);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    loadDownloadCounts();
+    loadIllustrations();
   }, []);
 
   const filteredIllustrations = useMemo(() => {
@@ -65,7 +54,7 @@ export default function Home() {
     if (searchQuery) {
       filtered = filtered.filter(ill => 
         ill.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ill.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+        (Array.isArray(ill.tags) && ill.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
       );
     }
 
@@ -211,6 +200,17 @@ export default function Home() {
         break;
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">イラストを読み込み中...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">

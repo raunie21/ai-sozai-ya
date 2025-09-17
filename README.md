@@ -1,40 +1,85 @@
-# 画像追加フロー（Cloudflare R2 + 画像リサイズ）
+# 画像追加フロー（Upstash DB + Cloudflare R2 + 画像リサイズ）
 
-このプロジェクトでは、画像配信は Cloudflare R2 + `/cdn-cgi/image`（Cloudflare Images Resizing）で行います。サムネイルや表示サイズはURLパラメータで動的リサイズされるため、ローカルに縮小版を作る必要はありません。
+このプロジェクトでは、画像データはUpstash Redisで管理し、画像配信は Cloudflare R2 + `/cdn-cgi/image`（Cloudflare Images Resizing）で行います。サムネイルや表示サイズはURLパラメータで動的リサイズされるため、ローカルに縮小版を作る必要はありません。
 
-## 手順
-1. 画像ファイルを用意（推奨: PNG、必要に応じて WebP も可）
-2. R2 にアップロード
-   - `.env.local` に R2 接続情報を設定済みなら、以下で一括アップロードできます。
-   - `npm run upload-images`（`scripts/upload-to-r2.js`）
-   - 配置先パス規約:
-     - 原稿: `images/originals/<file>.png`
-     - 表示用: `images/illustrations/<file>.png`
-     - サムネ: `images/thumbnails/<file>-thumb.png`（任意。なければ表示時に動的リサイズ）
-3. `app/data/illustrations.ts` にレコードを追加
-   ```ts
-   {
-     id: 14,
-     title: 'タイトル',
-     imageUrl: '/images/illustrations/<file>.png',
-     thumbnailUrl: '/images/thumbnails/<file>-thumb.png',
-     originalUrl: '/images/originals/<file>.png',
-     category: 'people',
-     tags: ['タグ1','タグ2'],
-     downloads: 0,
-     fileSize: '2.1MB',
-     dimensions: '1920x1080'
-   }
-   ```
-4. ブラウザで確認
-   - 一覧（サムネ）: `width=200`
-   - スライド: `width=600`
-   - モーダル: `width=800`
+## 新規画像追加手順（自動化版）
+
+### 1. 初回セットアップ
+```bash
+# 既存データをUpstashに移行
+npm run migrate-to-upstash
+```
+
+### 2. 新規画像追加
+```bash
+# 画像ファイル、タイトル、キャラクター名、カテゴリ、タグを指定して追加
+npm run add-image <画像パス> <タイトル> [キャラクター名] [カテゴリ] [タグ(カンマ区切り)]
+
+# 例
+npm run add-image ./new-image.png "新しいイラスト" John people "タグ1,タグ2"
+npm run add-image ./sarah.png "サラの笑顔" Sarah people "女性,笑顔"
+npm run add-image ./office.png "オフィス風景" Business-Man business "オフィス,働く"
+```
+
+### 3. 既存画像のキャラクター別整理
+```bash
+# 既存の画像をキャラクター別フォルダに自動整理
+npm run organize-by-character
+```
+
+このコマンドで以下が自動実行されます：
+- 画像をR2にアップロード（オリジナル）
+- サムネイル画像を自動生成・アップロード
+- Upstashにイラストデータを追加（自動採番）
+- ダウンロード数の初期化
+
+### 3. 手動での画像追加（API使用）
+
+```bash
+# POST /api/illustrations
+curl -X POST http://localhost:3000/api/illustrations \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "新しいイラスト",
+    "imageUrl": "https://img.ai-sozaiya.com/cdn-cgi/image/width=600/images/illustrations/new.png",
+    "thumbnailUrl": "https://img.ai-sozaiya.com/cdn-cgi/image/width=300/images/thumbnails/new-thumb.webp",
+    "originalUrl": "https://img.ai-sozaiya.com/images/originals/new.png",
+    "category": "people",
+    "tags": ["タグ1", "タグ2"],
+    "fileSize": "2.1MB",
+    "dimensions": "1920x1080"
+  }'
+```
 
 ## 表示時のリサイズ例
 実際の配信URLは自動的に以下の形式に変換されます。
 ```
 https://img.ai-sozaiya.com/cdn-cgi/image/width=600,fit=cover,gravity=center/images/illustrations/<file>.png
+```
+
+## データベース構造
+
+### Upstash Redis キー設計
+- `illustration:next_id` - 次のID（自動採番用）
+- `illustration:{id}` - イラストデータ（JSON）
+- `downloads:{id}` - ダウンロード数（数値）
+
+### イラストデータスキーマ
+```typescript
+interface Illustration {
+  id: number;                    // 自動採番
+  title: string;                 // タイトル
+  imageUrl: string;              // メイン画像URL（リサイズ済み）
+  thumbnailUrl: string;          // サムネイルURL
+  originalUrl: string;           // オリジナル画像URL
+  category: string;              // カテゴリ
+  tags: string[];                // タグ配列
+  downloads: number;             // ダウンロード数
+  fileSize?: string;             // ファイルサイズ
+  dimensions?: string;           // 画像寸法
+  createdAt: string;             // 作成日時
+  updatedAt: string;             // 更新日時
+}
 ```
 
 ## SEOの基本設定
@@ -107,7 +152,7 @@ npm run dev
 | ドメイン代 | お名前.com、ムームードメインなど | 約150円〜 |
 | ホスティング代 | Vercel/Netlifyの無料プラン | 0円 |
 | オブジェクトストレージ | Cloudflare R2（画像保管） | ほぼ0円 |
-| データベース | Supabase/PlanetScale無料プラン | 0円 |
+| データベース | Upstash Redis無料プラン | 0円 |
 | **合計** |  | **約150円〜** |
 
 ## 📁 プロジェクト構造
@@ -115,19 +160,27 @@ npm run dev
 \`\`\`
 radio2/
 ├── app/
-│   ├── components/          # Reactコンポーネント
+│   ├── api/                # API Routes
+│   │   ├── downloads/      # ダウンロード数管理
+│   │   └── illustrations/  # イラストCRUD操作
+│   ├── components/         # Reactコンポーネント
 │   │   ├── Header.tsx
 │   │   ├── Hero.tsx
 │   │   ├── Gallery.tsx
 │   │   ├── Modal.tsx
 │   │   └── ...
-│   ├── data/               # サンプルデータ
-│   │   └── illustrations.ts
 │   ├── types/              # TypeScript型定義
 │   │   └── illustration.ts
+│   ├── utils/              # ユーティリティ関数
+│   │   ├── illustrations.ts # イラストデータ操作
+│   │   └── imageUrl.ts     # 画像URL生成
 │   ├── globals.css         # グローバルスタイル
 │   ├── layout.tsx          # レイアウトコンポーネント
 │   └── page.tsx           # メインページ
+├── scripts/                # 自動化スクリプト
+│   ├── migrate-to-upstash.js    # データ移行
+│   ├── add-image-with-db.js     # 画像追加（DB連携）
+│   └── upload-to-r2.js          # R2アップロード
 ├── package.json
 ├── tailwind.config.js
 ├── tsconfig.json
@@ -138,21 +191,24 @@ radio2/
 
 ### イラストデータの追加
 
-\`app/data/illustrations.ts\` ファイルでイラストデータを管理できます:
+Upstash Redisでイラストデータを管理します。新しい画像を追加するには：
 
-\`\`\`typescript
-export const illustrations: Illustration[] = [
-  {
-    id: 1,
-    title: "新しいイラスト",
-    emoji: "🎨",
-    category: "icons",
-    tags: ["アート", "デザイン"],
-    downloads: 0
-  },
-  // 追加のイラスト...
-];
-\`\`\`
+1. **自動化コマンドを使用**（推奨）:
+   \`\`\`bash
+   npm run add-image ./new-image.png "新しいイラスト" people "タグ1,タグ2"
+   \`\`\`
+
+2. **APIを直接使用**:
+   \`\`\`bash
+   curl -X POST http://localhost:3000/api/illustrations \\
+     -H "Content-Type: application/json" \\
+     -d '{"title": "新しいイラスト", "category": "people", ...}'
+   \`\`\`
+
+3. **管理画面を作成**（将来の拡張）:
+   - イラストの一覧表示
+   - 編集・削除機能
+   - バッチアップロード
 
 ### カテゴリの追加
 

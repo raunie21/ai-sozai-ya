@@ -58,7 +58,7 @@ export default function IllustrationCard({ illustration, onClick }: Illustration
         </div>
         
         <div className="text-gray-600 text-sm mb-4">
-          {illustration.tags.join(', ')}
+          {Array.isArray(illustration.tags) ? illustration.tags.join(', ') : ''}
         </div>
         
         <button 

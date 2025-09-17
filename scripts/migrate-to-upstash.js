@@ -1,6 +1,10 @@
-import { Illustration } from '@/app/types/illustration';
+const { Redis } = require('@upstash/redis');
+require('dotenv').config({ path: '.env.local' });
 
-export const illustrations: Illustration[] = [
+const redis = Redis.fromEnv();
+
+// 既存のillustrationsデータ
+const illustrations = [
   {
     id: 1,
     title: "仲良し兄弟",
@@ -158,3 +162,41 @@ export const illustrations: Illustration[] = [
     dimensions: "1920x1080"
   },
 ];
+
+async function migrateToUpstash() {
+  try {
+    console.log('🚀 Upstashへの移行を開始します...');
+
+    // 既存のnext_idを設定（最大ID + 1）
+    const maxId = Math.max(...illustrations.map(i => i.id));
+    await redis.set('illustration:next_id', maxId + 1);
+    console.log(`✅ next_idを${maxId + 1}に設定しました`);
+
+    // 各イラストをUpstashに保存
+    for (const illustration of illustrations) {
+      const now = new Date().toISOString();
+      const illustrationData = {
+        ...illustration,
+        createdAt: now,
+        updatedAt: now
+      };
+
+      await redis.set(`illustration:${illustration.id}`, JSON.stringify(illustrationData));
+      await redis.set(`downloads:${illustration.id}`, 0);
+      
+      console.log(`✅ イラスト ${illustration.id}: ${illustration.title} を移行しました`);
+    }
+
+    console.log('🎉 移行が完了しました！');
+    console.log(`📊 合計 ${illustrations.length} 件のイラストを移行しました`);
+
+    // 検証
+    const keys = await redis.keys('illustration:*');
+    console.log(`🔍 Upstash内のillustrationキー数: ${keys.length}`);
+
+  } catch (error) {
+    console.error('❌ 移行中にエラーが発生しました:', error);
+  }
+}
+
+migrateToUpstash();

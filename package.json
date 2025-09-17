@@ -11,7 +11,11 @@
     "start": "next start",
     "lint": "next lint",
     "postbuild": "next-sitemap",
-    "upload-images": "node scripts/upload-to-r2.js"
+    "upload-images": "node scripts/upload-to-r2.js",
+    "migrate-to-upstash": "node scripts/migrate-to-upstash.js",
+    "add-image": "node scripts/add-image-with-db.js",
+    "organize-by-character": "node scripts/organize-by-character.js",
+    "import-folder": "node scripts/import-folder.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.882.0",
