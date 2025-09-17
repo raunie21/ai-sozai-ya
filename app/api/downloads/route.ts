@@ -42,10 +42,13 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     console.log('GET /api/downloads called');
-    // 全イラストのダウンロード数を取得（ID 1-13）
-    const ids = Array.from({ length: 13 }, (_, i) => i + 1);
+    // 既存のイラストIDを動的に列挙
+    const illustrationKeys = await redis.keys('illustration:*');
+    const ids = illustrationKeys
+      .map((k) => k.split(':')[1])
+      .filter(Boolean);
     const keys = ids.map((id) => `downloads:${id}`);
-    const values = await redis.mget<number[]>(...keys);
+    const values = keys.length > 0 ? await redis.mget<number[]>(...keys) : [];
     const downloads: Record<string, number> = {};
     ids.forEach((id, idx) => {
       const v = (values?.[idx] ?? 0) as number;

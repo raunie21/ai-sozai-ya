@@ -15,6 +15,7 @@
     "migrate-to-upstash": "node scripts/migrate-to-upstash.js",
     "add-image": "node scripts/add-image-with-db.js",
     "organize-by-character": "node scripts/organize-by-character.js",
+    "fix-image-urls": "node scripts/fix-image-urls.js",
     "import-folder": "node scripts/import-folder.js"
   },
   "dependencies": {
