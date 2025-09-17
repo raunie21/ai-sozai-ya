@@ -38,7 +38,13 @@ export default function Home() {
   }, []);
 
   const filteredIllustrations = useMemo(() => {
-    let filtered = [...illustrationData];
+    // 不正データを除外（タイトル欠落やURL欠落など）
+    let filtered = [...illustrationData].filter((ill) => {
+      const hasTitle = !!ill?.title && ill.title.trim() !== '';
+      const hasAnyUrl = !!ill?.thumbnailUrl || !!ill?.imageUrl || !!ill?.originalUrl;
+      const hasId = typeof ill?.id === 'number' && Number.isFinite(ill.id);
+      return hasTitle && hasAnyUrl && hasId;
+    });
 
     // Sort by downloads for ranking
     if (currentCategory === 'ranking') {

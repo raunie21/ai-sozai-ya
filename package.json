@@ -16,6 +16,10 @@
     "add-image": "node scripts/add-image-with-db.js",
     "organize-by-character": "node scripts/organize-by-character.js",
     "fix-image-urls": "node scripts/fix-image-urls.js",
+    "update-john-tags": "node scripts/update-john-tags.js",
+    "update-john-titles": "node scripts/update-john-titles.js",
+    "cleanup-empty": "node scripts/cleanup-empty-illustrations.js",
+    "reindex-ids": "node scripts/reindex-illustration-ids.js",
     "import-folder": "node scripts/import-folder.js"
   },
   "dependencies": {

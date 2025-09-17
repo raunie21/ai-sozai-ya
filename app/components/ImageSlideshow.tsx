@@ -37,10 +37,12 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
           const downloadCounts = data.downloads || {};
           
           // イラストデータにダウンロード数を適用
-          const updatedIllustrations = illustrations.map(illustration => ({
-            ...illustration,
-            downloads: downloadCounts[illustration.id.toString()] || 0
-          }));
+          const updatedIllustrations = illustrations
+            .filter((ill) => ill && typeof ill.id === 'number')
+            .map(illustration => ({
+              ...illustration,
+              downloads: downloadCounts[String(illustration.id)] || 0
+            }));
           
           setUpdatedIllustrations(updatedIllustrations);
         }
