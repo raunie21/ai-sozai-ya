@@ -4,26 +4,35 @@ export default function Footer() {
   const footerSections = [
     {
       title: '利用について',
-      links: ['利用規約', 'よくある質問', 'ライセンスについて']
-    },
-    {
-      title: 'カテゴリ',
-      links: ['人物イラスト', '動物イラスト', 'ビジネスイラスト', 'アイコン素材']
+      links: [
+        { name: '利用規約', url: '/terms' }
+      ]
     },
     {
       title: 'サポート',
-      links: ['お問い合わせ', 'リクエスト', '不具合報告']
+      links: [
+        { 
+          name: 'お問い合わせ', 
+          url: 'mailto:aisozaiya@ai-sozai.com?subject=%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B&body=%E3%81%8A%E5%90%8D%E5%89%8D%EF%BC%9A%0A%E3%81%94%E7%94%A8%E4%BB%B6%EF%BC%9A'
+        },
+        { 
+          name: 'リクエスト', 
+          url: 'https://docs.google.com/forms/d/e/1FAIpQLSfRhZemBKWEHMdUH4rdFgAWc4jtkvqKrzhUe_74Boy0bWz5Rg/viewform?usp=header'
+        }
+      ]
     },
     {
       title: 'SNS',
-      links: ['Twitter', 'Instagram', 'Facebook']
+      links: [
+        { name: 'Twitter', url: 'https://twitter.com/ai_sozaiya' }
+      ]
     }
   ];
 
   return (
     <footer className="bg-gradient-to-br from-gray-800 to-gray-900 text-white/90 py-16 text-center border-t border-white/10">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
           {footerSections.map((section, index) => (
             <div key={index} className="text-left">
               <h3 className="mb-4 text-indigo-400 font-semibold text-lg">
@@ -33,10 +42,12 @@ export default function Footer() {
                 {section.links.map((link, linkIndex) => (
                   <a
                     key={linkIndex}
-                    href="#"
-                    className="block text-gray-300 hover:text-white transition-colors duration-300 text-sm"
+                    href={link.url}
+                    target={link.url.startsWith('http') ? '_blank' : '_self'}
+                    rel={link.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className="block text-gray-300 hover:text-white transition-colors duration-300 text-sm hover:underline"
                   >
-                    {link}
+                    {link.name}
                   </a>
                 ))}
               </div>

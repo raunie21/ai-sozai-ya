@@ -20,6 +20,7 @@ export default function Gallery({ illustrations, currentCategory, searchQuery, o
     } else {
       const categoryNames = {
         people: '人物イラスト',
+        kids: 'キッズイラスト',
         animals: '動物イラスト',
         business: 'ビジネスイラスト',
         food: '食べ物イラスト',
@@ -65,7 +66,7 @@ export default function Gallery({ illustrations, currentCategory, searchQuery, o
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {illustrations.map((illustration) => (
             <IllustrationCard
               key={illustration.id}

@@ -35,37 +35,99 @@ export default function TermsPage() {
 
       <main className="py-16">
         <div className="max-w-4xl mx-auto px-4">
-          <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">
+          <h1 className="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-8 md:mb-12">
             利用規約
           </h1>
 
           {/* Tab Navigation */}
-          <div className="flex justify-center mb-8">
-            <div className="bg-white rounded-2xl p-2 border border-gray-200 shadow-sm">
-              {sections.map((section) => (
-                <button
-                  key={section.id}
-                  onClick={() => setActiveSection(section.id)}
-                  className={`px-6 py-3 rounded-xl transition-all duration-200 mx-1 ${
-                    activeSection === section.id
-                      ? 'bg-gray-800 text-white shadow-sm'
-                      : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
-                  }`}
-                >
-                  <span className="mr-2">{section.icon}</span>
-                  {section.label}
-                </button>
-              ))}
+          <div className="mb-8">
+            {/* デスクトップ表示 */}
+            <div className="hidden lg:flex justify-center">
+              <div className="bg-white rounded-2xl p-2 border border-gray-200 shadow-sm">
+                {sections.map((section) => (
+                  <button
+                    key={section.id}
+                    onClick={() => setActiveSection(section.id)}
+                    className={`px-6 py-3 rounded-xl transition-all duration-200 mx-1 whitespace-nowrap ${
+                      activeSection === section.id
+                        ? 'bg-gray-800 text-white shadow-sm'
+                        : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span className="mr-2">{section.icon}</span>
+                    {section.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* タブレット表示 */}
+            <div className="hidden md:flex lg:hidden justify-center">
+              <div className="grid grid-cols-3 gap-2 w-full max-w-2xl">
+                {sections.map((section) => (
+                  <button
+                    key={section.id}
+                    onClick={() => setActiveSection(section.id)}
+                    className={`px-4 py-3 rounded-xl transition-all duration-200 text-sm ${
+                      activeSection === section.id
+                        ? 'bg-gray-800 text-white shadow-sm'
+                        : 'bg-white text-gray-600 hover:text-gray-800 hover:bg-gray-50 border border-gray-200'
+                    }`}
+                  >
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-lg">{section.icon}</span>
+                      <span className="font-medium">{section.label}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* モバイル表示 */}
+            <div className="md:hidden space-y-2">
+              {/* 最初の3つを1行目に配置 */}
+              <div className="grid grid-cols-3 gap-2">
+                {sections.slice(0, 3).map((section) => (
+                  <button
+                    key={section.id}
+                    onClick={() => setActiveSection(section.id)}
+                    className={`px-2 py-2 rounded-lg transition-all duration-200 text-xs ${
+                      activeSection === section.id
+                        ? 'bg-gray-800 text-white shadow-sm'
+                        : 'bg-white text-gray-600 hover:text-gray-800 hover:bg-gray-50 border border-gray-200'
+                    }`}
+                  >
+                    <span className="font-medium">{section.label}</span>
+                  </button>
+                ))}
+              </div>
+              
+              {/* 最後の2つを2行目に中央配置 */}
+              <div className="flex justify-center gap-2">
+                {sections.slice(3, 5).map((section) => (
+                  <button
+                    key={section.id}
+                    onClick={() => setActiveSection(section.id)}
+                    className={`px-3 py-2 rounded-lg transition-all duration-200 text-xs ${
+                      activeSection === section.id
+                        ? 'bg-gray-800 text-white shadow-sm'
+                        : 'bg-white text-gray-600 hover:text-gray-800 hover:bg-gray-50 border border-gray-200'
+                    }`}
+                  >
+                    <span className="font-medium">{section.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Content */}
-          <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-2xl p-4 md:p-8 shadow-sm border border-gray-200">
             {activeSection === 'usage' && (
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">利用規約</h2>
+                <h2 className="text-xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6">利用規約</h2>
                 <div className="prose prose-lg max-w-none">
-                  <h3 className="text-xl font-semibold text-gray-700 mb-3">1. 利用条件</h3>
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-700 mb-3">1. 利用条件</h3>
                   <p className="text-gray-600 mb-4">
                     本サイトで提供されるイラスト素材は、個人利用・商用利用を問わずご利用いただけます。
                     ただし、以下の条件を遵守してください。
@@ -93,7 +155,7 @@ export default function TermsPage() {
 
             {activeSection === 'license' && (
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">ライセンス</h2>
+                <h2 className="text-xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6">ライセンス</h2>
                 <div className="prose prose-lg max-w-none">
                   <h3 className="text-xl font-semibold text-gray-700 mb-3">ライセンスの種類</h3>
                   <p className="text-gray-600 mb-4">
@@ -121,7 +183,7 @@ export default function TermsPage() {
 
             {activeSection === 'copyright' && (
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">著作権</h2>
+                <h2 className="text-xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6">著作権</h2>
                 <div className="prose prose-lg max-w-none">
                   <h3 className="text-xl font-semibold text-gray-700 mb-3">著作権の放棄</h3>
                   <p className="text-gray-600 mb-4">
@@ -149,7 +211,7 @@ export default function TermsPage() {
 
             {activeSection === 'disclaimer' && (
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">免責事項</h2>
+                <h2 className="text-xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6">免責事項</h2>
                 <div className="prose prose-lg max-w-none">
                   <h3 className="text-xl font-semibold text-gray-700 mb-3">責任の範囲</h3>
                   <p className="text-gray-600 mb-4">
@@ -176,7 +238,7 @@ export default function TermsPage() {
 
             {activeSection === 'contact' && (
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">お問い合わせ</h2>
+                <h2 className="text-xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6">お問い合わせ</h2>
                 <div className="prose prose-lg max-w-none">
                   <h3 className="text-xl font-semibold text-gray-700 mb-3">お問い合わせ方法</h3>
                   <p className="text-gray-600 mb-4">

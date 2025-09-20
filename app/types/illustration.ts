@@ -11,4 +11,4 @@ export interface Illustration {
   dimensions?: string; // 画像サイズ（例: "1920x1080"）
 }
 
-export type Category = 'all' | 'ranking' | 'people' | 'animals' | 'business' | 'food' | 'nature' | 'icons';
+export type Category = 'all' | 'ranking' | 'people' | 'animals' | 'business' | 'food' | 'nature' | 'icons' | 'kids';

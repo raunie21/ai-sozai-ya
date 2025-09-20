@@ -6,6 +6,7 @@ import Stats from './components/Stats';
 import Gallery from './components/Gallery';
 import Modal from './components/Modal';
 import Footer from './components/Footer';
+import CategoryFilter from './components/CategoryFilter';
 import { fetchIllustrations } from './utils/illustrations';
 import { Illustration, Category } from './types/illustration';
 
@@ -222,12 +223,16 @@ export default function Home() {
     <div className="min-h-screen">
       <Hero 
         onSearch={handleSearch}
-        onCategoryChange={handleCategoryChange}
-        currentCategory={currentCategory}
         illustrations={illustrationData}
       />
       
-      <main className="bg-white py-16">
+      {/* 固定カテゴリーフィルター */}
+      <CategoryFilter 
+        currentCategory={currentCategory}
+        onCategoryChange={handleCategoryChange}
+      />
+      
+      <main className="bg-white py-16" style={{paddingTop: '120px'}} id="main-content">
         <div className="max-w-6xl mx-auto px-4">
           <Stats />
           

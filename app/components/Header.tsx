@@ -9,11 +9,19 @@ interface HeaderProps {
 export default function Header({ onNavigate }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const navItems = [
-    { id: 'request', label: 'リクエスト' },
+  // デスクトップ表示用のナビアイテム（リクエスト・お問い合わせを除外）
+  const desktopNavItems = [
     { id: 'illustrations', label: 'イラスト' },
     { id: 'ranking', label: '人気ランキング' },
     { id: 'categories', label: 'カテゴリ' },
+  ];
+
+  // モバイル表示用のナビアイテム（全項目）
+  const mobileNavItems = [
+    { id: 'illustrations', label: 'イラスト' },
+    { id: 'ranking', label: '人気ランキング' },
+    { id: 'categories', label: 'カテゴリ' },
+    { id: 'request', label: 'リクエスト' },
     { id: 'contact', label: 'お問い合わせ' },
   ];
 
@@ -33,18 +41,10 @@ export default function Header({ onNavigate }: HeaderProps) {
           {/* Desktop Navigation */}
           <nav className="hidden md:block">
             <ul className="flex gap-8">
-              {navItems.map((item) => (
+              {desktopNavItems.map((item) => (
                 <li key={item.id}>
                   <button
-                    onClick={() => {
-                      if (item.id === 'request') {
-                        window.location.href = '/request';
-                      } else if (item.id === 'contact') {
-                        window.location.href = 'mailto:aisozaiya@ai-sozaiya.com';
-                      } else {
-                        onNavigate(item.id);
-                      }
-                    }}
+                    onClick={() => onNavigate(item.id)}
                     className="text-white/90 font-semibold transition-all duration-300 px-4 py-2 rounded-lg hover:text-white hover:bg-white/10 hover:-translate-y-0.5"
                   >
                     {item.label}
@@ -56,18 +56,28 @@ export default function Header({ onNavigate }: HeaderProps) {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-white/90 text-2xl"
+            className="md:hidden text-white/90 p-2 rounded-lg hover:bg-white/10 transition-all duration-300"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? '✕' : '☰'}
+            <div className="flex flex-col justify-center items-center w-6 h-6">
+              {isMobileMenuOpen ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </div>
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden mt-4 glassmorphism rounded-lg p-4">
+          <nav className="md:hidden mt-4 glassmorphism rounded-lg p-4 border border-white/20">
             <ul className="space-y-2">
-              {navItems.map((item) => (
+              {mobileNavItems.map((item) => (
                 <li key={item.id}>
                   <button
                     onClick={() => {
@@ -80,8 +90,15 @@ export default function Header({ onNavigate }: HeaderProps) {
                       }
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full text-left text-white/90 font-semibold py-2 px-4 rounded-lg hover:text-white hover:bg-white/10 transition-all duration-300"
+                    className="w-full text-left text-white/90 font-semibold py-3 px-4 rounded-lg hover:text-white hover:bg-white/10 transition-all duration-300 flex items-center gap-3"
                   >
+                    <span>
+                      {item.id === 'illustrations' && '🎨'}
+                      {item.id === 'ranking' && '🔥'}
+                      {item.id === 'categories' && '📁'}
+                      {item.id === 'request' && '📝'}
+                      {item.id === 'contact' && '📧'}
+                    </span>
                     {item.label}
                   </button>
                 </li>

@@ -7,24 +7,13 @@ import ImageSlideshow from './ImageSlideshow';
 
 interface HeroProps {
   onSearch: (query: string) => void;
-  onCategoryChange: (category: Category) => void;
-  currentCategory: Category;
   illustrations: Illustration[];
 }
 
-export default function Hero({ onSearch, onCategoryChange, currentCategory, illustrations }: HeroProps) {
+export default function Hero({ onSearch, illustrations }: HeroProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const categories = [
-    { id: 'all' as Category, label: 'すべて', icon: '🎨' },
-    { id: 'ranking' as Category, label: '人気ランキング', icon: '🔥' },
-    { id: 'people' as Category, label: '人物', icon: '👤' },
-    { id: 'animals' as Category, label: '動物', icon: '🐱' },
-    { id: 'business' as Category, label: 'ビジネス', icon: '💼' },
-    { id: 'food' as Category, label: '食べ物', icon: '🍎' },
-    { id: 'nature' as Category, label: '自然', icon: '🌿' },
-    { id: 'icons' as Category, label: 'アイコン', icon: '⭐' },
-  ];
 
   const handleSearch = () => {
     onSearch(searchQuery.trim());
@@ -50,8 +39,8 @@ export default function Hero({ onSearch, onCategoryChange, currentCategory, illu
               <span className="text-xl font-bold text-gray-800">AIそざいや</span>
             </div>
 
-            {/* ナビゲーション */}
-            <nav className="flex items-center space-x-4 lg:space-x-6">
+            {/* デスクトップナビゲーション */}
+            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6">
               <a
                 href="https://docs.google.com/forms/d/e/1FAIpQLSfRhZemBKWEHMdUH4rdFgAWc4jtkvqKrzhUe_74Boy0bWz5Rg/viewform?usp=header"
                 target="_blank"
@@ -69,31 +58,69 @@ export default function Hero({ onSearch, onCategoryChange, currentCategory, illu
                 <span className="hidden lg:inline">お問い合わせ</span>
               </a>
             </nav>
+
+            {/* モバイルハンバーガーメニューボタン */}
+            <button
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-all duration-300"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <div className="flex flex-col justify-center items-center w-6 h-6">
+                {isMobileMenuOpen ? (
+                  <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                )}
+              </div>
+            </button>
           </div>
+
+          {/* モバイルナビゲーションメニュー */}
+          {isMobileMenuOpen && (
+            <>
+              {/* オーバーレイ */}
+              <div 
+                className="fixed inset-0 bg-black/20 z-40"
+                onClick={() => setIsMobileMenuOpen(false)}
+              />
+              
+              {/* メニューコンテンツ */}
+              <div className="md:hidden mt-4 bg-white rounded-lg border border-gray-200 shadow-lg relative z-50">
+                <nav className="p-4">
+                  <ul className="space-y-2">
+                    <li>
+                      <a
+                        href="https://docs.google.com/forms/d/e/1FAIpQLSfRhZemBKWEHMdUH4rdFgAWc4jtkvqKrzhUe_74Boy0bWz5Rg/viewform?usp=header"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 w-full text-left text-gray-700 hover:text-gray-900 hover:bg-gray-50 py-3 px-4 rounded-lg transition-all duration-300"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <span className="text-lg">📝</span>
+                        <span className="font-medium">リクエスト</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="mailto:aisozaiya@ai-sozai.com?subject=%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B&body=%E3%81%8A%E5%90%8D%E5%89%8D%EF%BC%9A%0A%E3%81%94%E7%94%A8%E4%BB%B6%EF%BC%9A"
+                        className="flex items-center gap-3 w-full text-left text-gray-700 hover:text-gray-900 hover:bg-gray-50 py-3 px-4 rounded-lg transition-all duration-300"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <span className="text-lg">📧</span>
+                        <span className="font-medium">お問い合わせ</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </>
+          )}
         </div>
       </header>
 
-      {/* カテゴリフィルター - 固定ヘッダー */}
-      <section className="sticky top-16 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-center space-x-2 overflow-x-auto">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => onCategoryChange(category.id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-full border transition-all duration-200 whitespace-nowrap ${
-                  currentCategory === category.id
-                    ? 'bg-gray-800 text-white border-gray-800 shadow-md'
-                    : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm'
-                }`}
-              >
-                <span className="text-lg">{category.icon}</span>
-                <span className="font-medium">{category.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* 最近追加された画像のスライドショー */}
       <ImageSlideshow illustrations={illustrations} />
