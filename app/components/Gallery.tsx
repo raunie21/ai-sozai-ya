@@ -9,9 +9,10 @@ interface GalleryProps {
   currentCategory: Category;
   searchQuery: string;
   onIllustrationClick: (illustration: Illustration) => void;
+  onTagClick?: (tag: string) => void;
 }
 
-export default function Gallery({ illustrations, currentCategory, searchQuery, onIllustrationClick }: GalleryProps) {
+export default function Gallery({ illustrations, currentCategory, searchQuery, onIllustrationClick, onTagClick }: GalleryProps) {
   const getTitle = () => {
     if (currentCategory === 'ranking') {
       return `人気ランキング TOP ${illustrations.length}`;
@@ -72,6 +73,7 @@ export default function Gallery({ illustrations, currentCategory, searchQuery, o
               key={illustration.id}
               illustration={illustration}
               onClick={() => onIllustrationClick(illustration)}
+              onTagClick={onTagClick}
             />
           ))}
         </div>

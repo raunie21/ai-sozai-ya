@@ -20,21 +20,17 @@ export default function CategoryFilter({ currentCategory, onCategoryChange }: Ca
       // ヘッダーの高さ（固定）
       const headerHeight = 64;
       
-      // メインコンテンツエリアの開始位置を動的に取得
-      const mainElement = document.querySelector('main');
-      if (mainElement) {
-        const mainElementTop = mainElement.offsetTop;
-        const titleSectionHeight = 150; // Stats + セクションタイトル部分の高さ
-        const galleryStartPosition = mainElementTop + titleSectionHeight;
-        
-        // 大きくスクロールした場合（ヘッダーが見えなくなる程度）
-        if (currentScrollY > headerHeight) {
-          // 画面最上部に配置（隙間を埋める）
-          setTopPosition(0);
-        } else {
-          // 通常時はヘッダー下に配置
-          setTopPosition(headerHeight);
-        }
+      // スライドショーの高さを考慮した位置調整
+      const slideshowElement = document.querySelector('[data-slideshow]') as HTMLElement;
+      const slideshowHeight = slideshowElement ? slideshowElement.offsetHeight : 0;
+      
+      // スライドショーが表示されている場合の調整
+      if (currentScrollY < slideshowHeight + headerHeight) {
+        // スライドショーが見えている間はヘッダー下に配置
+        setTopPosition(headerHeight);
+      } else {
+        // スライドショーを過ぎたら画面最上部に固定
+        setTopPosition(0);
       }
     };
 
@@ -63,7 +59,7 @@ export default function CategoryFilter({ currentCategory, onCategoryChange }: Ca
 
   return (
     <section 
-      className="fixed left-0 right-0 z-40 bg-white backdrop-blur-md border-b border-gray-200 shadow-sm transition-all duration-500 ease-in-out"
+      className="fixed left-0 right-0 z-30 bg-white backdrop-blur-md border-b border-gray-200 shadow-sm transition-all duration-500 ease-in-out"
       style={{ 
         top: `${topPosition}px`,
         transform: `translateY(0)`

@@ -192,7 +192,7 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
   }
 
   return (
-    <section className="bg-white py-12">
+    <section className="bg-white py-12" data-slideshow>
       <div className="max-w-6xl mx-auto px-4">
         {/* デスクトップ用スワイパー (4枚表示) */}
         <div className="hidden md:block">

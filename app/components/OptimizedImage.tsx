@@ -13,6 +13,8 @@ interface OptimizedImageProps {
   onError?: () => void;
   format?: 'auto' | 'webp' | 'png' | 'jpg' | 'avif';
   quality?: 'auto' | number;
+  title?: string;
+  sizes?: string;
 }
 
 export default function OptimizedImage({
@@ -25,6 +27,8 @@ export default function OptimizedImage({
   onError,
   format = 'auto',
   quality = 'auto',
+  title,
+  sizes,
 }: OptimizedImageProps) {
   // src が既に /cdn-cgi/image を含む完全URLならそのまま使い、
   // そうでなければ getImageUrl でR2用URLを生成
@@ -59,9 +63,11 @@ export default function OptimizedImage({
     <img
       src={currentSrc}
       alt={alt}
+      title={title || alt}
       className={className}
       width={width}
       height={height}
+      sizes={sizes}
       loading={priority ? 'eager' : 'lazy'}
       onError={handleError}
       onLoad={handleLoad}
@@ -69,6 +75,9 @@ export default function OptimizedImage({
         opacity: hasError ? 0.5 : 1,
         transition: 'opacity 0.3s ease',
       }}
+      // SEO最適化のための追加属性
+      decoding="async"
+      fetchPriority={priority ? 'high' : 'auto'}
     />
   );
 }

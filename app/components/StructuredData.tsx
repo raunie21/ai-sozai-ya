@@ -1,0 +1,171 @@
+'use client';
+
+import { Illustration } from '../types/illustration';
+
+interface StructuredDataProps {
+  illustrations?: Illustration[];
+  currentIllustration?: Illustration;
+  type?: 'website' | 'illustration' | 'gallery';
+}
+
+export default function StructuredData({ illustrations, currentIllustration, type = 'website' }: StructuredDataProps) {
+  const generateWebsiteSchema = () => ({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "AIそざいや",
+    "description": "商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード",
+    "url": "https://www.ai-sozaiya.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://www.ai-sozaiya.com/?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "AIそざいや",
+      "url": "https://www.ai-sozaiya.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://img.ai-sozaiya.com/logo/ai-sozaiya-logo.png"
+      }
+    }
+  });
+
+  const generateOrganizationSchema = () => ({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "AIそざいや",
+    "url": "https://www.ai-sozaiya.com",
+    "logo": "https://img.ai-sozaiya.com/logo/ai-sozaiya-logo.png",
+    "description": "商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード",
+    "sameAs": [
+      "https://twitter.com/ai_sozaiya"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "url": "https://www.ai-sozaiya.com/request"
+    }
+  });
+
+  const generateIllustrationSchema = (illustration: Illustration) => ({
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    "name": illustration.title,
+    "description": `${illustration.title}のイラストです。商用利用OK、クレジット表記不要で無料ダウンロード可能。`,
+    "url": illustration.imageUrl || illustration.thumbnailUrl,
+    "thumbnailUrl": illustration.thumbnailUrl,
+    "contentUrl": illustration.originalUrl || illustration.imageUrl,
+    "encodingFormat": "image/png",
+    "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "acquireLicensePage": "https://www.ai-sozaiya.com/terms",
+    "creditText": "AIそざいや",
+    "creator": {
+      "@type": "Organization",
+      "name": "AIそざいや"
+    },
+    "keywords": illustration.tags?.join(', ') || '',
+    "category": illustration.category,
+    "downloadUrl": illustration.originalUrl || illustration.imageUrl,
+    "usageInfo": "商用利用OK、クレジット表記不要",
+    "copyrightNotice": "AIそざいや - 商用利用OK"
+  });
+
+  const generateGallerySchema = (illustrations: Illustration[]) => ({
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    "name": "AIそざいや - 無料イラストギャラリー",
+    "description": "商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード",
+    "url": "https://www.ai-sozaiya.com",
+    "image": illustrations.slice(0, 10).map(ill => ({
+      "@type": "ImageObject",
+      "name": ill.title,
+      "url": ill.thumbnailUrl || ill.imageUrl,
+      "description": `${ill.title}のイラスト`
+    })),
+    "numberOfItems": illustrations.length,
+    "publisher": {
+      "@type": "Organization",
+      "name": "AIそざいや"
+    }
+  });
+
+  const generateBreadcrumbSchema = () => ({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "ホーム",
+        "item": "https://www.ai-sozaiya.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "無料イラスト",
+        "item": "https://www.ai-sozaiya.com"
+      }
+    ]
+  });
+
+  const generateFAQSchema = () => ({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "商用利用は可能ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい、すべてのイラストは商用利用可能です。クレジット表記も不要です。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "クレジット表記は必要ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "いいえ、クレジット表記は不要です。自由にご利用いただけます。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "ダウンロードは無料ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい、すべてのイラストを無料でダウンロードできます。"
+        }
+      }
+    ]
+  });
+
+  let schemas = [];
+
+  // 基本スキーマは常に含める
+  schemas.push(generateWebsiteSchema());
+  schemas.push(generateOrganizationSchema());
+  schemas.push(generateBreadcrumbSchema());
+  schemas.push(generateFAQSchema());
+
+  // タイプ別のスキーマを追加
+  if (type === 'illustration' && currentIllustration) {
+    schemas.push(generateIllustrationSchema(currentIllustration));
+  } else if (type === 'gallery' && illustrations && illustrations.length > 0) {
+    schemas.push(generateGallerySchema(illustrations));
+  }
+
+  return (
+    <>
+      {schemas.map((schema, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema, null, 2)
+          }}
+        />
+      ))}
+    </>
+  );
+}

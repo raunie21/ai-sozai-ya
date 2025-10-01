@@ -7,6 +7,8 @@ import Gallery from './components/Gallery';
 import Modal from './components/Modal';
 import Footer from './components/Footer';
 import CategoryFilter from './components/CategoryFilter';
+import StructuredData from './components/StructuredData';
+import Breadcrumb from './components/Breadcrumb';
 import { fetchIllustrations } from './utils/illustrations';
 import { Illustration, Category } from './types/illustration';
 
@@ -70,11 +72,22 @@ export default function Home() {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+    setCurrentCategory('all'); // Reset category when searching
   };
 
   const handleCategoryChange = (category: Category) => {
     setCurrentCategory(category);
     setSearchQuery(''); // Clear search when changing category
+  };
+
+  const handleTagClick = (tag: string) => {
+    setSearchQuery(tag);
+    setCurrentCategory('all');
+  };
+
+  const handleSearchClear = () => {
+    setSearchQuery('');
+    setCurrentCategory('all');
   };
 
   const handleIllustrationClick = (illustration: Illustration) => {
@@ -220,61 +233,83 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen">
-      <Hero 
-        onSearch={handleSearch}
-        illustrations={illustrationData}
+    <>
+      <StructuredData 
+        illustrations={filteredIllustrations}
+        type={selectedIllustration ? 'illustration' : 'gallery'}
+        currentIllustration={selectedIllustration || undefined}
       />
       
-      {/* 固定カテゴリーフィルター */}
-      <CategoryFilter 
-        currentCategory={currentCategory}
-        onCategoryChange={handleCategoryChange}
-      />
-      
-      <main className="bg-white py-16" style={{paddingTop: '120px'}} id="main-content">
-        <div className="max-w-6xl mx-auto px-4">
-          <Stats />
-          
-          {/* セクションタイトル */}
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">
-              {currentCategory === 'all' ? 'すべてのイラスト' : 
-               currentCategory === 'ranking' ? '人気ランキング' :
-               currentCategory === 'people' ? '人物' :
-               currentCategory === 'animals' ? '動物' :
-               currentCategory === 'business' ? 'ビジネス' :
-               currentCategory === 'food' ? '食べ物' :
-               currentCategory === 'nature' ? '自然' :
-               currentCategory === 'icons' ? 'アイコン' : 'イラスト'}
-            </h2>
-            <p className="text-gray-600">
-              {filteredIllustrations.length}件のイラストが見つかりました
-            </p>
+      <div className="min-h-screen">
+        <Hero 
+          onSearch={handleSearch}
+          illustrations={illustrationData}
+        />
+        
+        {/* 固定カテゴリーフィルター */}
+        <CategoryFilter 
+          currentCategory={currentCategory}
+          onCategoryChange={handleCategoryChange}
+        />
+        
+        <main className="bg-white py-16" style={{paddingTop: '80px'}} id="main-content">
+          <div className="max-w-6xl mx-auto px-4">
+            <Stats />
+            
+            {/* パンくずナビゲーション */}
+            <Breadcrumb
+              currentCategory={currentCategory}
+              searchQuery={searchQuery}
+              currentIllustration={selectedIllustration || undefined}
+              onCategoryChange={handleCategoryChange}
+              onSearchClear={handleSearchClear}
+            />
+            
+            {/* セクションタイトル */}
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                {searchQuery ? `「${searchQuery}」の検索結果` :
+                 currentCategory === 'all' ? 'すべてのイラスト' : 
+                 currentCategory === 'ranking' ? '人気ランキング' :
+                 currentCategory === 'people' ? '人物' :
+                 currentCategory === 'animals' ? '動物' :
+                 currentCategory === 'business' ? 'ビジネス' :
+                 currentCategory === 'food' ? '食べ物' :
+                 currentCategory === 'nature' ? '自然' :
+                 currentCategory === 'icons' ? 'アイコン' : 'イラスト'}
+              </h2>
+              <p className="text-gray-600">
+                {filteredIllustrations.length}件のイラストが見つかりました
+              </p>
+            </div>
+            
+            <Gallery
+              illustrations={filteredIllustrations}
+              currentCategory={currentCategory}
+              searchQuery={searchQuery}
+              onIllustrationClick={handleIllustrationClick}
+              onTagClick={handleTagClick}
+            />
           </div>
-          
-          <Gallery
-            illustrations={filteredIllustrations}
-            currentCategory={currentCategory}
-            searchQuery={searchQuery}
-            onIllustrationClick={handleIllustrationClick}
-          />
-        </div>
-      </main>
+        </main>
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setJustDownloaded(false);
-        }}
-        illustration={selectedIllustration}
-        onDownload={handleDownload}
-        isDownloading={isDownloading}
-        justDownloaded={justDownloaded}
-      />
-      
-      <Footer />
-    </div>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setJustDownloaded(false);
+          }}
+          illustration={selectedIllustration}
+          onDownload={handleDownload}
+          isDownloading={isDownloading}
+          justDownloaded={justDownloaded}
+          allIllustrations={illustrationData}
+          onIllustrationClick={handleIllustrationClick}
+          onTagClick={handleTagClick}
+        />
+        
+        <Footer />
+      </div>
+    </>
   );
 }

@@ -1,0 +1,26 @@
+{
+  "name": "AIそざいや - 無料イラスト配布サイト",
+  "short_name": "AIそざいや",
+  "description": "商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "categories": ["design", "graphics", "productivity"],
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ]
+}

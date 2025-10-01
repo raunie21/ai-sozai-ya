@@ -123,7 +123,9 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
 
 
       {/* 最近追加された画像のスライドショー */}
-      <ImageSlideshow illustrations={illustrations} />
+      <div className="mt-16 md:mt-20">
+        <ImageSlideshow illustrations={illustrations} />
+      </div>
 
       {/* ヒーローセクション */}
       <section className="bg-white py-16">
