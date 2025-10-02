@@ -1,3 +1,7 @@
 # ads.txt file for ai-sozaiya.com
 # Google AdSense
 google.com, pub-6554623340823430, DIRECT, f08c47fec0942fa0
+
+# AdSense サイト所有権確認用スニペット
+# 以下の行をコピーしてAdSenseダッシュボードに貼り付けてください
+# google.com, pub-6554623340823430, DIRECT, f08c47fec0942fa0
