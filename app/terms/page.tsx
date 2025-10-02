@@ -142,10 +142,10 @@ export default function TermsPage() {
                     <li>その他の商業的利用</li>
                   </ul>
 
-                  <h3 className="text-xl font-semibold text-gray-700 mb-3">3. 動画サイトでの使用時（必須要件）</h3>
+                  <h3 className="text-xl font-semibold text-gray-700 mb-3">3. YouTubeでの使用時（必須要件）</h3>
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
                     <p className="text-red-700 font-medium mb-3">
-                      ⚠️ YouTube、TikTok、Instagram等の動画サイトで使用する場合は、以下のクレジット表記が<strong>必須</strong>です：
+                      ⚠️ YouTubeで使用する場合は、以下のクレジット表記が<strong>必須</strong>です：
                     </p>
                     <div className="bg-white border border-gray-200 rounded-lg p-3 mb-3">
                       <p className="text-sm text-gray-600 mb-2">動画の概要欄に以下のテキストを必ず記載してください：</p>
@@ -168,7 +168,7 @@ export default function TermsPage() {
                     <li>素材の改変・加工後の再配布</li>
                     <li>違法な用途での利用</li>
                     <li>他者の権利を侵害する利用</li>
-                    <li>動画サイトでの使用時にクレジット表記を怠ること</li>
+                    <li>YouTubeでの使用時にクレジット表記を怠ること</li>
                   </ul>
                 </div>
               </div>
@@ -199,10 +199,10 @@ export default function TermsPage() {
                     また、素材を改変した場合は、その旨を明記することをお勧めします。
                   </p>
 
-                  <h3 className="text-xl font-semibold text-gray-700 mb-3">動画サイトでの使用時（必須）</h3>
+                  <h3 className="text-xl font-semibold text-gray-700 mb-3">YouTubeでの使用時（必須）</h3>
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
                     <p className="text-gray-700 font-medium mb-3">
-                      YouTube、TikTok、Instagram、その他の動画サイトで使用する場合は、以下のクレジット表記が<strong>必須</strong>です：
+                      YouTubeで使用する場合は、以下のクレジット表記が<strong>必須</strong>です：
                     </p>
                     <div className="bg-white border border-gray-200 rounded-lg p-3 mb-3">
                       <p className="text-sm text-gray-600 mb-2">概要欄に以下のテキストをコピー&ペーストしてください：</p>
@@ -215,7 +215,7 @@ export default function TermsPage() {
                       </div>
                     </div>
                     <ul className="list-disc list-inside text-gray-600 space-y-1 text-sm">
-                      <li>動画の概要欄（説明文）に必ず記載</li>
+                      <li>YouTube動画の概要欄（説明文）に必ず記載</li>
                       <li>コメント欄での表記は不可</li>
                       <li>動画内での表記のみでは不十分</li>
                       <li>URLはコピー&ペースト可能な形で記載</li>
