@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Illustration, Category } from '../types/illustration';
 import IllustrationCard from './IllustrationCard';
 import RankingItem from './RankingItem';
@@ -72,7 +73,7 @@ export default function Gallery({ illustrations, currentCategory, searchQuery, o
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {(() => {
-            const items = [];
+            const items: React.ReactNode[] = [];
             const adPositions = [5, 11, 17, 23]; // 広告を表示する位置
             const adSlots = [
               ADS_CONFIG.AD_SLOTS.CARD_AD_1,
