@@ -131,10 +131,10 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
       <section className="bg-white py-16">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold text-gray-800 mb-6 leading-tight">
-            無料AIイラスト配布サイト
+            AI素材・無料イラスト配布サイト
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-            商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード
+            AI素材・フリー素材を無料配布！商用利用OK・クレジット表記不要の高品質AI生成イラストをダウンロード
             <br />
             商用利用の際の利用規約に関して、<a href="/terms" className="text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200 underline">
               こちら

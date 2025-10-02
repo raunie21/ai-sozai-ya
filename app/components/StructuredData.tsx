@@ -12,8 +12,9 @@ export default function StructuredData({ illustrations, currentIllustration, typ
   const generateWebsiteSchema = () => ({
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "AIそざいや",
-    "description": "商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード",
+    "name": "AI素材 - AIそざいや",
+    "description": "AI素材・フリー素材を無料配布！商用利用OK・クレジット表記不要の高品質AI生成イラストをダウンロード",
+    "keywords": "AI素材,AI 素材,AI イラスト,フリー素材,無料イラスト,商用利用,AI生成",
     "url": "https://www.ai-sozaiya.com",
     "potentialAction": {
       "@type": "SearchAction",
@@ -34,10 +35,11 @@ export default function StructuredData({ illustrations, currentIllustration, typ
   const generateOrganizationSchema = () => ({
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "AIそざいや",
+    "name": "AI素材 - AIそざいや",
     "url": "https://www.ai-sozaiya.com",
     "logo": "https://img.ai-sozaiya.com/logo/ai-sozaiya-logo.png",
-    "description": "商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード",
+    "description": "AI素材・フリー素材を無料配布！商用利用OK・クレジット表記不要の高品質AI生成イラストをダウンロード",
+    "keywords": "AI素材,AI 素材,AI イラスト,フリー素材,無料イラスト,商用利用,AI生成",
     "sameAs": [
       "https://twitter.com/ai_sozaiya"
     ],

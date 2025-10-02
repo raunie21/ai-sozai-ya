@@ -3,11 +3,11 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: {
-    default: 'AIそざいや - 無料イラスト配布サイト',
-    template: '%s | AIそざいや'
+    default: 'AI素材 - 無料イラスト配布サイト | AIそざいや',
+    template: '%s | AI素材 - AIそざいや'
   },
-  description: '商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード。45点以上の無料イラスト素材を配布中。',
-  keywords: ['無料イラスト', '商用利用', 'AI', 'イラスト素材', 'ダウンロード', 'クレジット不要', 'フリー素材', '人物イラスト', '子供イラスト'],
+  description: 'AI素材の無料イラスト配布サイト。商用利用OK・クレジット表記不要の高品質AI生成イラストを無料でダウンロード。AI素材、フリー素材、無料イラスト素材を45点以上配布中。',
+  keywords: ['AI素材', 'AI 素材', 'AI イラスト', 'AI生成', '無料イラスト', 'フリー素材', 'イラスト素材', '商用利用', 'ダウンロード', 'クレジット不要', '人物イラスト', '子供イラスト', 'AIアート', 'AI画像'],
   authors: [{ name: 'AIそざいや' }],
   creator: 'AIそざいや',
   publisher: 'AIそざいや',
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'AIそざいや - 無料イラスト配布サイト',
-    description: '商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード。45点以上の無料イラスト素材を配布中。',
+    title: 'AI素材 - 無料イラスト配布サイト | AIそざいや',
+    description: 'AI素材の無料イラスト配布サイト。商用利用OK・クレジット表記不要の高品質AI生成イラストを無料でダウンロード。AI素材、フリー素材を45点以上配布中。',
     type: 'website',
     url: 'https://www.ai-sozaiya.com/',
     siteName: 'AIそざいや',
@@ -41,8 +41,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AIそざいや - 無料イラスト配布サイト',
-    description: '商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード。45点以上の無料イラスト素材を配布中。',
+    title: 'AI素材 - 無料イラスト配布サイト | AIそざいや',
+    description: 'AI素材の無料イラスト配布サイト。商用利用OK・クレジット表記不要の高品質AI生成イラストを無料でダウンロード。',
     images: ['https://img.ai-sozaiya.com/cdn-cgi/image/width=1200,height=630,fit=cover/og/default-og.png'],
     creator: '@ai_sozaiya',
   },
@@ -65,7 +65,8 @@ export default function RootLayout({
         <meta name="theme-color" content="#6366f1" />
         <meta name="color-scheme" content="light" />
         <link rel="canonical" href="https://www.ai-sozaiya.com/" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://img.ai-sozaiya.com" />

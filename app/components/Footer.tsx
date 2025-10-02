@@ -5,6 +5,7 @@ export default function Footer() {
     {
       title: '利用について',
       links: [
+        { name: 'AI素材について', url: '/ai-sozai' },
         { name: '利用規約', url: '/terms' }
       ]
     },
