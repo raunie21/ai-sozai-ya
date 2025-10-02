@@ -81,6 +81,9 @@ export default function RootLayout({
         {/* AdSense サイト所有権確認用メタタグ */}
         <meta name="google-adsense-account" content="ca-pub-6554623340823430" />
         <meta name="google-site-verification" content="ca-pub-6554623340823430" />
+        <meta name="google-adsense-account" content="ca-pub-6554623340823430" />
+        <meta name="google-adsense-account" content="ca-pub-6554623340823430" />
+        <meta name="google-site-verification" content="ca-pub-6554623340823430" />
       </head>
       <body className="antialiased">
         <GoogleAnalytics />

@@ -16,6 +16,7 @@ import { ADS_CONFIG } from './config/ads';
 import { fetchIllustrations } from './utils/illustrations';
 import { Illustration, Category } from './types/illustration';
 import { useAnalytics } from './hooks/useAnalytics';
+import AdSenseHead from './components/AdSenseHead';
 
 export default function Home() {
   const [currentCategory, setCurrentCategory] = useState<Category>('all');
@@ -258,13 +259,14 @@ export default function Home() {
     );
   }
 
-  return (
-    <>
-      <StructuredData 
-        illustrations={filteredIllustrations}
-        type={selectedIllustration ? 'illustration' : 'gallery'}
-        currentIllustration={selectedIllustration || undefined}
-      />
+      return (
+        <>
+          <AdSenseHead />
+          <StructuredData 
+            illustrations={filteredIllustrations}
+            type={selectedIllustration ? 'illustration' : 'gallery'}
+            currentIllustration={selectedIllustration || undefined}
+          />
       
       <div className="min-h-screen">
         <Hero 
