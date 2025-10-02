@@ -136,6 +136,8 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
             AI素材・フリー素材を無料配布！商用利用OK・クレジット表記不要の高品質AI生成イラストをダウンロード
             <br />
+            <span className="text-red-600 font-medium">⚠️ YouTube等の動画サイトで使用する場合は概要欄へのクレジット表記が必須です</span>
+            <br />
             商用利用の際の利用規約に関して、<a href="/terms" className="text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200 underline">
               こちら
             </a>をご確認ください。
