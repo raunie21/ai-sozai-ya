@@ -1,0 +1,3 @@
+# ads.txt file for ai-sozaiya.com
+# Google AdSense
+google.com, pub-6554623340823430, DIRECT, f08c47fec0942fa0

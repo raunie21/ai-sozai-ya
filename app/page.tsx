@@ -9,8 +9,13 @@ import Footer from './components/Footer';
 import CategoryFilter from './components/CategoryFilter';
 import StructuredData from './components/StructuredData';
 import Breadcrumb from './components/Breadcrumb';
+import ResponsiveAd from './components/ResponsiveAd';
+import InFeedAd from './components/InFeedAd';
+import HorizontalAd from './components/HorizontalAd';
+import { ADS_CONFIG } from './config/ads';
 import { fetchIllustrations } from './utils/illustrations';
 import { Illustration, Category } from './types/illustration';
+import { useAnalytics } from './hooks/useAnalytics';
 
 export default function Home() {
   const [currentCategory, setCurrentCategory] = useState<Category>('all');
@@ -21,6 +26,9 @@ export default function Home() {
   const [justDownloaded, setJustDownloaded] = useState(false);
   const [illustrationData, setIllustrationData] = useState<Illustration[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Analytics フック
+  const { trackDownload, trackSearch, trackCategoryChange, trackModalOpen } = useAnalytics();
 
   // アプリケーション起動時にUpstashからイラストデータを読み込む
   useEffect(() => {
@@ -73,11 +81,23 @@ export default function Home() {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     setCurrentCategory('all'); // Reset category when searching
+    
+    // Analytics: 検索イベントを追跡
+    if (query.trim()) {
+      const resultCount = illustrationData.filter(ill => 
+        ill.title.toLowerCase().includes(query.toLowerCase()) ||
+        (Array.isArray(ill.tags) && ill.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase())))
+      ).length;
+      trackSearch(query, resultCount);
+    }
   };
 
   const handleCategoryChange = (category: Category) => {
     setCurrentCategory(category);
     setSearchQuery(''); // Clear search when changing category
+    
+    // Analytics: カテゴリ変更イベントを追跡
+    trackCategoryChange(category);
   };
 
   const handleTagClick = (tag: string) => {
@@ -94,6 +114,9 @@ export default function Home() {
     setSelectedIllustration(illustration);
     setJustDownloaded(false); // 新しいイラストを選択した時にリセット
     setIsModalOpen(true);
+    
+    // Analytics: モーダル開封イベントを追跡
+    trackModalOpen(illustration.id, illustration.title);
   };
 
   const handleDownload = async () => {
@@ -186,6 +209,9 @@ export default function Home() {
       // ダウンロード完了フラグを設定
       setJustDownloaded(true);
       
+      // Analytics: ダウンロード完了イベントを追跡
+      trackDownload(selectedIllustration.id, selectedIllustration.title);
+      
       // モーダルを閉じる
       setIsModalOpen(false);
     } catch (error) {
@@ -256,6 +282,13 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-4">
             <Stats />
             
+            {/* ヘッダー下横長広告 */}
+            <HorizontalAd 
+              adSlot={ADS_CONFIG.AD_SLOTS.HEADER_BANNER} 
+              className="mb-8" 
+              position="header-below"
+            />
+            
             {/* パンくずナビゲーション */}
             <Breadcrumb
               currentCategory={currentCategory}
@@ -290,6 +323,13 @@ export default function Home() {
               onIllustrationClick={handleIllustrationClick}
               onTagClick={handleTagClick}
             />
+            
+            {/* コンテンツ下横長広告 */}
+            <HorizontalAd 
+              adSlot={ADS_CONFIG.AD_SLOTS.CONTENT_BANNER} 
+              className="mt-12" 
+              position="content-below"
+            />
           </div>
         </main>
 
@@ -306,6 +346,13 @@ export default function Home() {
           allIllustrations={illustrationData}
           onIllustrationClick={handleIllustrationClick}
           onTagClick={handleTagClick}
+        />
+        
+        {/* フッター上横長広告 */}
+        <HorizontalAd 
+          adSlot={ADS_CONFIG.AD_SLOTS.FOOTER_BANNER} 
+          className="bg-gray-50 py-8" 
+          position="footer-above"
         />
         
         <Footer />

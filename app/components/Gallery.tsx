@@ -3,6 +3,9 @@
 import { Illustration, Category } from '../types/illustration';
 import IllustrationCard from './IllustrationCard';
 import RankingItem from './RankingItem';
+import InFeedAd from './InFeedAd';
+import AdCard from './AdCard';
+import { ADS_CONFIG } from '../config/ads';
 
 interface GalleryProps {
   illustrations: Illustration[];
@@ -68,14 +71,44 @@ export default function Gallery({ illustrations, currentCategory, searchQuery, o
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-          {illustrations.map((illustration) => (
-            <IllustrationCard
-              key={illustration.id}
-              illustration={illustration}
-              onClick={() => onIllustrationClick(illustration)}
-              onTagClick={onTagClick}
-            />
-          ))}
+          {(() => {
+            const items = [];
+            const adPositions = [5, 11, 17, 23]; // 広告を表示する位置
+            const adSlots = [
+              ADS_CONFIG.AD_SLOTS.CARD_AD_1,
+              ADS_CONFIG.AD_SLOTS.CARD_AD_2,
+              ADS_CONFIG.AD_SLOTS.CARD_AD_3,
+              ADS_CONFIG.AD_SLOTS.CARD_AD_4
+            ];
+            
+            illustrations.forEach((illustration, index) => {
+              // イラストカードを追加
+              items.push(
+                <div key={illustration.id}>
+                  <IllustrationCard
+                    illustration={illustration}
+                    onClick={() => onIllustrationClick(illustration)}
+                    onTagClick={onTagClick}
+                  />
+                </div>
+              );
+              
+              // 指定された位置に広告カードを挿入
+              if (adPositions.includes(index)) {
+                const adIndex = adPositions.indexOf(index);
+                items.push(
+                  <AdCard
+                    key={`ad-${index}`}
+                    adSlot={adSlots[adIndex]}
+                    position={`gallery-${index + 1}`}
+                    index={index}
+                  />
+                );
+              }
+            });
+            
+            return items;
+          })()}
         </div>
       )}
     </div>

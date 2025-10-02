@@ -1,10 +1,6 @@
-# AI素材・フリー素材の無料配布サイト
-# AI素材、AI生成イラスト、フリー素材を無料でダウンロード
-
+# *
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /_next/
 
 # Host
 Host: https://www.ai-sozaiya.com

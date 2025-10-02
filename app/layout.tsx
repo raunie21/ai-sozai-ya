@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import GoogleAnalytics from './components/GoogleAnalytics';
 
 export const metadata: Metadata = {
   title: {
@@ -71,8 +72,19 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://img.ai-sozaiya.com" />
         <link rel="dns-prefetch" href="https://img.ai-sozaiya.com" />
+        {/* Google AdSense */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6554623340823430"
+          crossOrigin="anonymous"
+        ></script>
+        {/* AdSense サイト所有権確認用メタタグ */}
+        <meta name="google-adsense-account" content="ca-pub-6554623340823430" />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <GoogleAnalytics />
+        {children}
+      </body>
     </html>
   );
 }
