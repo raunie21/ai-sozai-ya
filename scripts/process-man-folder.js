@@ -41,90 +41,103 @@ function tokenizeFileName(name) {
   return name
     .replace(/\.[^.]+$/, '')
     .toLowerCase()
-    .split(/[\-_\s]+/)
+    .split(/[\-\_\s]+/)
     .filter(Boolean);
 }
 
 // 英単語 -> 日本語タグの簡易辞書
 const TAG_MAP = new Map([
-  ['man', '男性'],
-  ['male', '男性'],
-  ['boy', '男性'],
-  ['business', 'ビジネス'],
-  ['office', 'オフィス'],
-  ['worker', 'ビジネス'],
-  ['suit', 'スーツ'],
-  ['tie', 'ネクタイ'],
-  ['casual', 'カジュアル'],
-  ['smile', '笑顔'],
-  ['happy', '笑顔'],
-  ['sad', '悲しい'],
-  ['angry', '怒り'],
-  ['thinking', '考える'],
-  ['idea', 'ひらめき'],
-  ['point', '指差し'],
-  ['pointing', '指差し'],
-  ['ok', 'OKサイン'],
-  ['good', 'グッドサイン'],
-  ['no', 'バツサイン'],
-  ['ng', 'バツサイン'],
-  ['thumb', 'サムズアップ'],
-  ['thumbs', 'サムズアップ'],
-  ['phone', 'スマホ'],
-  ['smartphone', 'スマホ'],
-  ['pc', 'パソコン'],
-  ['laptop', 'ノートPC'],
-  ['computer', 'パソコン'],
-  ['meeting', '会議'],
-  ['present', 'プレゼン'],
-  ['presentation', 'プレゼン'],
-  ['talk', '会話'],
-  ['call', '通話'],
-  ['run', '走る'],
-  ['walk', '歩く'],
-  ['stand', '立つ'],
-  ['sitting', '座る'],
-  ['sit', '座る'],
-  ['surprised', '驚き'],
-  ['shock', '驚き'],
-  ['confused', '困惑'],
-  ['question', '疑問'],
-  ['idea', 'ひらめき'],
-  ['money', 'お金'],
-  ['coin', 'コイン'],
-  ['yen', '円'],
-  ['japanese', '日本人'],
+  // 基本
+  ['man', '男性'], ['male', '男性'], ['boy', '男性'], ['guy', '男性'], ['person', '人物'],
+  // ビジネス/服装
+  ['business', 'ビジネス'], ['office', 'オフィス'], ['worker', 'ビジネスマン'],
+  ['suit', 'スーツ'], ['tie', 'ネクタイ'], ['shirt', 'シャツ'], ['jacket', 'ジャケット'], ['casual', 'カジュアル'],
+  // 表情
+  ['smile', '笑顔'], ['happy', '笑顔'], ['angry', '怒り'], ['mad', '怒り'], ['sad', '悲しい'], ['cry', '涙'],
+  ['excited', '興奮'], ['excite', '興奮'], ['yell', '叫ぶ'], ['yelling', '叫ぶ'],
+  ['surprise', '驚き'], ['surprised', '驚き'], ['shock', '驚き'], ['confused', '困惑'], ['think', '考える'], ['thinking', '考える'],
+  // ジェスチャ/姿勢
+  ['point', '指差し'], ['pointing', '指差し'], ['ok', 'OKサイン'], ['okay', 'OKサイン'], ['good', 'グッドサイン'], ['great', 'グッドサイン'], ['thumb', 'サムズアップ'], ['thumbs', 'サムズアップ'], ['thumbsup', 'サムズアップ'],
+  ['ng', 'バツサイン'], ['no', 'バツサイン'], ['armscross', '腕組み'], ['arms', '腕組み'], ['cross', '腕組み'],
+  ['sit', '座る'], ['sitting', '座る'], ['stand', '立つ'], ['standing', '立つ'], ['walk', '歩く'], ['run', '走る'], ['jump', 'ジャンプ'],
+  // 物/シーン
+  ['phone', 'スマホ'], ['smartphone', 'スマホ'], ['call', '通話'], ['talk', '会話'], ['chat', '会話'],
+  ['pc', 'パソコン'], ['computer', 'パソコン'], ['laptop', 'ノートPC'], ['present', 'プレゼン'], ['presentation', 'プレゼン'], ['meeting', '会議'],
+  ['document', '書類'], ['money', 'お金'], ['coin', 'コイン'], ['yen', '円'],
+  // 属性
+  ['japanese', '日本人'], ['young', '若者'], ['old', '高齢'], ['elderly', '高齢'],
 ]);
 
-function generateJapaneseTitleAndTags(fileBase) {
-  const tokens = tokenizeFileName(fileBase);
+// 日本語タグの同義語拡張
+const TAG_SYNONYMS = new Map([
+  ['笑顔', ['スマイル']],
+  ['怒り', ['怒る']],
+  ['叫ぶ', ['怒鳴る']],
+  ['スマホ', ['携帯']],
+  ['サムズアップ', ['いいね', '親指', 'グッド']],
+  ['OKサイン', ['オーケー', 'OK']],
+]);
 
-  const baseTags = new Set(['男性', '人物', 'イラスト']);
-  let domain = '';
-  const actionTags = [];
+function addTagWithSynonyms(tagSet, tag) {
+  tagSet.add(tag);
+  const syns = TAG_SYNONYMS.get(tag);
+  if (syns && syns.length > 0) {
+    for (const s of syns) tagSet.add(s);
+  }
+}
+
+function toFullWidthNumber(numStr) {
+  return numStr.replace(/[0-9]/g, d => String.fromCharCode(d.charCodeAt(0) + 0xFEE0));
+}
+
+function extractTrailingNumber(baseName) {
+  const m = baseName.match(/(\d+)$/);
+  return m ? m[1] : '';
+}
+
+function generateJapaneseTitleAndTags(fileBase) {
+  const tokens = tokenizeFileName(fileBase)
+    .map(t => t.replace(/\d+$/, '')) // 語尾の番号は除去 ex) pose1 -> pose
+    .filter(t => !['img', 'image', 'illust', 'illustration', 'ver'].includes(t));
+
+  // 初期タグから「イラスト」は除去
+  const tags = new Set(['男性', '人物']);
+  const baseNameNoExt = fileBase.replace(/\.[^.]+$/, '');
+  const trailingNum = extractTrailingNumber(baseNameNoExt);
+
+  const found = {
+    domain: new Set(), // ビジネス/カジュアル等
+    clothing: new Set(),
+    gesture: new Set(),
+    emotion: new Set(),
+    action: new Set(),
+    item: new Set(),
+    attribute: new Set(),
+  };
 
   for (const t of tokens) {
     const mapped = TAG_MAP.get(t);
     if (mapped) {
-      baseTags.add(mapped);
-      if (['ビジネス', 'オフィス', 'スーツ'].includes(mapped)) domain = 'ビジネス';
-      if ([
-        '笑顔','悲しい','怒り','考える','ひらめき','指差し','OKサイン','グッドサイン','バツサイン','サムズアップ','会議','プレゼン','会話','通話','走る','歩く','立つ','座る','驚き','困惑','疑問','お金'
-      ].includes(mapped)) {
-        actionTags.push(mapped);
-      }
+      addTagWithSynonyms(tags, mapped);
+      if (['ビジネス', 'オフィス', 'ビジネスマン'].includes(mapped)) found.domain.add('ビジネス');
+      if (['カジュアル'].includes(mapped)) found.domain.add('カジュアル');
+      if (['スーツ','ネクタイ','シャツ','ジャケット'].includes(mapped)) found.clothing.add(mapped);
+      if (['スマホ','パソコン','ノートPC','書類','お金','コイン','円'].includes(mapped)) found.item.add(mapped);
+      if (['指差し','OKサイン','グッドサイン','サムズアップ','バツサイン','腕組み'].includes(mapped)) found.gesture.add(mapped);
+      if (['笑顔','悲しい','怒り','驚き','困惑','考える','興奮'].includes(mapped)) found.emotion.add(mapped);
+      if (['走る','歩く','立つ','座る','ジャンプ','会議','プレゼン','会話','通話','叫ぶ'].includes(mapped)) found.action.add(mapped);
+      if (['日本人','若者','高齢'].includes(mapped)) found.attribute.add(mapped);
     }
   }
 
-  // タイトル構築（重要度順に並べる）
-  const titleParts = ['男性'];
-  if (domain) titleParts.push(domain);
-  // 代表的なアクション1-2個
-  if (actionTags.length > 0) titleParts.push(actionTags[0]);
-  if (actionTags.length > 1) titleParts.push(actionTags[1]);
-
-  const title = titleParts.join('・');
-  return { title, tags: Array.from(baseTags) };
+  // タイトルは「男性 {主要語}{番号}」形式
+  const numSuffix = trailingNum ? toFullWidthNumber(trailingNum) : '';
+  let mainTerm = '';
+  if (found.gesture.size > 0) mainTerm = Array.from(found.gesture)[0];
+  else if (found.emotion.size > 0) mainTerm = Array.from(found.emotion)[0];
+  else if (found.action.size > 0) mainTerm = Array.from(found.action)[0];
+  const title = mainTerm ? `男性 ${mainTerm}${numSuffix}` : `男性${numSuffix ? ' ' + numSuffix : ''}`;
+  return { title, tags: Array.from(tags) };
 }
 
 async function listManObjects() {
@@ -139,7 +152,7 @@ async function listManObjects() {
     }));
     (resp.Contents || []).forEach(o => {
       if (!o.Key) return;
-      if (/(^|\/)\./.test(o.Key)) return;
+      if (/(^|\/)/.test(o.Key)) return;
       if (/-thumb\.(webp|png|jpg|jpeg)$/i.test(o.Key)) return;
       if (!/\.(png|jpg|jpeg|webp|gif)$/i.test(o.Key)) return;
       results.push(o.Key);
@@ -149,26 +162,58 @@ async function listManObjects() {
   return results;
 }
 
-async function addToDb({ title, imageUrl, thumbnailUrl, originalUrl, category, tags }) {
-  const nextId = await redis.incr('illustration:next_id');
+async function findExistingIdByOriginalUrl(originalUrl) {
+  const keys = await redis.keys('illustration:*');
+  const idKeys = keys.filter(k => /^illustration:\d+$/.test(k));
+  for (const k of idKeys) {
+    const raw = await redis.get(k);
+    if (!raw) continue;
+    const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    if (data && data.originalUrl === originalUrl) {
+      return data.id;
+    }
+  }
+  return null;
+}
+
+async function upsertToDb({ title, imageUrl, thumbnailUrl, originalUrl, category, tags }) {
   const now = new Date().toISOString();
-  const payload = {
-    id: nextId,
-    title,
-    imageUrl,
-    thumbnailUrl,
-    originalUrl,
-    category,
-    tags,
-    downloads: 0,
-    fileSize: '',
-    dimensions: '',
-    createdAt: now,
-    updatedAt: now,
-  };
-  await redis.set(`illustration:${nextId}`, JSON.stringify(payload));
-  await redis.set(`downloads:${nextId}`, 0);
-  return payload;
+  const existingId = await findExistingIdByOriginalUrl(originalUrl);
+  if (existingId) {
+    const existingRaw = await redis.get(`illustration:${existingId}`);
+    const existing = typeof existingRaw === 'string' ? JSON.parse(existingRaw) : existingRaw;
+    const updated = {
+      ...existing,
+      title,
+      imageUrl,
+      thumbnailUrl,
+      category,
+      tags,
+      updatedAt: now,
+    };
+    await redis.set(`illustration:${existingId}`, JSON.stringify(updated));
+    // downloads は維持
+    return updated;
+  } else {
+    const nextId = await redis.incr('illustration:next_id');
+    const payload = {
+      id: nextId,
+      title,
+      imageUrl,
+      thumbnailUrl,
+      originalUrl,
+      category,
+      tags,
+      downloads: 0,
+      fileSize: '',
+      dimensions: '',
+      createdAt: now,
+      updatedAt: now,
+    };
+    await redis.set(`illustration:${nextId}`, JSON.stringify(payload));
+    await redis.set(`downloads:${nextId}`, 0);
+    return payload;
+  }
 }
 
 function decideCategory(tags) {
@@ -195,9 +240,9 @@ async function main() {
       const imageUrl = buildResizedUrl(key, 600);
       const thumbnailUrl = buildResizedUrl(key, 300);
 
-      const created = await addToDb({ title, imageUrl, thumbnailUrl, originalUrl, category, tags });
+      const created = await upsertToDb({ title, imageUrl, thumbnailUrl, originalUrl, category, tags });
       success++;
-      console.log(`✅ Imported: ${created.id} - ${title}`);
+      console.log(`✅ Upserted: ${created.id} - ${title}`);
     } catch (e) {
       console.error('❌ Failed to import', key, e.message);
     }

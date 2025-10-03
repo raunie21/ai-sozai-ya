@@ -180,17 +180,16 @@ export default function TermsPage() {
                 <div className="prose prose-lg max-w-none">
                   <h3 className="text-xl font-semibold text-gray-700 mb-3">ライセンスの種類</h3>
                   <p className="text-gray-600 mb-4">
-                    本サイトのイラスト素材は「Creative Commons Zero (CC0)」ライセンスの下で提供されています。
-                    これは最も自由なライセンスで、制限なく利用できます。
+                  本サイトの利用許諾範囲 
                   </p>
                   
-                  <h3 className="text-xl font-semibold text-gray-700 mb-3">CC0ライセンスの特徴</h3>
+                  <h3 className="text-xl font-semibold text-gray-700 mb-3">利用許諾範囲</h3>
                   <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2">
-                    <li>著作権表示の義務なし</li>
-                    <li>商用利用の制限なし</li>
-                    <li>改変・加工の制限なし</li>
-                    <li>再配布の制限なし</li>
-                    <li>帰属表示の義務なし</li>
+                    <li>利用の基本原則 ・著作権は当サイトが保有します。 </li>
+                    <li>商用利用、個人利用ともに無料です。</li>
+                    <li>改変・加工は自由です。</li>
+                    <li>禁止事項 ・素材をそのまま、または加工しての再配布、転売、譲渡は一切禁止します。</li>
+                    <li> 素材そのものを主体とする商品（グッズなど）の販売・配布は禁止します。</li>
                   </ul>
 
                   <h3 className="text-xl font-semibold text-gray-700 mb-3">利用時の推奨事項</h3>
@@ -208,17 +207,14 @@ export default function TermsPage() {
                       <p className="text-sm text-gray-600 mb-2">概要欄に以下のテキストをコピー&ペーストしてください：</p>
                       <div className="bg-gray-100 p-3 rounded border font-mono text-sm">
                         <div className="text-gray-800">
-                          <div>🎨 イラスト素材提供：AIそざいや</div>
-                          <div>🌐 サイトURL：https://www.ai-sozaiya.com</div>
-                          <div>📱 無料ダウンロード可能</div>
+                          <div>イラスト素材提供：AIそざいや</div>
+                          <div>サイトURL：https://www.ai-sozaiya.com</div>
+                          <div>無料ダウンロード可能</div>
                         </div>
                       </div>
                     </div>
                     <ul className="list-disc list-inside text-gray-600 space-y-1 text-sm">
-                      <li>YouTube動画の概要欄（説明文）に必ず記載</li>
-                      <li>コメント欄での表記は不可</li>
-                      <li>動画内での表記のみでは不十分</li>
-                      <li>URLはコピー&ペースト可能な形で記載</li>
+                      <li>YouTube動画の概要欄（説明文）に記載</li>
                     </ul>
                   </div>
                 </div>
@@ -229,19 +225,16 @@ export default function TermsPage() {
               <div className="space-y-6">
                 <h2 className="text-xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6">著作権</h2>
                 <div className="prose prose-lg max-w-none">
-                  <h3 className="text-xl font-semibold text-gray-700 mb-3">著作権の放棄</h3>
+                  <h3 className="text-xl font-semibold text-gray-700 mb-3">著作権について</h3>
                   <p className="text-gray-600 mb-4">
-                    本サイトのイラスト素材の著作権は、作者により放棄されています。
-                    これにより、利用者は自由に素材を利用できます。
+                    利用者は自由に素材を利用できますが、著作権は当サイトが保有しております。
                   </p>
                   
                   <h3 className="text-xl font-semibold text-gray-700 mb-3">利用者の権利</h3>
                   <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2">
                     <li>素材の自由な利用</li>
                     <li>素材の改変・加工</li>
-                    <li>素材の再配布</li>
                     <li>商用利用</li>
-                    <li>著作権表示の省略</li>
                   </ul>
 
                   <h3 className="text-xl font-semibold text-gray-700 mb-3">注意事項</h3>
@@ -296,14 +289,14 @@ export default function TermsPage() {
                       <span className="text-2xl">📧</span>
                       <div>
                         <p className="font-semibold text-gray-700">メールアドレス</p>
-                        <p className="text-gray-600">contact@illustration-site.com</p>
+                        <p className="text-gray-600">aisozaiya@ai-sozaiya.com</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">🌐</span>
                       <div>
                         <p className="font-semibold text-gray-700">Webサイト</p>
-                        <p className="text-gray-600">https://illustration-site.com</p>
+                        <p className="text-gray-600">https://www.ai-sozaiya.com</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -322,7 +315,6 @@ export default function TermsPage() {
                   <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2">
                     <li>素材の利用方法について</li>
                     <li>ライセンスについて</li>
-                    <li>素材の品質について</li>
                     <li>その他のご質問</li>
                   </ul>
                 </div>

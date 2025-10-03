@@ -194,3 +194,4 @@ async function checkUpstashDetails() {
 if (require.main === module) {
   checkUpstashDetails().catch(console.error);
 }
+
