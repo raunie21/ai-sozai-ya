@@ -12,7 +12,11 @@ interface OptimizedImageProps {
 }
 
 export default function OptimizedImage({ src, alt = '', className = '', width = 800, height = 800, priority = false }: OptimizedImageProps) {
-  const safeAlt = alt && alt.trim().length > 0 ? alt : 'AI素材 無料イラスト';
+  const fallbackAlt = 'AI 素材 無料イラスト';
+  const baseAlt = alt && alt.trim().length > 0 ? alt.trim() : fallbackAlt;
+  const hasAiSozai = /(AI素材|AI 素材)/.test(baseAlt);
+  const safeAlt = hasAiSozai ? baseAlt : `${baseAlt} - AI 素材`;
+
   return (
     <Image
       src={src}
