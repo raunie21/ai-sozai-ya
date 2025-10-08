@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import StructuredData from '../components/StructuredData';
+import React from 'react';
 
 export const metadata: Metadata = {
   title: 'AI素材とは？無料でダウンロードできるAI生成イラスト',
@@ -17,6 +18,65 @@ export default function AISozaiPage() {
   return (
     <>
       <StructuredData type="website" />
+      {/* FAQPage & BreadcrumbList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'AI素材は本当に無料で使えますか？',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'はい、当サイトのAI素材はすべて無料でご利用いただけます。商用利用も無料で、クレジット表記も不要です（YouTube利用時のみクレジット必須）。',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'AI素材の使い方は？',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'トップページで素材を選び、ダウンロードボタンをクリックしてください。Webサイト、資料、SNS、動画サムネイルなど幅広くご利用いただけます。',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'AI素材の商用利用は可能ですか？',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: '商用利用は可能です。詳しい条件は利用規約ページをご確認ください。',
+                },
+              },
+            ],
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'ホーム',
+                item: 'https://www.ai-sozaiya.com/',
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'AI素材について',
+                item: 'https://www.ai-sozaiya.com/ai-sozai',
+              },
+            ],
+          }),
+        }}
+      />
       <div className="min-h-screen bg-gray-50">
         {/* ヘッダー */}
         <header className="bg-white shadow-sm border-b">
@@ -29,10 +89,10 @@ export default function AISozaiPage() {
               <span className="text-gray-900 font-medium">AI素材について</span>
             </nav>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              AI素材とは？無料でダウンロードできるAI生成イラスト
+              AI素材とは？無料でダウンロードできるAI生成イラスト（AI 素材・フリー素材）
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              AI素材の基本から活用方法まで、詳しく解説します
+              「AI 素材」の基本から活用方法、無料ダウンロードの手順、検索のコツまでを分かりやすく解説します。
             </p>
           </div>
         </header>
@@ -42,7 +102,7 @@ export default function AISozaiPage() {
           <article className="bg-white rounded-2xl shadow-sm p-8 md:p-12">
             {/* AI素材とは */}
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">AI素材とは</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">AI素材（AI 素材）とは</h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-6">
                   <strong>AI素材</strong>とは、人工知能（AI）技術を使用して生成されたイラストや画像素材のことです。
@@ -52,12 +112,15 @@ export default function AISozaiPage() {
                   当サイト「AIそざいや」では、高品質なAI素材を無料で提供しており、
                   <strong>商用利用OK・クレジット表記不要</strong>でご利用いただけます。
                 </p>
+                <p className="text-gray-700 leading-relaxed">
+                  目的別に使いやすいよう、「人物のAI 素材」「キッズ向けAI 素材」などカテゴリ分けも充実しています。
+                </p>
               </div>
             </section>
 
             {/* AI素材の特徴 */}
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">AI素材の特徴</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">AI素材（AI 素材）の特徴</h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 p-6 rounded-xl">
                   <h3 className="text-xl font-semibold text-blue-900 mb-3">🎨 高品質な仕上がり</h3>
@@ -92,7 +155,7 @@ export default function AISozaiPage() {
 
             {/* 利用方法 */}
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">AI素材の利用方法</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">AI素材（AI 素材）の利用方法</h2>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
@@ -132,7 +195,7 @@ export default function AISozaiPage() {
 
             {/* よくある質問 */}
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">AI素材に関するよくある質問</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">AI素材（AI 素材）に関するよくある質問</h2>
               <div className="space-y-6">
                 <div className="border border-gray-200 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Q. AI素材は本当に無料で使えますか？</h3>
