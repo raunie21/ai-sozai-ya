@@ -35,7 +35,7 @@ export const metadata: Metadata = {
         url: 'https://img.ai-sozaiya.com/cdn-cgi/image/width=1200,height=630,fit=cover/og/default-og.png',
         width: 1200,
         height: 630,
-        alt: 'AIそざいや - 無料イラスト配布サイト',
+        alt: 'AI 素材 - 無料イラスト | AIそざいや',
         type: 'image/png',
       },
     ],

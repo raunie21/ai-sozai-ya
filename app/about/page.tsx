@@ -7,9 +7,11 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
+  const lastUpdated = new Date().toISOString().split('T')[0];
   return (
     <main className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">運営者情報・制作プロセス</h1>
+      <h1 className="text-3xl font-bold text-gray-900 mb-2">運営者情報・制作プロセス</h1>
+      <p className="text-gray-500 text-sm mb-6">最終更新日：{lastUpdated}</p>
       <section className="mb-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">運営者情報</h2>
         <p className="text-gray-700">サイト名：AIそざいや／運営：AIそざいや編集部／連絡先：<a href="mailto:aisozaiya@ai-sozai.com" className="text-blue-600 hover:underline">aisozaiya@ai-sozai.com</a></p>
@@ -30,6 +32,10 @@ export default function Page() {
           <li>人物表現の自然さ・用途適合性</li>
           <li>メタ情報（タグ・タイトル・カテゴリ）の整合性</li>
         </ul>
+      </section>
+      <section className="mb-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">監修</h2>
+        <p className="text-gray-700">AI生成とデザインに知見のある社内編集チームが監修しています。</p>
       </section>
       <section>
         <h2 className="text-xl font-semibold text-gray-900 mb-2">更新体制</h2>

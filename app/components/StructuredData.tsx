@@ -75,20 +75,18 @@ export default function StructuredData({ illustrations, currentIllustration, typ
 
   const generateGallerySchema = (illustrations: Illustration[]) => ({
     "@context": "https://schema.org",
-    "@type": "ImageGallery",
-    "name": "AIそざいや - 無料イラストギャラリー",
-    "description": "商用利用OK！クレジット表記不要の高品質イラストを無料でダウンロード",
+    "@type": "CollectionPage",
+    "name": "AIそざいや - 無料イラストギャラリー（AI 素材）",
+    "description": "商用利用OK！クレジット表記不要の高品質AI 素材イラストを無料でダウンロード",
     "url": "https://www.ai-sozaiya.com",
-    "image": illustrations.slice(0, 10).map(ill => ({
-      "@type": "ImageObject",
-      "name": ill.title,
-      "url": ill.thumbnailUrl || ill.imageUrl,
-      "description": `${ill.title}のイラスト`
-    })),
-    "numberOfItems": illustrations.length,
-    "publisher": {
-      "@type": "Organization",
-      "name": "AIそざいや"
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": illustrations.slice(0, 24).map((ill, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "url": ill.originalUrl || ill.imageUrl,
+        "name": ill.title
+      }))
     }
   });
 
@@ -142,7 +140,7 @@ export default function StructuredData({ illustrations, currentIllustration, typ
     ]
   });
 
-  let schemas = [];
+  let schemas: any[] = [];
 
   // 基本スキーマは常に含める
   schemas.push(generateWebsiteSchema());
