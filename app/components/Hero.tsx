@@ -42,6 +42,13 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
             {/* デスクトップナビゲーション */}
             <nav className="hidden md:flex items-center space-x-4 lg:space-x-6">
               <a
+                href="/ai-sozai"
+                className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors duration-200"
+              >
+                <span className="text-lg">📘</span>
+                <span className="hidden lg:inline">AI素材とは？</span>
+              </a>
+              <a
                 href="https://docs.google.com/forms/d/e/1FAIpQLSfRhZemBKWEHMdUH4rdFgAWc4jtkvqKrzhUe_74Boy0bWz5Rg/viewform?usp=header"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -91,6 +98,16 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
               <div className="md:hidden mt-4 bg-white rounded-lg border border-gray-200 shadow-lg relative z-50">
                 <nav className="p-4">
                   <ul className="space-y-2">
+                    <li>
+                      <a
+                        href="/ai-sozai"
+                        className="flex items-center gap-3 w-full text-left text-gray-700 hover:text-gray-900 hover:bg-gray-50 py-3 px-4 rounded-lg transition-all duration-300"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <span className="text-lg">📘</span>
+                        <span className="font-medium">AI素材とは？</span>
+                      </a>
+                    </li>
                     <li>
                       <a
                         href="https://docs.google.com/forms/d/e/1FAIpQLSfRhZemBKWEHMdUH4rdFgAWc4jtkvqKrzhUe_74Boy0bWz5Rg/viewform?usp=header"
@@ -195,6 +212,16 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
               <span className="text-xl">📋</span>
               <span>利用規約を詳しく確認</span>
               <svg className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+            <Link
+              href="/ai-sozai"
+              className="ml-3 inline-flex items-center space-x-3 px-8 py-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold text-lg rounded-full transition-all duration-200 shadow-sm hover:shadow transform hover:-translate-y-1"
+            >
+              <span className="text-xl">📘</span>
+              <span>AI素材とは？詳しく見る</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </Link>

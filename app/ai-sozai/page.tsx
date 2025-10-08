@@ -12,6 +12,9 @@ export const metadata: Metadata = {
     description: 'AI素材（AI生成イラスト）について詳しく解説。商用利用可能な無料AI素材の特徴、使い方、ダウンロード方法をご紹介。',
     url: 'https://www.ai-sozaiya.com/ai-sozai',
   },
+  alternates: {
+    canonical: 'https://www.ai-sozaiya.com/ai-sozai',
+  },
 };
 
 export default function AISozaiPage() {
