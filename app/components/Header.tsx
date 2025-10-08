@@ -51,6 +51,12 @@ export default function Header({ onNavigate }: HeaderProps) {
                   </button>
                 </li>
               ))}
+              <li>
+                <a href="/about" className="text-white/90 font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/10">このサイトについて</a>
+              </li>
+              <li>
+                <a href="/contact" className="text-white/90 font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/10">お問い合わせ</a>
+              </li>
             </ul>
           </nav>
 
@@ -84,7 +90,7 @@ export default function Header({ onNavigate }: HeaderProps) {
                       if (item.id === 'request') {
                         window.location.href = '/request';
                       } else if (item.id === 'contact') {
-                        window.location.href = 'mailto:aisozaiya@ai-sozaiya.com';
+                        window.location.href = '/contact';
                       } else {
                         onNavigate(item.id);
                       }
@@ -103,6 +109,9 @@ export default function Header({ onNavigate }: HeaderProps) {
                   </button>
                 </li>
               ))}
+              <li>
+                <a href="/about" className="block w-full text-left text-white/90 font-semibold py-3 px-4 rounded-lg hover:text-white hover:bg-white/10 transition-all duration-300">このサイトについて</a>
+              </li>
             </ul>
           </nav>
         )}

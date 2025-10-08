@@ -10,6 +10,7 @@ export default function Footer() {
         { name: 'AI素材 商用利用', url: '/ai-sozai/commercial' },
         { name: 'AI素材 使い方', url: '/ai-sozai/how-to' },
         { name: '運営者情報・制作プロセス', url: '/about' },
+        { name: 'お問い合わせ', url: '/contact' },
         { name: '利用規約', url: '/terms' },
         { name: 'プライバシーポリシー', url: '/privacy' }
       ]
