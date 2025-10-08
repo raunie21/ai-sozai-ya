@@ -6,6 +6,10 @@ export default function Footer() {
       title: '利用について',
       links: [
         { name: 'AI素材について', url: '/ai-sozai' },
+        { name: 'AI素材 フリー素材', url: '/ai-sozai/free' },
+        { name: 'AI素材 商用利用', url: '/ai-sozai/commercial' },
+        { name: 'AI素材 使い方', url: '/ai-sozai/how-to' },
+        { name: '運営者情報・制作プロセス', url: '/about' },
         { name: '利用規約', url: '/terms' },
         { name: 'プライバシーポリシー', url: '/privacy' }
       ]
