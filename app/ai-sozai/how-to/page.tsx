@@ -9,6 +9,20 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: 'AI素材 使い方',
+            description: 'AI素材（AI 素材）の使い方ガイド',
+            author: { '@type': 'Organization', name: 'AIそざいや' },
+            publisher: { '@type': 'Organization', name: 'AIそざいや' },
+            mainEntityOfPage: 'https://www.ai-sozaiya.com/ai-sozai/how-to'
+          })
+        }}
+      />
       <h1 className="text-3xl font-bold text-gray-900 mb-4">AI素材 使い方</h1>
       <ol className="list-decimal list-inside text-gray-700 space-y-2">
         <li>トップページでカテゴリや検索から素材を探す</li>

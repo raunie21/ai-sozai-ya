@@ -84,6 +84,45 @@ export default function RootLayout({
         <meta name="google-adsense-account" content="ca-pub-6554623340823430" />
         <meta name="google-adsense-account" content="ca-pub-6554623340823430" />
         <meta name="google-site-verification" content="ca-pub-6554623340823430" />
+        {/* WebSite + SearchAction */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'AIそざいや',
+              url: 'https://www.ai-sozaiya.com/',
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: 'https://www.ai-sozaiya.com/?q={search_term_string}',
+                'query-input': 'required name=search_term_string'
+              }
+            })
+          }}
+        />
+        {/* Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'AIそざいや',
+              url: 'https://www.ai-sozaiya.com/',
+              logo: 'https://www.ai-sozaiya.com/favicon.svg',
+              sameAs: [
+                'https://twitter.com/ai_sozaiya'
+              ],
+              contactPoint: [{
+                '@type': 'ContactPoint',
+                email: 'aisozaiya@ai-sozai.com',
+                contactType: 'customer support',
+                availableLanguage: ['Japanese']
+              }]
+            })
+          }}
+        />
       </head>
       <body className="antialiased">
         <GoogleAnalytics />

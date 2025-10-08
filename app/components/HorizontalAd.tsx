@@ -18,7 +18,6 @@ declare global {
 export default function HorizontalAd({ adSlot, className = '', position = 'unknown' }: HorizontalAdProps) {
   useEffect(() => {
     if (!canShowAds()) return;
-    
     try {
       if (typeof window !== 'undefined') {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -32,7 +31,7 @@ export default function HorizontalAd({ adSlot, className = '', position = 'unkno
   if (!canShowAds()) {
     return (
       <div className={`w-full flex justify-center my-8 ${className}`}>
-        <div className="bg-gradient-to-r from-blue-100 to-purple-100 border-2 border-dashed border-blue-400 rounded-lg p-8 text-center w-full max-w-4xl">
+        <div className="bg-gradient-to-r from-blue-100 to-purple-100 border-2 border-dashed border-blue-400 rounded-lg p-8 text-center w-full max-w-4xl min-h-[90px] md:min-h-[120px] lg:min-h-[180px]">
           <div className="flex items-center justify-center gap-4">
             <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
               <span className="text-white text-sm font-bold">広</span>
@@ -48,7 +47,7 @@ export default function HorizontalAd({ adSlot, className = '', position = 'unkno
   }
 
   return (
-    <div className={`w-full flex justify-center my-8 ${className}`}>
+    <div className={`w-full flex justify-center my-8 ${className}`} style={{ minHeight: '90px' }}>
       <ins
         className="adsbygoogle"
         style={{ 

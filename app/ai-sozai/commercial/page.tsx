@@ -9,6 +9,20 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: 'AI素材 商用利用',
+            description: 'AI素材（AI 素材）の商用利用ガイド',
+            author: { '@type': 'Organization', name: 'AIそざいや' },
+            publisher: { '@type': 'Organization', name: 'AIそざいや' },
+            mainEntityOfPage: 'https://www.ai-sozaiya.com/ai-sozai/commercial'
+          })
+        }}
+      />
       <h1 className="text-3xl font-bold text-gray-900 mb-4">AI素材 商用利用</h1>
       <p className="text-gray-700 mb-6">AI素材（AI 素材）を商用で使用する際のガイドラインです。</p>
       <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-3">利用可能な用途</h2>

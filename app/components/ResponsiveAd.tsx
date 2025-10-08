@@ -21,7 +21,6 @@ export default function ResponsiveAd({ adSlot, className = '', position = 'unkno
 
   useEffect(() => {
     if (!canShowAds()) return;
-    
     try {
       if (typeof window !== 'undefined') {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -39,7 +38,7 @@ export default function ResponsiveAd({ adSlot, className = '', position = 'unkno
   if (!canShowAds()) {
     return (
       <div className={`w-full flex justify-center my-8 ${className}`}>
-        <div className="bg-gray-200 border-2 border-dashed border-gray-400 rounded-lg p-8 text-center">
+        <div className="bg-gray-200 border-2 border-dashed border-gray-400 rounded-lg p-8 text-center w-full max-w-4xl min-h-[90px] md:min-h-[120px] lg:min-h-[180px]">
           <p className="text-gray-600 text-sm">広告エリア (開発環境)</p>
           <p className="text-xs text-gray-500 mt-1">AdSlot: {adSlot}</p>
         </div>
@@ -51,7 +50,7 @@ export default function ResponsiveAd({ adSlot, className = '', position = 'unkno
     <div className={`w-full flex justify-center my-8 ${className}`} onClick={handleAdClick}>
       <ins
         className="adsbygoogle"
-        style={{ display: 'block' }}
+        style={{ display: 'block', minHeight: '90px' }}
         data-ad-client={ADS_CONFIG.PUBLISHER_ID}
         data-ad-slot={adSlot}
         data-ad-format="auto"

@@ -316,6 +316,17 @@ export default function Home() {
               <p className="text-gray-600">
                 {filteredIllustrations.length}件のイラストが見つかりました
               </p>
+              {/* カテゴリ説明（簡潔に「AI 素材」を含める） */}
+              {currentCategory !== 'all' && currentCategory !== 'ranking' && (
+                <p className="text-gray-600 mt-2 text-sm">
+                  {currentCategory === 'people' && '人物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                  {currentCategory === 'animals' && '動物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                  {currentCategory === 'business' && 'ビジネス向けAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                  {currentCategory === 'food' && '食べ物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                  {currentCategory === 'nature' && '自然のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                  {currentCategory === 'icons' && 'アイコンのAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                </p>
+              )}
             </div>
             
             <Gallery
@@ -325,6 +336,25 @@ export default function Home() {
               onIllustrationClick={handleIllustrationClick}
               onTagClick={handleTagClick}
             />
+
+            {/* AI素材関連記事への内部リンク */}
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <a href="/ai-sozai/free" className="block p-4 border rounded-lg hover:bg-gray-50 transition">
+                <div className="text-sm text-gray-500 mb-1">AI素材の基礎</div>
+                <div className="font-semibold text-gray-800">AI素材 フリー素材</div>
+                <p className="text-gray-600 text-sm mt-1">完全無料のAI 素材まとめ</p>
+              </a>
+              <a href="/ai-sozai/commercial" className="block p-4 border rounded-lg hover:bg-gray-50 transition">
+                <div className="text-sm text-gray-500 mb-1">ビジネス活用</div>
+                <div className="font-semibold text-gray-800">AI素材 商用利用</div>
+                <p className="text-gray-600 text-sm mt-1">利用範囲と注意点</p>
+              </a>
+              <a href="/ai-sozai/how-to" className="block p-4 border rounded-lg hover:bg-gray-50 transition">
+                <div className="text-sm text-gray-500 mb-1">使い方ガイド</div>
+                <div className="font-semibold text-gray-800">AI素材 使い方</div>
+                <p className="text-gray-600 text-sm mt-1">検索・ダウンロードのコツ</p>
+              </a>
+            </div>
             
             {/* コンテンツ下横長広告 */}
             <HorizontalAd 
