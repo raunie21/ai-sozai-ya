@@ -165,16 +165,16 @@ export default function AISozaiPage() {
             {/* CTA */}
             <section className="text-center bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                今すぐAI素材をダウンロード
+                今すぐAI 素材をダウンロード
               </h2>
               <p className="text-gray-700 mb-6">
-                45点以上の高品質AI素材を無料でご利用いただけます
+                45点以上の高品質AI素材（AI 素材）を無料でご利用いただけます
               </p>
               <Link
                 href="/"
                 className="inline-flex items-center px-8 py-3 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors duration-200"
               >
-                AI素材を見る
+                AI 素材をダウンロード
                 <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
