@@ -21,65 +21,6 @@ export default function AISozaiPage() {
   return (
     <>
       <StructuredData type="website" />
-      {/* FAQPage & BreadcrumbList JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: [
-              {
-                '@type': 'Question',
-                name: 'AI素材は本当に無料で使えますか？',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'はい、当サイトのAI素材はすべて無料でご利用いただけます。商用利用も無料で、クレジット表記も不要です（YouTube利用時のみクレジット必須）。',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: 'AI素材の使い方は？',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'トップページで素材を選び、ダウンロードボタンをクリックしてください。Webサイト、資料、SNS、動画サムネイルなど幅広くご利用いただけます。',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: 'AI素材の商用利用は可能ですか？',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: '商用利用は可能です。詳しい条件は利用規約ページをご確認ください。',
-                },
-              },
-            ],
-          }),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-              {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'ホーム',
-                item: 'https://www.ai-sozaiya.com/',
-              },
-              {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'AI素材について',
-                item: 'https://www.ai-sozaiya.com/ai-sozai',
-              },
-            ],
-          }),
-        }}
-      />
       <div className="min-h-screen bg-gray-50">
         {/* ヘッダー */}
         <header className="bg-white shadow-sm border-b">
