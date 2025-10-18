@@ -17,6 +17,7 @@ import { fetchIllustrations } from './utils/illustrations';
 import { Illustration, Category } from './types/illustration';
 import { useAnalytics } from './hooks/useAnalytics';
 import AdSenseHead from './components/AdSenseHead';
+import Sidebar from './components/Sidebar';
 
 export default function Home() {
   const [currentCategory, setCurrentCategory] = useState<Category>('all');
@@ -196,16 +197,19 @@ export default function Home() {
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       
-      // ダウンロードリンクを作成
+      // ダウンロードリンクを作成（安全なクリーンアップを保証）
       const link = document.createElement('a');
       link.href = url;
       link.download = `${selectedIllustration.title}.png`;
-      document.body.appendChild(link);
-      link.click();
-      
-      // クリーンアップ
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      try {
+        document.body?.appendChild(link);
+        link.click();
+      } finally {
+        if (link.parentNode) {
+          link.parentNode.removeChild(link);
+        }
+        window.URL.revokeObjectURL(url);
+      }
       
       // ダウンロード完了フラグを設定
       setJustDownloaded(true);
@@ -259,14 +263,15 @@ export default function Home() {
     );
   }
 
-      return (
-        <>
-          <AdSenseHead />
-          <StructuredData 
-            illustrations={filteredIllustrations}
-            type={selectedIllustration ? 'illustration' : 'gallery'}
-            currentIllustration={selectedIllustration || undefined}
-          />
+       return (
+         <>
+           <AdSenseHead />
+          {/* 検索ページ用の動的メタは一時停止（遷移時エラー対策） */}
+           <StructuredData 
+             illustrations={filteredIllustrations}
+             type={selectedIllustration ? 'illustration' : 'gallery'}
+             currentIllustration={selectedIllustration || undefined}
+           />
       
       <div className="min-h-screen">
         <Hero 
@@ -281,88 +286,101 @@ export default function Home() {
         />
         
         <main className="bg-white py-16" style={{paddingTop: '80px'}} id="main-content">
-          <div className="max-w-6xl mx-auto px-4">
-            <Stats />
-            
-            {/* ヘッダー下横長広告 */}
-            <HorizontalAd 
-              adSlot={ADS_CONFIG.AD_SLOTS.HEADER_BANNER} 
-              className="mb-8" 
-              position="header-below"
-            />
-            
-            {/* パンくずナビゲーション */}
-            <Breadcrumb
-              currentCategory={currentCategory}
-              searchQuery={searchQuery}
-              currentIllustration={selectedIllustration || undefined}
-              onCategoryChange={handleCategoryChange}
-              onSearchClear={handleSearchClear}
-            />
-            
-            {/* セクションタイトル */}
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                {searchQuery ? `「${searchQuery}」の検索結果` :
-                 currentCategory === 'all' ? 'すべてのイラスト' : 
-                 currentCategory === 'ranking' ? '人気ランキング' :
-                 currentCategory === 'people' ? '人物' :
-                 currentCategory === 'animals' ? '動物' :
-                 currentCategory === 'business' ? 'ビジネス' :
-                 currentCategory === 'food' ? '食べ物' :
-                 currentCategory === 'nature' ? '自然' :
-                 currentCategory === 'icons' ? 'アイコン' : 'イラスト'}
-              </h2>
-              <p className="text-gray-600">
-                {filteredIllustrations.length}件のイラストが見つかりました
-              </p>
-              {/* カテゴリ説明（簡潔に「AI 素材」を含める） */}
-              {currentCategory !== 'all' && currentCategory !== 'ranking' && (
-                <p className="text-gray-600 mt-2 text-sm">
-                  {currentCategory === 'people' && '人物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                  {currentCategory === 'animals' && '動物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                  {currentCategory === 'business' && 'ビジネス向けAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                  {currentCategory === 'food' && '食べ物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                  {currentCategory === 'nature' && '自然のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                  {currentCategory === 'icons' && 'アイコンのAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                </p>
-              )}
-            </div>
-            
-            <Gallery
-              illustrations={filteredIllustrations}
-              currentCategory={currentCategory}
-              searchQuery={searchQuery}
-              onIllustrationClick={handleIllustrationClick}
-              onTagClick={handleTagClick}
-            />
+          <div className="xl:max-w-none xl:pl-4 xl:pr-0 max-w-7xl mx-auto px-4">
+            {/* メインコンテンツエリア */}
+            <div className="w-full">
+                <Stats />
+                
+                {/* ヘッダー下横長広告 */}
+                <HorizontalAd 
+                  adSlot={ADS_CONFIG.AD_SLOTS.HEADER_BANNER} 
+                  className="mb-8" 
+                  position="header-below"
+                />
+                
+                {/* パンくずナビゲーション */}
+                <Breadcrumb
+                  currentCategory={currentCategory}
+                  searchQuery={searchQuery}
+                  currentIllustration={selectedIllustration || undefined}
+                  onCategoryChange={handleCategoryChange}
+                  onSearchClear={handleSearchClear}
+                />
+                
+                {/* セクションタイトル */}
+                <div className="mb-8 px-4 md:px-6 xl:px-8">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                    {searchQuery ? `「${searchQuery}」の検索結果` :
+                     currentCategory === 'all' ? 'すべてのイラスト' : 
+                     currentCategory === 'ranking' ? '人気ランキング' :
+                     currentCategory === 'people' ? '人物' :
+                     currentCategory === 'animals' ? '動物' :
+                     currentCategory === 'business' ? 'ビジネス' :
+                     currentCategory === 'food' ? '食べ物' :
+                     currentCategory === 'nature' ? '自然' :
+                     currentCategory === 'icons' ? 'アイコン' : 'イラスト'}
+                  </h2>
+                  <p className="text-gray-600">
+                    {filteredIllustrations.length}件のイラストが見つかりました
+                  </p>
+                  {/* カテゴリ説明（簡潔に「AI 素材」を含める） */}
+                  {currentCategory !== 'all' && currentCategory !== 'ranking' && (
+                    <p className="text-gray-600 mt-2 text-sm">
+                      {currentCategory === 'people' && '人物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                      {currentCategory === 'animals' && '動物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                      {currentCategory === 'business' && 'ビジネス向けAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                      {currentCategory === 'food' && '食べ物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                      {currentCategory === 'nature' && '自然のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                      {currentCategory === 'icons' && 'アイコンのAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
+                    </p>
+                  )}
+                </div>
+                
+                {/* Gallery とサイドバーを並列配置 */}
+                <div className="flex xl:gap-6 gap-0">
+                  {/* メインコンテンツエリア */}
+                  <div className="flex-1 min-w-0 xl:pr-0 pr-4">
+                    <Gallery
+                      illustrations={filteredIllustrations}
+                      currentCategory={currentCategory}
+                      searchQuery={searchQuery}
+                      onIllustrationClick={handleIllustrationClick}
+                      onTagClick={handleTagClick}
+                    />
 
-            {/* AI素材関連記事への内部リンク */}
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <a href="/ai-sozai/free" className="block p-4 border rounded-lg hover:bg-gray-50 transition">
-                <div className="text-sm text-gray-500 mb-1">AI素材の基礎</div>
-                <div className="font-semibold text-gray-800">AI素材 フリー素材</div>
-                <p className="text-gray-600 text-sm mt-1">完全無料のAI 素材まとめ</p>
-              </a>
-              <a href="/ai-sozai/commercial" className="block p-4 border rounded-lg hover:bg-gray-50 transition">
-                <div className="text-sm text-gray-500 mb-1">ビジネス活用</div>
-                <div className="font-semibold text-gray-800">AI素材 商用利用</div>
-                <p className="text-gray-600 text-sm mt-1">利用範囲と注意点</p>
-              </a>
-              <a href="/ai-sozai/how-to" className="block p-4 border rounded-lg hover:bg-gray-50 transition">
-                <div className="text-sm text-gray-500 mb-1">使い方ガイド</div>
-                <div className="font-semibold text-gray-800">AI素材 使い方</div>
-                <p className="text-gray-600 text-sm mt-1">検索・ダウンロードのコツ</p>
-              </a>
+                    {/* AI素材関連記事への内部リンク */}
+                    <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <a href="/ai-sozai/free" className="block p-4 border rounded-lg hover:bg-gray-50 transition">
+                        <div className="text-sm text-gray-500 mb-1">AI素材の基礎</div>
+                        <div className="font-semibold text-gray-800">AI素材 フリー素材</div>
+                        <p className="text-gray-600 text-sm mt-1">完全無料のAI 素材まとめ</p>
+                      </a>
+                      <a href="/ai-sozai/commercial" className="block p-4 border rounded-lg hover:bg-gray-50 transition">
+                        <div className="text-sm text-gray-500 mb-1">ビジネス活用</div>
+                        <div className="font-semibold text-gray-800">AI素材 商用利用</div>
+                        <p className="text-gray-600 text-sm mt-1">利用範囲と注意点</p>
+                      </a>
+                      <a href="/ai-sozai/how-to" className="block p-4 border rounded-lg hover:bg-gray-50 transition">
+                        <div className="text-sm text-gray-500 mb-1">使い方ガイド</div>
+                        <div className="font-semibold text-gray-800">AI素材 使い方</div>
+                        <p className="text-gray-600 text-sm mt-1">検索・ダウンロードのコツ</p>
+                      </a>
+                    </div>
+                    
+                    {/* コンテンツ下横長広告 */}
+                    <HorizontalAd 
+                      adSlot={ADS_CONFIG.AD_SLOTS.CONTENT_BANNER} 
+                      className="mt-12" 
+                      position="content-below"
+                    />
+                  </div>
+
+                  {/* サイドバー（PC版のみ表示） */}
+                  <Sidebar className="hidden xl:block w-64 flex-shrink-0 sticky top-20 xl:mr-8" />
+                </div>
             </div>
-            
-            {/* コンテンツ下横長広告 */}
-            <HorizontalAd 
-              adSlot={ADS_CONFIG.AD_SLOTS.CONTENT_BANNER} 
-              className="mt-12" 
-              position="content-below"
-            />
           </div>
+
         </main>
 
         <Modal

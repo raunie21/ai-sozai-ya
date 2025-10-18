@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Sidebar from '../components/Sidebar';
 
 export default function TermsPage() {
   const [activeSection, setActiveSection] = useState('usage');
@@ -33,8 +34,9 @@ export default function TermsPage() {
         </div>
       </header>
 
-      <main className="py-16">
-        <div className="max-w-4xl mx-auto px-4">
+      <main className="py-16 xl:pr-72">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="w-full">
           <h1 className="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-8 md:mb-12">
             利用規約
           </h1>
@@ -325,7 +327,11 @@ export default function TermsPage() {
           <div className="text-center mt-8">
             <p className="text-gray-600 text-sm">最終更新日: 2025年1月26日</p>
           </div>
+          </div>
         </div>
+
+        {/* サイドバー（PC版のみ表示・右端固定） */}
+        <Sidebar className="hidden xl:block fixed right-0 w-64 overflow-y-auto bg-white border-l border-gray-200 z-10" style={{top: '120px', height: 'calc(100vh - 120px)'}} />
       </main>
     </div>
   );

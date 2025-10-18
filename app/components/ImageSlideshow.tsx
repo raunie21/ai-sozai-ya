@@ -150,16 +150,19 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         
-        // ダウンロードリンクを作成
+        // ダウンロードリンクを作成（安全なクリーンアップを保証）
         const link = document.createElement('a');
         link.href = url;
         link.download = `${selectedIllustration.title}.png`;
-        document.body.appendChild(link);
-        link.click();
-        
-        // クリーンアップ
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
+        try {
+          document.body?.appendChild(link);
+          link.click();
+        } finally {
+          if (link.parentNode) {
+            link.parentNode.removeChild(link);
+          }
+          window.URL.revokeObjectURL(url);
+        }
         
         // ダウンロード完了フラグを設定
         setJustDownloaded(true);

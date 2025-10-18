@@ -2,6 +2,11 @@
 User-agent: *
 Allow: /
 
+# Disallow SVG icons and assets from indexing
+Disallow: /icon.svg
+Disallow: /favicon.svg
+Disallow: /*.svg$
+
 # Host
 Host: https://www.ai-sozaiya.com
 

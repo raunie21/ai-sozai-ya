@@ -60,7 +60,7 @@ export default function Gallery({ illustrations, currentCategory, searchQuery, o
       </h2>
       
       {currentCategory === 'ranking' ? (
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 xl:px-8">
           {illustrations.map((illustration, index) => (
             <RankingItem
               key={illustration.id}
@@ -71,7 +71,7 @@ export default function Gallery({ illustrations, currentCategory, searchQuery, o
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+        <div className="px-4 md:px-6 xl:px-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {(() => {
             const items: React.ReactNode[] = [];
             const adPositions = [5, 11, 17, 23]; // 広告を表示する位置

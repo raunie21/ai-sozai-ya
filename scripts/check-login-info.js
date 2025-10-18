@@ -93,3 +93,6 @@ function checkLoginInfo() {
 // メイン実行
 checkLoginInfo();
 
+
+
+
