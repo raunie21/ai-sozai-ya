@@ -55,9 +55,25 @@ export default function CategoryFilter({ currentCategory, onCategoryChange }: Ca
     { id: 'people' as Category, label: '人物', icon: '👤' },
     { id: 'kids' as Category, label: 'キッズ', icon: '👶' },
     { id: 'animals' as Category, label: '動物', icon: '🐱' },
+    { id: 'business' as Category, label: 'ビジネス', icon: '💼' },
     { id: 'food' as Category, label: '食べ物', icon: '🍎' },
     { id: 'nature' as Category, label: '自然', icon: '🌿' }
   ];
+
+  // カテゴリーごとのカラースキーム（自然:#6e9e7f を基準）
+  const getColors = (id: Category) => {
+    const map: Record<string, { base: string; active: string }> = {
+      all: { base: '#7a8899', active: '#6a7a8b' },
+      ranking: { base: '#ad5f5f', active: '#9c5454' },
+      people: { base: '#6a86b3', active: '#5875a3' },
+      kids: { base: '#cc9ac5', active: '#b889b1' },
+      animals: { base: '#d7c975', active: '#c5b465' },
+      business: { base: '#679eae', active: '#5b8f9d' },
+      food: { base: '#d39a64', active: '#c0854e' },
+      nature: { base: '#6e9e7f', active: '#5f8a73' },
+    };
+    return map[id] || { base: '#7a8899', active: '#6a7a8b' };
+  };
 
   return (
     <section 
@@ -77,15 +93,24 @@ export default function CategoryFilter({ currentCategory, onCategoryChange }: Ca
             scrollSnapType: 'x mandatory'
           }}
         >
-          {categories.map((category) => (
+          {categories.map((category) => {
+            const c = getColors(category.id);
+            const isActive = currentCategory === category.id;
+            const bg = isActive ? c.active : c.base;
+            const style: React.CSSProperties = {
+              backgroundColor: bg,
+              color: '#ffffff',
+              borderColor: 'transparent',
+              boxShadow: isActive
+                ? 'inset 0 3px 10px rgba(0,0,0,0.28), inset 0 -2px 2px rgba(255,255,255,0.18)'
+                : undefined
+            };
+            return (
             <button
               key={category.id}
               onClick={() => onCategoryChange(category.id)}
-              className={`flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 md:px-2.5 lg:px-3 xl:px-4 py-1 sm:py-1.5 md:py-2 rounded-full border transition-all duration-200 whitespace-nowrap flex-shrink text-xs sm:text-sm lg:text-base ${
-                currentCategory === category.id
-                  ? 'bg-gray-800 text-white border-gray-800 shadow-md'
-                  : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm'
-              }`}
+              className={`flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 md:px-2.5 lg:px-3 xl:px-4 py-1 sm:py-1.5 md:py-2 rounded-full border transition-all duration-200 whitespace-nowrap flex-shrink text-xs sm:text-sm lg:text-base ${isActive ? '' : 'hover:shadow-sm'}`}
+              style={style}
             >
               <span className="text-xs sm:text-sm md:text-base lg:text-lg">{category.icon}</span>
               <span className={`font-medium text-xs sm:text-sm lg:text-base ${
@@ -94,7 +119,7 @@ export default function CategoryFilter({ currentCategory, onCategoryChange }: Ca
                   : 'hidden sm:inline'
               }`}>{category.label}</span>
             </button>
-          ))}
+          );})}
         </div>
       </div>
     </section>

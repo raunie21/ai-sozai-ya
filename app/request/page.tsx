@@ -81,6 +81,24 @@ export default function RequestPage() {
             </ul>
           </div>
           
+          {/* 内部リンクとFAQ */}
+          <div className="grid md:grid-cols-3 gap-4 mb-8">
+            <a href="/ai-sozai" className="block p-4 rounded-xl border hover:bg-gray-50">AI素材とは？</a>
+            <a href="/ai-sozai/free" className="block p-4 rounded-xl border hover:bg-gray-50">フリー素材まとめ</a>
+            <a href="/ai-sozai/commercial" className="block p-4 rounded-xl border hover:bg-gray-50">商用利用の注意点</a>
+          </div>
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-3">よくある質問</h2>
+            <details className="bg-white rounded-xl border p-4 mb-3">
+              <summary className="font-semibold cursor-pointer">どんな依頼が通りやすい？</summary>
+              <p className="text-gray-700 mt-2">人物カテゴリ（表情やポーズ違い）やアイコン素材など、サイトの方向性に合う内容が比較的早く対応できます。</p>
+            </details>
+            <details className="bg-white rounded-xl border p-4">
+              <summary className="font-semibold cursor-pointer">納期はどのくらい？</summary>
+              <p className="text-gray-700 mt-2">内容や混雑状況により数日〜数週間いただく場合があります。完成次第、該当カテゴリに追加してお知らせします。</p>
+            </details>
+          </section>
+
           <div className="bg-gray-50 rounded-xl p-6 mb-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">リクエスト方法</h2>
             <p className="text-gray-600">

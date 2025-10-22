@@ -74,7 +74,8 @@ export default function Gallery({ illustrations, currentCategory, searchQuery, o
         <div className="px-4 md:px-6 xl:px-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {(() => {
             const items: React.ReactNode[] = [];
-            const adPositions = [5, 11, 17, 23]; // 広告を表示する位置
+            // 10カードに1回広告（0始まりindexで9, 19, 29...の直後に差し込む）
+            const shouldInsertAdAfter = (index: number) => (index + 1) % 10 === 0;
             const adSlots = [
               ADS_CONFIG.AD_SLOTS.CARD_AD_1,
               ADS_CONFIG.AD_SLOTS.CARD_AD_2,
@@ -94,13 +95,13 @@ export default function Gallery({ illustrations, currentCategory, searchQuery, o
                 </div>
               );
               
-              // 指定された位置に広告カードを挿入
-              if (adPositions.includes(index)) {
-                const adIndex = adPositions.indexOf(index);
+              // 10件ごとに広告カードを挿入（用意済みの4枠を循環使用）
+              if (shouldInsertAdAfter(index)) {
+                const cycle = Math.floor(index / 10) % adSlots.length;
                 items.push(
                   <AdCard
                     key={`ad-${index}`}
-                    adSlot={adSlots[adIndex]}
+                    adSlot={adSlots[cycle]}
                     position={`gallery-${index + 1}`}
                     index={index}
                   />

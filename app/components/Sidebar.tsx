@@ -48,6 +48,20 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
       ]
     },
     {
+      id: 'categories',
+      title: 'カテゴリ',
+      icon: '🗂️',
+      items: [
+        { title: '人物', href: '/categories/people', description: '人物のAI 素材' },
+        { title: 'キッズ', href: '/categories/kids', description: 'キッズのAI 素材' },
+        { title: '動物', href: '/categories/animals', description: '動物のAI 素材' },
+        { title: 'ビジネス', href: '/categories/business', description: 'ビジネスのAI 素材' },
+        { title: '食べ物', href: '/categories/food', description: '食べ物のAI 素材' },
+        { title: '自然', href: '/categories/nature', description: '自然のAI 素材' },
+        { title: 'アイコン', href: '/categories/icons', description: 'アイコン素材' }
+      ]
+    },
+    {
       id: 'support',
       title: 'サポート',
       icon: '🛠️',

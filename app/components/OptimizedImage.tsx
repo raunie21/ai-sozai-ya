@@ -12,9 +12,10 @@ interface OptimizedImageProps {
   sizes?: string;
   title?: string;
   onError?: () => void;
+  fetchPriority?: 'high' | 'low' | 'auto';
 }
 
-export default function OptimizedImage({ src, alt = '', className = '', width = 800, height = 800, priority = false, sizes, title, onError }: OptimizedImageProps) {
+export default function OptimizedImage({ src, alt = '', className = '', width = 800, height = 800, priority = false, sizes, title, onError, fetchPriority }: OptimizedImageProps) {
   const fallbackAlt = 'AI 素材 無料イラスト';
   const baseAlt = alt && alt.trim().length > 0 ? alt.trim() : fallbackAlt;
   const hasAiSozai = /(AI素材|AI 素材)/.test(baseAlt);
@@ -31,6 +32,7 @@ export default function OptimizedImage({ src, alt = '', className = '', width = 
       sizes={sizes}
       title={title}
       onError={onError}
+      fetchPriority={fetchPriority}
     />
   );
 }

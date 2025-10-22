@@ -9,6 +9,9 @@ export interface Illustration {
   downloads: number;
   fileSize?: string; // ファイルサイズ（例: "2.3MB"）
   dimensions?: string; // 画像サイズ（例: "1920x1080"）
+  // APIから返却される可能性のあるタイムスタンプ
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export type Category = 'all' | 'ranking' | 'people' | 'animals' | 'business' | 'food' | 'nature' | 'icons' | 'kids';

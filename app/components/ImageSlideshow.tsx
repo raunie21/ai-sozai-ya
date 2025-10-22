@@ -154,11 +154,15 @@ export default function ImageSlideshow({ illustrations }: ImageSlideshowProps) {
         const link = document.createElement('a');
         link.href = url;
         link.download = `${selectedIllustration.title}.png`;
+        let appended = false;
         try {
-          document.body?.appendChild(link);
+          if (document.body) {
+            document.body.appendChild(link);
+            appended = true;
+          }
           link.click();
         } finally {
-          if (link.parentNode) {
+          if (appended && link && link.parentNode) {
             link.parentNode.removeChild(link);
           }
           window.URL.revokeObjectURL(url);

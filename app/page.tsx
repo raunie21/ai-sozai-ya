@@ -80,6 +80,22 @@ export default function Home() {
     return filtered;
   }, [illustrationData, currentCategory, searchQuery]);
 
+  // 最終更新日（全イラストの中で最新のupdatedAt/createdAt）
+  const lastUpdated = useMemo(() => {
+    if (!illustrationData || illustrationData.length === 0) return null;
+    const timestamps = illustrationData
+      .map((ill) => new Date(ill?.updatedAt || ill?.createdAt || 0).getTime())
+      .filter((t) => Number.isFinite(t));
+    if (timestamps.length === 0) return null;
+    const maxTs = Math.max(...timestamps);
+    const d = new Date(maxTs);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    // 形式: YYYY-MM-DD（Aboutページと統一）
+    return `${y}-${m}-${day}`;
+  }, [illustrationData]);
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     setCurrentCategory('all'); // Reset category when searching
@@ -201,11 +217,15 @@ export default function Home() {
       const link = document.createElement('a');
       link.href = url;
       link.download = `${selectedIllustration.title}.png`;
+      let appended = false;
       try {
-        document.body?.appendChild(link);
+        if (document.body) {
+          document.body.appendChild(link);
+          appended = true;
+        }
         link.click();
       } finally {
-        if (link.parentNode) {
+        if (appended && link && link.parentNode) {
           link.parentNode.removeChild(link);
         }
         window.URL.revokeObjectURL(url);
@@ -266,7 +286,6 @@ export default function Home() {
        return (
          <>
            <AdSenseHead />
-          {/* 検索ページ用の動的メタは一時停止（遷移時エラー対策） */}
            <StructuredData 
              illustrations={filteredIllustrations}
              type={selectedIllustration ? 'illustration' : 'gallery'}
@@ -309,37 +328,69 @@ export default function Home() {
                 
                 {/* セクションタイトル */}
                 <div className="mb-8 px-4 md:px-6 xl:px-8">
-                  <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                    {searchQuery ? `「${searchQuery}」の検索結果` :
-                     currentCategory === 'all' ? 'すべてのイラスト' : 
-                     currentCategory === 'ranking' ? '人気ランキング' :
-                     currentCategory === 'people' ? '人物' :
-                     currentCategory === 'animals' ? '動物' :
-                     currentCategory === 'business' ? 'ビジネス' :
-                     currentCategory === 'food' ? '食べ物' :
-                     currentCategory === 'nature' ? '自然' :
-                     currentCategory === 'icons' ? 'アイコン' : 'イラスト'}
-                  </h2>
-                  <p className="text-gray-600">
-                    {filteredIllustrations.length}件のイラストが見つかりました
-                  </p>
-                  {/* カテゴリ説明（簡潔に「AI 素材」を含める） */}
+                  <div className="flex items-end justify-start gap-4">
+                    <div className="min-w-0">
+                      <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                        {searchQuery ? `「${searchQuery}」の検索結果` :
+                         currentCategory === 'all' ? 'すべてのイラスト' : 
+                         currentCategory === 'ranking' ? '人気ランキング' :
+                         currentCategory === 'people' ? '人物' :
+                         currentCategory === 'animals' ? '動物' :
+                         currentCategory === 'business' ? 'ビジネス' :
+                         currentCategory === 'food' ? '食べ物' :
+                         currentCategory === 'nature' ? '自然' :
+                         currentCategory === 'icons' ? 'アイコン' : 'イラスト'}
+                      </h2>
+                      <p className="text-gray-600 flex items-center gap-4 flex-wrap">
+                        <span>{filteredIllustrations.length}件のイラストが見つかりました</span>
+                        {currentCategory === 'all' && lastUpdated && (
+                          <span className="text-sm text-gray-500 whitespace-nowrap">最終更新日: {lastUpdated}</span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  {/* カテゴリ説明＋内部リンク */}
                   {currentCategory !== 'all' && currentCategory !== 'ranking' && (
-                    <p className="text-gray-600 mt-2 text-sm">
-                      {currentCategory === 'people' && '人物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                      {currentCategory === 'animals' && '動物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                      {currentCategory === 'business' && 'ビジネス向けAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                      {currentCategory === 'food' && '食べ物のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                      {currentCategory === 'nature' && '自然のAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                      {currentCategory === 'icons' && 'アイコンのAI 素材（無料イラスト）。商用利用OK・クレジット不要でダウンロード可能。'}
-                    </p>
+                    <div className="text-gray-600 mt-2 text-sm">
+                      {currentCategory === 'people' && (
+                        <>
+                          人物のAI 素材（無料）。<a href="/categories/people" className="text-blue-600 hover:underline">人物カテゴリ一覧</a> ／ <a href="/ai-sozai/how-to" className="text-blue-600 hover:underline">使い方</a>
+                        </>
+                      )}
+                      {currentCategory === 'animals' && (
+                        <>
+                          動物のAI 素材（無料）。<a href="/categories/animals" className="text-blue-600 hover:underline">動物カテゴリ一覧</a> ／ <a href="/ai-sozai/free" className="text-blue-600 hover:underline">フリー素材</a>
+                        </>
+                      )}
+                      {currentCategory === 'business' && (
+                        <>
+                          ビジネス向けAI 素材（無料）。<a href="/categories/business" className="text-blue-600 hover:underline">ビジネスカテゴリ一覧</a> ／ <a href="/ai-sozai/commercial" className="text-blue-600 hover:underline">商用利用</a>
+                        </>
+                      )}
+                      {currentCategory === 'food' && (
+                        <>
+                          食べ物のAI 素材（無料）。<a href="/categories/food" className="text-blue-600 hover:underline">食べ物カテゴリ一覧</a>
+                        </>
+                      )}
+                      {currentCategory === 'nature' && (
+                        <>
+                          自然のAI 素材（無料）。<a href="/categories/nature" className="text-blue-600 hover:underline">自然カテゴリ一覧</a>
+                        </>
+                      )}
+                      {currentCategory === 'icons' && (
+                        <>
+                          アイコン素材（無料）。<a href="/categories/icons" className="text-blue-600 hover:underline">アイコンカテゴリ一覧</a>
+                        </>
+                      )}
+                    </div>
                   )}
                 </div>
                 
                 {/* Gallery とサイドバーを並列配置 */}
-                <div className="flex xl:gap-6 gap-0">
+                <div className="flex xl:gap-6 gap-0 justify-between">
                   {/* メインコンテンツエリア */}
-                  <div className="flex-1 min-w-0 xl:pr-0 pr-4">
+                  <div className="flex-1 min-w-0 xl:pr-0 pr-4 flex justify-center">
+                    <div className="w-full xl:max-w-6xl">
                     <Gallery
                       illustrations={filteredIllustrations}
                       currentCategory={currentCategory}
@@ -373,10 +424,11 @@ export default function Home() {
                       className="mt-12" 
                       position="content-below"
                     />
+                    </div>
                   </div>
 
-                  {/* サイドバー（PC版のみ表示） */}
-                  <Sidebar className="hidden xl:block w-64 flex-shrink-0 sticky top-20 xl:mr-8" />
+                  {/* サイドバー（PC版のみ表示・ギャラリーと並列） */}
+                  <Sidebar className="hidden xl:block w-64 flex-shrink-0 sticky top-24 max-h-[calc(100vh-96px)] overflow-y-auto" />
                 </div>
             </div>
           </div>
