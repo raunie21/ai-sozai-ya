@@ -41,6 +41,41 @@ export default function IllustrationDetailPage() {
     };
   }, [data]);
 
+  // 以降のフックは早期returnの前に定義して、フック呼び出し順序を安定させる
+  const sameCategory = useMemo(() => {
+    if (!data) return [] as Illustration[];
+    return all
+      .filter(i => i && i.category === data.category)
+      .sort((a, b) => a.id - b.id);
+  }, [all, data]);
+
+  const indexInCat = useMemo(() => {
+    if (!data) return -1;
+    return sameCategory.findIndex(i => i.id === data.id);
+  }, [sameCategory, data]);
+
+  const prevItem = indexInCat > 0 ? sameCategory[indexInCat - 1] : null;
+  const nextItem = indexInCat >= 0 && indexInCat < sameCategory.length - 1 ? sameCategory[indexInCat + 1] : null;
+
+  const related = useMemo(() => {
+    if (!data) return [] as Illustration[];
+    const tags = new Set((data.tags || []).map(t => t.toLowerCase()));
+    const pool = all.filter(i => i.id !== data.id);
+    const scored = pool.map(i => {
+      let score = 0;
+      if (i.category === data.category) score += 2;
+      if (Array.isArray(i.tags)) {
+        for (const t of i.tags) if (tags.has(String(t).toLowerCase())) score += 1;
+      }
+      return { i, score };
+    });
+    return scored
+      .filter(s => s.score > 0)
+      .sort((a, b) => b.score - a.score || b.i.downloads - a.i.downloads)
+      .slice(0, 8)
+      .map(s => s.i);
+  }, [all, data]);
+
   const breadcrumbs = useMemo(() => {
     if (!data) return null;
     return {
@@ -69,36 +104,6 @@ export default function IllustrationDetailPage() {
       </main>
     );
   }
-
-  const sameCategory = useMemo(() => {
-    if (!data) return [] as Illustration[];
-    return all
-      .filter(i => i && i.category === data.category)
-      .sort((a, b) => a.id - b.id);
-  }, [all, data]);
-
-  const indexInCat = sameCategory.findIndex(i => i.id === data.id);
-  const prevItem = indexInCat > 0 ? sameCategory[indexInCat - 1] : null;
-  const nextItem = indexInCat >= 0 && indexInCat < sameCategory.length - 1 ? sameCategory[indexInCat + 1] : null;
-
-  const related = useMemo(() => {
-    if (!data) return [] as Illustration[];
-    const tags = new Set((data.tags || []).map(t => t.toLowerCase()));
-    const pool = all.filter(i => i.id !== data.id);
-    const scored = pool.map(i => {
-      let score = 0;
-      if (i.category === data.category) score += 2;
-      if (Array.isArray(i.tags)) {
-        for (const t of i.tags) if (tags.has(String(t).toLowerCase())) score += 1;
-      }
-      return { i, score };
-    });
-    return scored
-      .filter(s => s.score > 0)
-      .sort((a, b) => b.score - a.score || b.i.downloads - a.i.downloads)
-      .slice(0, 8)
-      .map(s => s.i);
-  }, [all, data]);
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-12">
