@@ -148,10 +148,16 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
       <section className="bg-white py-16">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold text-gray-800 mb-6 leading-tight">
-            AI素材（AI 素材）・無料イラスト配布サイト
+            AI素材（AI生成された素材）を
+            <br />
+            無料で配布するサイト
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-            AI素材・フリー素材（AI 素材）を無料配布！商用利用OK・クレジット表記不要の高品質AI生成イラストをダウンロード
+            AI 素材 は背景透過済みで使いやすい状態で配布しています。
+            <br />
+            AIで生成だからこそできる高画質の無料素材画像
+            <br />
+            商用利用OK・クレジット表記不要の高品質AI生成画像
             <br />
             <span className="text-red-600 font-medium">⚠️ YouTubeで使用する場合は概要欄へのクレジット表記が必須です</span>
             <br />
@@ -164,7 +170,7 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 max-w-4xl mx-auto">
             <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">
               <div className="text-3xl font-bold text-blue-600 mb-2">15,000+</div>
-              <div className="text-gray-600 text-sm">イラスト総数</div>
+              <div className="text-gray-600 text-sm">素材総数</div>
             </div>
             <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">
               <div className="text-3xl font-bold text-green-600 mb-2">500+</div>

@@ -45,6 +45,12 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
           href: '/ai-sozai/how-to',
           description: '検索・ダウンロードのコツ'
         }
+        ,
+        {
+          title: '素材使用例まとめ',
+          href: '/articles/usage-examples',
+          description: 'サムネ・動画編集・ポスターの作り方'
+        }
       ]
     },
     {

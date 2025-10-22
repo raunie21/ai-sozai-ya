@@ -32,10 +32,11 @@ export default function Page() {
         <li><strong>ダウンロード</strong>：ボタンから高解像度を入手。用途に応じてサイズ変更やトリミングを行う。</li>
         <li><strong>表記</strong>：YouTubeのみ概要欄にクレジット表記が必要。それ以外は原則クレジット不要。</li>
       </ol>
-      <div className="mt-6 grid md:grid-cols-3 gap-4">
+      <div className="mt-6 grid md:grid-cols-4 gap-4">
         <a href="/ai-sozai" className="block p-4 rounded-xl border hover:bg-gray-50">AI素材とは？</a>
         <a href="/ai-sozai/free" className="block p-4 rounded-xl border hover:bg-gray-50">フリー素材まとめ</a>
         <a href="/ai-sozai/commercial" className="block p-4 rounded-xl border hover:bg-gray-50">商用利用の注意点</a>
+        <a href="/articles/usage-examples" className="block p-4 rounded-xl border hover:bg-gray-50">素材使用例</a>
       </div>
       <section className="mt-10">
         <h2 className="text-2xl font-bold text-gray-900 mb-3">よくある質問</h2>
