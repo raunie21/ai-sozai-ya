@@ -139,7 +139,13 @@ export default function IllustrationDetailPage() {
 
       {Array.isArray(data.tags) && data.tags.length > 0 && (
         <div className="mt-6">
-          <TagLinks tags={data.tags} maxVisible={20} variant="pill" size="md" />
+          <TagLinks
+            tags={data.tags}
+            onTagClick={() => { /* 詳細ページではタグ遷移無し */ }}
+            maxVisible={20}
+            variant="pill"
+            size="md"
+          />
         </div>
       )}
 
