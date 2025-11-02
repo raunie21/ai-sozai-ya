@@ -157,6 +157,8 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
             無料で配布するサイト
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+            全て独自に生成したAI画像のみを使用
+            <br />
             AI 素材 は背景透過済みで使いやすい状態で配布しています。
             <br />
             AIで生成だからこそできる高画質の無料素材画像
