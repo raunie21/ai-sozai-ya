@@ -149,14 +149,14 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
       </div>
 
       {/* ヒーローセクション */}
-      <section className="bg-white py-16">
+      <section className="bg-white py-12 md:py-16">
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold text-gray-800 mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-4 md:mb-6 leading-snug md:leading-tight">
             AI素材（AI生成された素材）を
             <br />
             無料で配布するサイト
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 md:mb-8 max-w-2xl md:max-w-3xl mx-auto leading-normal sm:leading-relaxed">
             全て独自に生成したAI画像のみを使用
             <br />
             AI 素材 は背景透過済みで使いやすい状態で配布しています。
