@@ -339,6 +339,7 @@ export default function Home() {
                          currentCategory === 'business' ? 'ビジネス' :
                          currentCategory === 'food' ? '食べ物' :
                          currentCategory === 'nature' ? '自然' :
+                         currentCategory === 'daily' ? '日常' :
                          currentCategory === 'icons' ? 'アイコン' : 'イラスト'}
                       </h2>
                       <p className="text-gray-600 flex items-center gap-4 flex-wrap">
@@ -375,6 +376,11 @@ export default function Home() {
                       {currentCategory === 'nature' && (
                         <>
                           自然のAI 素材（無料）。<a href="/categories/nature" className="text-blue-600 hover:underline">自然カテゴリ一覧</a>
+                        </>
+                      )}
+                      {currentCategory === 'daily' && (
+                        <>
+                          日常のAI 素材（無料）。<a href="/categories/daily" className="text-blue-600 hover:underline">日常カテゴリ一覧</a>
                         </>
                       )}
                       {currentCategory === 'icons' && (

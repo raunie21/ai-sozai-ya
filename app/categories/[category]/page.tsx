@@ -63,12 +63,14 @@ export default function CategoryLandingPage() {
       <div className="xl:max-w-none xl:pl-4 xl:pr-0 max-w-7xl mx-auto px-4">
         {/* パディング強化済みの上部コンテンツ */}
         <div className="px-4 md:px-6 xl:px-8">
+          <div id="breadcrumb">
           <Breadcrumb
             currentCategory={category}
             searchQuery={''}
-            onCategoryChange={(c) => router.push(`/categories/${c}`)}
+            onCategoryChange={(c) => router.push(`/categories/${c}#breadcrumb`)}
             onSearchClear={() => router.push('/')}
           />
+          </div>
 
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{titleMap[category] || 'イラスト'}</h1>

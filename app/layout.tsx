@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import Script from 'next/script';
+import Footer from './components/Footer';
 
 export const metadata: Metadata = {
   title: {
@@ -122,6 +123,7 @@ export default function RootLayout({
       <body className="antialiased">
         <GoogleAnalytics />
         {children}
+        <Footer />
       </body>
     </html>
   );

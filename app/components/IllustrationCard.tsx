@@ -62,7 +62,7 @@ export default function IllustrationCard({ illustration, onClick, onTagClick }: 
         </div>
         
         {onTagClick && illustration.tags && illustration.tags.length > 0 && (
-          <div className="mb-2 md:mb-3">
+          <div className="mb-2 md:mb-3" onClick={(e) => e.stopPropagation()}>
             <TagLinks
               tags={illustration.tags}
               onTagClick={(tag) => {

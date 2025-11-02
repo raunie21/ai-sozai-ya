@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { siteUpdates } from '@/app/data/updates';
 
 interface SidebarProps {
   className?: string;
@@ -58,13 +59,13 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
       title: 'カテゴリ',
       icon: '🗂️',
       items: [
-        { title: '人物', href: '/categories/people', description: '人物のAI 素材' },
-        { title: 'キッズ', href: '/categories/kids', description: 'キッズのAI 素材' },
-        { title: '動物', href: '/categories/animals', description: '動物のAI 素材' },
-        { title: 'ビジネス', href: '/categories/business', description: 'ビジネスのAI 素材' },
-        { title: '食べ物', href: '/categories/food', description: '食べ物のAI 素材' },
-        { title: '自然', href: '/categories/nature', description: '自然のAI 素材' },
-        { title: 'アイコン', href: '/categories/icons', description: 'アイコン素材' }
+        { title: '人物', href: '/categories/people#breadcrumb', description: '人物のAI 素材' },
+        { title: 'キッズ', href: '/categories/kids#breadcrumb', description: 'キッズのAI 素材' },
+        { title: '動物', href: '/categories/animals#breadcrumb', description: '動物のAI 素材' },
+        { title: 'ビジネス', href: '/categories/business#breadcrumb', description: 'ビジネスのAI 素材' },
+        { title: '食べ物', href: '/categories/food#breadcrumb', description: '食べ物のAI 素材' },
+        { title: '自然', href: '/categories/nature#breadcrumb', description: '自然のAI 素材' },
+        { title: 'アイコン', href: '/categories/icons#breadcrumb', description: 'アイコン素材' }
       ]
     },
     {
@@ -179,6 +180,22 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
               </div>
             </Link>
           </div>
+        </div>
+
+        {/* 新着情報 */}
+        <div className="mt-6 p-3 bg-gray-50 rounded-lg border border-gray-100">
+          <h3 className="font-medium text-sm text-gray-800 mb-2 flex items-center">
+            <span className="text-base mr-1">🆕</span>
+            新着情報
+          </h3>
+          <ul className="space-y-2">
+            {siteUpdates.map((u, idx) => (
+              <li key={idx} className="text-xs text-gray-700">
+                <span className="font-semibold mr-2 text-gray-800">{u.date}</span>
+                <span className="align-middle">{u.text}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* SNSリンク */}

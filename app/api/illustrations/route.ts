@@ -22,31 +22,36 @@ interface Illustration {
 // 全イラスト取得
 export async function GET() {
   try {
-    // 全イラストのIDを取得
+    // 全イラストのIDを取得（数値IDのみ対象。例: illustration:next_id は除外）
     const keys = await redis.keys('illustration:*');
+    const idKeys = keys.filter((k) => /^illustration:\d+$/.test(k));
     
-    if (keys.length === 0) {
+    if (idKeys.length === 0) {
       return NextResponse.json({ success: true, illustrations: [] });
     }
 
     // 全イラストデータを一括取得
-    const illustrations = await redis.mget(...keys);
+    const illustrations = await redis.mget(...idKeys);
     
     // ダウンロード数も取得
-    const downloadKeys = keys.map(key => `downloads:${key.split(':')[1]}`);
+    const downloadKeys = idKeys.map(key => `downloads:${key.split(':')[1]}`);
     const downloadCounts = await redis.mget(...downloadKeys);
 
     // データを整形
     const result = illustrations.map((illustration, index) => {
-      if (!illustration) return null;
-      
-      // データが既にオブジェクトの場合はそのまま使用、文字列の場合はパース
-      const data = typeof illustration === 'string' ? JSON.parse(illustration) : illustration;
-      return {
-        ...data,
-        downloads: Number(downloadCounts[index]) || 0
-      };
-    }).filter(Boolean);
+      try {
+        if (!illustration) return null;
+        // データが既にオブジェクトの場合はそのまま使用、文字列の場合はパース
+        const data = typeof illustration === 'string' ? JSON.parse(illustration) : illustration;
+        return {
+          ...data,
+          downloads: Number(downloadCounts[index]) || 0,
+        } as any;
+      } catch (e) {
+        console.warn('Skipping invalid illustration JSON at', idKeys[index]);
+        return null;
+      }
+    }).filter(Boolean) as any[];
 
     // ID順でソート
     result.sort((a, b) => a.id - b.id);

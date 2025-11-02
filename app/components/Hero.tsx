@@ -32,11 +32,14 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             {/* ロゴ */}
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-black rounded flex items-center justify-center">
-                <span className="text-white font-bold text-lg">A</span>
+            <div className="flex items-center space-x-1">
+              <div className="w-8 h-8 rounded flex items-center justify-center">
+                <img src="/favicon.svg" alt="AIそざいやicon" className="w-8 h-8 -mt-2 object-contain" />
               </div>
-              <span className="text-xl font-bold text-gray-800">AIそざいや</span>
+              <div className="space-x-2">
+                <span className="text-xl font-bold text-gray-800">AIそざいや</span>
+                <span className="text-sm font-medium text-gray-800 mt-1.5"><span className="text-xs">＜</span>毎日更新中！</span>
+              </div>
             </div>
 
             {/* デスクトップナビゲーション */}

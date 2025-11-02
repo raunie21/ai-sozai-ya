@@ -58,8 +58,8 @@ export default function RequestPage() {
           })
         }}
       />
-      <main className="min-h-screen bg-white py-16">
-        <div className="max-w-5xl mx-auto px-4">
+    <main className="min-h-screen bg-white py-16">
+      <div className="max-w-5xl mx-auto px-4">
           <nav className="mb-6">
             <ol className="flex items-center space-x-2 text-sm text-gray-600">
               <li><a href="/" className="hover:text-blue-600">ホーム</a></li>
@@ -68,7 +68,7 @@ export default function RequestPage() {
             </ol>
           </nav>
           
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">イラストのリクエスト</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">イラストのリクエスト</h1>
           <div className="prose max-w-none mb-8">
             <p className="text-gray-600 text-lg leading-relaxed">
               AI素材やでは、ユーザーの皆様からのイラストリクエストを受け付けています。
@@ -104,17 +104,17 @@ export default function RequestPage() {
             <p className="text-gray-600">
               下記のGoogleフォームに、ご希望のイラストの詳細をご記入ください。
               できるだけ具体的にご記入いただくと、より良いイラストを制作できます。
-            </p>
+        </p>
           </div>
           
-          <iframe
-            src={formUrl}
+        <iframe
+          src={formUrl}
             className="w-full h-[1200px] border rounded-xl shadow-lg"
             title="イラストリクエストフォーム"
             loading="lazy"
-          />
-        </div>
-      </main>
+        />
+      </div>
+    </main>
     </>
   );
 }

@@ -14,4 +14,4 @@ export interface Illustration {
   updatedAt?: string;
 }
 
-export type Category = 'all' | 'ranking' | 'people' | 'animals' | 'business' | 'food' | 'nature' | 'icons' | 'kids';
+export type Category = 'all' | 'ranking' | 'people' | 'animals' | 'business' | 'food' | 'nature' | 'icons' | 'daily';

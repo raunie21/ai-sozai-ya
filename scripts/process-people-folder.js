@@ -21,6 +21,14 @@ if (!R2_PUBLIC_URL) {
   console.warn('CLOUDFLARE_R2_PUBLIC_URL is not set. URLs may be invalid.');
 }
 
+// Args
+const args = process.argv.slice(2);
+const subfolder = (args[0] || '').toLowerCase();
+if (!subfolder) {
+  console.log('Usage: node scripts/process-people-folder.js <woman|john|sarah|granpa|grandpa>');
+  process.exit(1);
+}
+
 // Clients
 const r2Client = new S3Client({
   region: 'auto',
@@ -45,32 +53,49 @@ function tokenizeFileName(name) {
     .filter(Boolean);
 }
 
-// 英単語 -> 日本語タグの簡易辞書（grandma向け）
+// subject default by folder
+const SUBJECT_BY_FOLDER = new Map([
+  ['woman', '女性'],
+  ['john', '男性'],
+  ['sarah', '女性'],
+  ['granpa', 'おじいちゃん'],
+  ['grandpa', 'おじいちゃん'],
+]);
+
 const TAG_MAP = new Map([
-  // 主語/人物
-  ['grandma', 'おばあちゃん'], ['grandmother', 'おばあちゃん'], ['elderly', '高齢'], ['old', '高齢'], ['woman', '女性'],
+  // 主語/属性
+  ['man', '男性'], ['male', '男性'], ['boy', '男性'], ['guy', '男性'], ['person', '人物'],
+  ['woman', '女性'], ['female', '女性'], ['lady', '女性'],
+  ['grandpa', 'おじいちゃん'], ['granpa', 'おじいちゃん'], ['elderly', '高齢'], ['old', '高齢'],
+  ['japanese', '日本人'], ['young', '若者'],
+
+  // ビジネス/服装
+  ['business', 'ビジネス'], ['office', 'オフィス'], ['worker', 'ビジネスマン'],
+  ['suit', 'スーツ'], ['tie', 'ネクタイ'], ['shirt', 'シャツ'], ['jacket', 'ジャケット'], ['casual', 'カジュアル'],
+
   // 表情
-  ['smile', '笑顔'], ['smiling', '笑顔'], ['happy', '笑顔'], ['angry', '怒り'], ['mad', '怒り'], ['sad', '悲しい'], ['cry', '涙'],
+  ['smile', '笑顔'], ['smiling', '笑顔'], ['angry', '怒り'], ['mad', '怒り'], ['sad', '悲しい'], ['cry', '涙'],
   ['excited', '興奮'], ['yell', '叫ぶ'], ['yelling', '叫ぶ'],
   ['surprise', '驚き'], ['surprised', '驚き'], ['shock', '驚き'], ['confused', '困惑'], ['think', '考える'], ['thinking', '考える'],
+
   // ジェスチャ/姿勢
-  ['point', '指差し'], ['pointing', '指差し'], ['ok', 'OKサイン'], ['okay', 'OKサイン'], ['good', 'グッドサイン'], ['great', 'グッドサイン'], ['thumb', 'サムズアップ'], ['thumbs', 'サムズアップ'], ['thumbsup', 'サムズアップ'], ['wave','手を振る'],
+  ['point', '指差し'], ['pointing', '指差し'], ['ok', 'OKサイン'], ['okay', 'OKサイン'], ['good', 'グッドサイン'],
+  ['great', 'グッドサイン'], ['thumb', 'サムズアップ'], ['thumbs', 'サムズアップ'], ['thumbsup', 'サムズアップ'], ['wave', '手を振る'],
   ['ng', 'バツサイン'], ['no', 'バツサイン'], ['armscross', '腕組み'], ['arms', '腕組み'], ['cross', '腕組み'],
   ['sit', '座る'], ['sitting', '座る'], ['stand', '立つ'], ['standing', '立つ'], ['walk', '歩く'], ['run', '走る'], ['running', '走る'], ['jump', 'ジャンプ'],
+
   // 物/シーン
   ['phone', 'スマホ'], ['smartphone', 'スマホ'], ['call', '通話'], ['talk', '会話'], ['chat', '会話'],
   ['pc', 'パソコン'], ['computer', 'パソコン'], ['laptop', 'ノートPC'], ['present', 'プレゼン'], ['presentation', 'プレゼン'], ['meeting', '会議'],
   ['document', '書類'], ['money', 'お金'], ['coin', 'コイン'], ['yen', '円'],
 ]);
 
-// 日本語タグの同義語拡張
 const TAG_SYNONYMS = new Map([
   ['笑顔', ['スマイル']],
   ['叫ぶ', ['怒鳴る']],
   ['スマホ', ['携帯']],
-  ['サムズアップ', ['いいね', '親指', 'グッド', 'OK', '良い']],
+  ['サムズアップ', ['いいね', '親指', 'グッド']],
   ['OKサイン', ['オーケー', 'OK']],
-  ['バツサイン', ['NG']],
 ]);
 
 function addTagWithSynonyms(tagSet, tag) {
@@ -90,82 +115,84 @@ function extractTrailingNumber(baseName) {
   return m ? m[1] : '';
 }
 
-function generateJapaneseTitleAndTags(fileBase) {
+function generateJapaneseTitleAndTags(fileBase, folder) {
   const tokens = tokenizeFileName(fileBase)
     .map(t => t.replace(/\d+$/, ''))
     .filter(t => !['img', 'image', 'illust', 'illustration', 'ver', 'pose', 'a', 'b'].includes(t));
 
-  // 必須タグ3語を初期付与
-  const tags = new Set(['おばあちゃん', 'おばあさん', 'おばさん']);
-  // 参考用の一般タグ
-  tags.add('人物');
-
-  const baseNameNoExt = fileBase.replace(/\.[^.]+$/, '');
-  const trailingNum = extractTrailingNumber(baseNameNoExt);
-
+  const tags = new Set(['人物']);
+  let subject = SUBJECT_BY_FOLDER.get(folder) || '';
   const found = {
     gesture: new Set(),
     emotion: new Set(),
     action: new Set(),
-    item: new Set(),
+    domain: new Set(),
+    clothing: new Set(),
+    attribute: new Set(),
   };
 
   for (const t of tokens) {
     const mapped = TAG_MAP.get(t);
     if (mapped) {
       addTagWithSynonyms(tags, mapped);
-      if (['指差し','OKサイン','グッドサイン','サムズアップ','バツサイン','腕組み'].includes(mapped)) found.gesture.add(mapped);
+      if (['男性','女性','おじいちゃん','高齢','若者','日本人'].includes(mapped)) {
+        if (!subject && (mapped === '男性' || mapped === '女性' || mapped === 'おじいちゃん')) subject = mapped;
+        if (['高齢','若者','日本人'].includes(mapped)) found.attribute.add(mapped);
+      }
+      if (['ビジネス','オフィス','ビジネスマン','カジュアル'].includes(mapped)) found.domain.add(mapped);
+      if (['スーツ','ネクタイ','シャツ','ジャケット'].includes(mapped)) found.clothing.add(mapped);
+      if (['スマホ','パソコン','ノートPC','書類','お金','コイン','円'].includes(mapped)) found.action.add(mapped);
+      if (['指差し','OKサイン','グッドサイン','サムズアップ','バツサイン','腕組み','手を振る'].includes(mapped)) found.gesture.add(mapped);
       if (['笑顔','悲しい','怒り','驚き','困惑','考える','興奮'].includes(mapped)) found.emotion.add(mapped);
       if (['走る','歩く','立つ','座る','ジャンプ','会議','プレゼン','会話','通話','叫ぶ'].includes(mapped)) found.action.add(mapped);
-      if (['スマホ','パソコン','ノートPC','書類','お金','コイン','円'].includes(mapped)) found.item.add(mapped);
     }
   }
 
-  // タイトル: 「おばあちゃん {主要語}{番号}」
+  const baseNameNoExt = fileBase.replace(/\.[^.]+$/, '');
+  const trailingNum = extractTrailingNumber(baseNameNoExt);
   const numSuffix = trailingNum ? toFullWidthNumber(trailingNum) : '';
+
   let mainTerm = '';
   if (found.gesture.size > 0) mainTerm = Array.from(found.gesture)[0];
   else if (found.emotion.size > 0) mainTerm = Array.from(found.emotion)[0];
   else if (found.action.size > 0) mainTerm = Array.from(found.action)[0];
 
-  const title = mainTerm ? `おばあちゃん ${mainTerm}${numSuffix}` : `おばあちゃん${numSuffix ? ' ' + numSuffix : ''}`;
+  const subjectWord = subject || '人物';
+  const title = mainTerm ? `${subjectWord} ${mainTerm}${numSuffix}` : `${subjectWord}${numSuffix ? ' ' + numSuffix : ''}`;
+
   // 派生タグ
   if (found.gesture.size > 0) tags.add('ジェスチャ');
   if (found.emotion.size > 0) tags.add('感情');
   if (found.action.size > 0) tags.add('動作');
-  return { title, tags: Array.from(tags) };
+  if (found.domain.has('ビジネス')) tags.add('ビジネス');
+  for (const c of found.clothing) tags.add(c);
+  for (const a of found.attribute) tags.add(a);
+
+  // カテゴリ決定
+  const category = tags.has('ビジネス') ? 'business' : 'people';
+  return { title, tags: Array.from(tags), category };
 }
 
-async function listGrandmaObjects() {
-  const prefixesToTry = [
-    'images/originals/grandma/',
-    'ai-sozai-images/images/originals/grandma/',
-    'grandma/'
-  ];
-  for (const Prefix of prefixesToTry) {
-    const results = [];
-    let ContinuationToken = undefined;
-    do {
-      const resp = await r2Client.send(new ListObjectsV2Command({
-        Bucket: BUCKET_NAME,
-        Prefix,
-        ContinuationToken,
-      }));
-      (resp.Contents || []).forEach(o => {
-        if (!o.Key) return;
-        if (o.Key.endsWith('/')) return; // skip directory placeholders
-        if (/-thumb\.(webp|png|jpg|jpeg)$/i.test(o.Key)) return;
-        if (!/\.(png|jpg|jpeg|webp|gif)$/i.test(o.Key)) return;
-        results.push(o.Key);
-      });
-      ContinuationToken = resp.IsTruncated ? resp.NextContinuationToken : undefined;
-    } while (ContinuationToken);
-    if (results.length > 0) {
-      console.log(`🔎 Using prefix: ${Prefix} (found ${results.length})`);
-      return results;
-    }
-  }
-  return [];
+async function listPeopleObjects(folder) {
+  const Prefix = `images/originals/${folder}/`;
+  const results = [];
+  let ContinuationToken = undefined;
+  do {
+    const resp = await r2Client.send(new ListObjectsV2Command({
+      Bucket: BUCKET_NAME,
+      Prefix,
+      ContinuationToken,
+    }));
+    (resp.Contents || []).forEach(o => {
+      if (!o.Key) return;
+      if (o.Key.endsWith('/')) return;
+      if (/-thumb\.(webp|png|jpg|jpeg)$/i.test(o.Key)) return;
+      if (!/\.(png|jpg|jpeg|webp|gif)$/i.test(o.Key)) return;
+      results.push(o.Key);
+    });
+    ContinuationToken = resp.IsTruncated ? resp.NextContinuationToken : undefined;
+  } while (ContinuationToken);
+  return results;
 }
 
 async function findExistingIdByOriginalUrl(originalUrl) {
@@ -221,15 +248,11 @@ async function upsertToDb({ title, imageUrl, thumbnailUrl, originalUrl, category
   }
 }
 
-function decideCategory(tags) {
-  return 'people';
-}
-
 async function main() {
-  console.log('👵 Processing grandma folder...');
-  const keys = await listGrandmaObjects();
+  console.log(`🧑 Processing people folder: ${subfolder} ...`);
+  const keys = await listPeopleObjects(subfolder);
   if (keys.length === 0) {
-    console.log('❌ No images found under: images/originals/grandma/');
+    console.log(`❌ No images found under: images/originals/${subfolder}/`);
     return;
   }
   console.log(`📦 Found ${keys.length} files`);
@@ -238,8 +261,7 @@ async function main() {
   for (const key of keys) {
     try {
       const base = key.split('/').pop() || '';
-      const { title, tags } = generateJapaneseTitleAndTags(base);
-      const category = decideCategory(tags);
+      const { title, tags, category } = generateJapaneseTitleAndTags(base, subfolder);
 
       const originalUrl = R2_PUBLIC_URL ? `${R2_PUBLIC_URL}/${key}` : '';
       const imageUrl = buildResizedUrl(key, 600);
@@ -261,5 +283,8 @@ if (require.main === module) {
     process.exit(1);
   });
 }
+
+
+
 
 
