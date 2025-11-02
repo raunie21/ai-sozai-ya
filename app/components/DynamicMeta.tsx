@@ -33,16 +33,16 @@ export default function DynamicMeta({
     // ページタイプ別のメタデータ生成
     switch (pageType) {
       case 'category':
-        const categoryNames = {
+        const categoryNames: Record<Category, string> = {
           'all': 'すべて',
           'ranking': '人気ランキング',
           'people': '人物',
+          'daily': '日常',
           'animals': '動物',
           'business': 'ビジネス',
           'food': '食べ物',
           'nature': '自然',
-          'icons': 'アイコン',
-          'kids': '子供'
+          'icons': 'アイコン'
         };
         const categoryName = categoryNames[currentCategory] || 'すべて';
         title = `${categoryName}のイラスト一覧 | AIそざいや`;
