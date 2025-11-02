@@ -31,7 +31,15 @@ export default function CategoryLandingPage() {
   }, [all, category]);
 
   const titleMap: Record<Category, string> = {
-    all: 'すべて', ranking: '人気ランキング', people: '人物', animals: '動物', business: 'ビジネス', food: '食べ物', nature: '自然', icons: 'アイコン', kids: 'キッズ'
+    all: 'すべて',
+    ranking: '人気ランキング',
+    people: '人物',
+    daily: '日常',
+    animals: '動物',
+    business: 'ビジネス',
+    food: '食べ物',
+    nature: '自然',
+    icons: 'アイコン'
   };
 
   // タグ一覧（簡易生成）とタグフィルタ（フックは早期returnの前に定義）

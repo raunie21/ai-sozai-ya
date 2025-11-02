@@ -60,7 +60,7 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
       icon: '🗂️',
       items: [
         { title: '人物', href: '/categories/people#breadcrumb', description: '人物のAI 素材' },
-        { title: 'キッズ', href: '/categories/kids#breadcrumb', description: 'キッズのAI 素材' },
+        { title: '日常', href: '/categories/daily#breadcrumb', description: '日常のAI 素材' },
         { title: '動物', href: '/categories/animals#breadcrumb', description: '動物のAI 素材' },
         { title: 'ビジネス', href: '/categories/business#breadcrumb', description: 'ビジネスのAI 素材' },
         { title: '食べ物', href: '/categories/food#breadcrumb', description: '食べ物のAI 素材' },
