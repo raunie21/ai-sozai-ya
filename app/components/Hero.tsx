@@ -34,6 +34,7 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
             {/* ロゴ */}
             <div className="flex items-center space-x-1">
               <div className="w-8 h-8 rounded flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/favicon.svg" alt="AIそざいやicon" className="w-8 h-8 -mt-2 object-contain" />
               </div>
               <div className="space-x-2">

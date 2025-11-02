@@ -1,5 +1,6 @@
 'use client';
 
+/* eslint-disable @next/next/no-img-element */
 import { getImageUrl } from '@/app/utils/imageUrl';
 import { useState } from 'react';
 
