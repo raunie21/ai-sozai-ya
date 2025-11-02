@@ -173,7 +173,7 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
           {/* 統計情報 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 max-w-4xl mx-auto">
             <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">
-              <div className="text-3xl font-bold text-blue-600 mb-2">15,000+</div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">500+</div>
               <div className="text-gray-600 text-sm">素材総数</div>
             </div>
             <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">

@@ -120,7 +120,6 @@ function generateJapaneseTitleAndTags(fileBase, folder) {
   }
 
   if (folder === 'business') tags.add('資料');
-  if (folder === 'food') tags.add('グルメ');
   if (folder === 'daily') tags.add('暮らし');
 
   // 料理名（food）を優先してタイトル化
