@@ -116,6 +116,20 @@ export default function Home() {
     
     // Analytics: カテゴリ変更イベントを追跡
     trackCategoryChange(category);
+    
+    // パンくず位置の少し上へスクロール
+    setTimeout(() => {
+      const element = document.getElementById('breadcrumb');
+      if (element) {
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - 80; // 100px上にオフセット
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
   };
 
   const handleTagClick = (tag: string) => {
@@ -318,6 +332,7 @@ export default function Home() {
                 />
                 
                 {/* パンくずナビゲーション */}
+                <div id="breadcrumb">
                 <Breadcrumb
                   currentCategory={currentCategory}
                   searchQuery={searchQuery}
@@ -325,6 +340,7 @@ export default function Home() {
                   onCategoryChange={handleCategoryChange}
                   onSearchClear={handleSearchClear}
                 />
+                </div>
                 
                 {/* セクションタイトル */}
                 <div className="mb-8 px-4 md:px-6 xl:px-8">

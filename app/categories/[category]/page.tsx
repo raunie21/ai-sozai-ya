@@ -24,6 +24,19 @@ export default function CategoryLandingPage() {
     })();
   }, []);
 
+  // ハッシュ（#breadcrumb）がある場合、パンくず位置へスクロール
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash === '#breadcrumb') {
+      // DOMの描画完了を待つ
+      setTimeout(() => {
+        const element = document.getElementById('breadcrumb');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, [category]);
+
   const filtered = useMemo(() => {
     if (!Array.isArray(all)) return [];
     if (!category) return all;

@@ -3,6 +3,7 @@ import './globals.css';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import Script from 'next/script';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 
 export const metadata: Metadata = {
   title: {
@@ -121,6 +122,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="antialiased">
+        <ScrollToTop />
         <GoogleAnalytics />
         {children}
         <Footer />
