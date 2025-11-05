@@ -1,16 +1,39 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { siteUpdates } from '@/app/data/updates';
+import { useEffect, useState } from 'react';
 
 interface SidebarProps {
   className?: string;
   style?: React.CSSProperties;
 }
 
+type SiteUpdate = { date: string; text: string };
+
 export default function Sidebar({ className = '', style }: SidebarProps) {
   const [expandedSections, setExpandedSections] = useState<string[]>(['ai-sozai']);
+  const [updates, setUpdates] = useState<SiteUpdate[]>([]);
+
+  useEffect(() => {
+    let aborted = false;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/site-updates?limit=4', { cache: 'no-store' });
+        if (!res.ok) throw new Error('failed');
+        const json = await res.json();
+        const list: SiteUpdate[] = (json?.updates || []).map((u: any) => ({ date: u?.date, text: u?.text })).filter((u: any) => u?.date && u?.text);
+        if (!aborted) setUpdates(list);
+      } catch {
+        // フォールバック: 既存の静的データを遅延import
+        import('@/app/data/updates').then(mod => {
+          if (aborted) return;
+          setUpdates((mod.siteUpdates || []).slice(0, 4));
+        }).catch(() => {});
+      }
+    };
+    load();
+    return () => { aborted = true; };
+  }, []);
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => 
@@ -189,7 +212,7 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
             新着情報
           </h3>
           <ul className="space-y-2">
-            {siteUpdates.map((u, idx) => (
+            {updates.map((u, idx) => (
               <li key={idx} className="text-xs text-gray-700">
                 <span className="font-semibold mr-2 text-gray-800">{u.date}</span>
                 <span className="align-middle">{u.text}</span>
