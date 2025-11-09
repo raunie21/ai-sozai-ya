@@ -22,39 +22,45 @@ interface Illustration {
 // 全イラスト取得
 export async function GET() {
   try {
-    // 全イラストのIDを取得（数値IDのみ対象。例: illustration:next_id は除外）
-    const keys = await redis.keys('illustration:*');
-    const idKeys = keys.filter((k) => /^illustration:\d+$/.test(k));
-    
-    if (idKeys.length === 0) {
+    // keys/scan を避け、next_id から1..next_id の範囲で取得して欠番は除外
+    const nextIdRaw = await redis.get('illustration:next_id');
+    const nextId = Number(nextIdRaw || 0);
+    if (!Number.isFinite(nextId) || nextId <= 0) {
       return NextResponse.json({ success: true, illustrations: [] });
     }
 
-    // 全イラストデータを一括取得
-    const illustrations = await redis.mget(...idKeys);
-    
-    // ダウンロード数も取得
-    const downloadKeys = idKeys.map(key => `downloads:${key.split(':')[1]}`);
-    const downloadCounts = await redis.mget(...downloadKeys);
+    const makeKeys = (from: number, to: number) =>
+      Array.from({ length: to - from + 1 }, (_, i) => `illustration:${from + i}`);
+
+    const makeDownloadKeys = (from: number, to: number) =>
+      Array.from({ length: to - from + 1 }, (_, i) => `downloads:${from + i}`);
+
+    const CHUNK = 200; // Upstashへの過大なmgetを避ける
+    const items: any[] = [];
+    for (let start = 1; start <= nextId; start += CHUNK) {
+      const end = Math.min(start + CHUNK - 1, nextId);
+      const idKeys = makeKeys(start, end);
+      const downloadKeys = makeDownloadKeys(start, end);
+      const [chunkIllustrations, chunkDownloads] = await Promise.all([
+        redis.mget(...idKeys),
+        redis.mget(...downloadKeys),
+      ]);
+
+      for (let i = 0; i < idKeys.length; i++) {
+        const raw = (chunkIllustrations as any[])[i];
+        if (!raw) continue;
+        try {
+          const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
+          const downloads = Number((chunkDownloads as any[])[i]) || 0;
+          items.push({ ...data, downloads });
+        } catch {
+          // skip invalid json
+        }
+      }
+    }
 
     // データを整形
-    const result = illustrations.map((illustration, index) => {
-      try {
-        if (!illustration) return null;
-        // データが既にオブジェクトの場合はそのまま使用、文字列の場合はパース
-        const data = typeof illustration === 'string' ? JSON.parse(illustration) : illustration;
-        return {
-          ...data,
-          downloads: Number(downloadCounts[index]) || 0,
-        } as any;
-      } catch (e) {
-        console.warn('Skipping invalid illustration JSON at', idKeys[index]);
-        return null;
-      }
-    }).filter(Boolean) as any[];
-
-    // ID順でソート
-    result.sort((a, b) => a.id - b.id);
+    const result = items.sort((a, b) => a.id - b.id);
 
     const response = NextResponse.json({ 
       success: true, 

@@ -148,6 +148,24 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
         <ImageSlideshow illustrations={illustrations} />
       </div>
 
+      {/* クリスマス特集ボタン（スライドショーとヒーローの間） */}
+      <div className="mt-4 md:mt-6 px-4">
+        <p className="text-center text-red-700 font-semibold text-sm md:text-base mb-2 tracking-wide">\クリスマス関連の素材を追加しました！/</p>
+        <Link
+          href="/christmas"
+          aria-label="クリスマス特集ページへ"
+          className="relative block mx-auto w-[92vw] md:w-[72vw] lg:w-[60vw] text-center py-4 md:py-5 rounded-2xl text-white font-black text-base md:text-lg shadow-xl hover:shadow-2xl transition-all duration-200 bg-[url('/checkpattern2.png')] bg-cover bg-center transform hover:-translate-y-0.5 hover:scale-[1.02] border-2 border-green-600/80 ring-2 md:ring-4 ring-green-600/30"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-xl md:text-2xl">🎄</span>
+            <span className="drop-shadow-md tracking-wide">クリスマス特集を見る！</span>
+          </div>
+          <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full shadow-md">
+            NEW
+          </span>
+        </Link>
+      </div>
+
       {/* ヒーローセクション */}
       <section className="bg-white py-12 md:py-16">
         <div className="max-w-6xl mx-auto px-4 text-center">
@@ -175,7 +193,7 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
           {/* 統計情報 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 max-w-4xl mx-auto">
             <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">
-              <div className="text-3xl font-bold text-blue-600 mb-2">500+</div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">600+</div>
               <div className="text-gray-600 text-sm">素材総数</div>
             </div>
             <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">

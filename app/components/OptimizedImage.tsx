@@ -1,7 +1,5 @@
 'use client';
 
-import Image from 'next/image';
-
 interface OptimizedImageProps {
   src: string;
   alt?: string;
@@ -22,17 +20,18 @@ export default function OptimizedImage({ src, alt = '', className = '', width = 
   const safeAlt = hasAiSozai ? baseAlt : `${baseAlt} - AI 素材`;
 
   return (
-    <Image
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       src={src}
       alt={safeAlt}
       className={className}
       width={width}
       height={height}
-      priority={priority}
-      sizes={sizes}
       title={title}
-      onError={onError}
+      loading={priority ? 'eager' : 'lazy'}
       fetchPriority={fetchPriority}
+      onError={onError}
+      sizes={sizes}
     />
   );
 }

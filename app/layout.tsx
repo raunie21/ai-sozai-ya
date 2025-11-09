@@ -77,12 +77,11 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://img.ai-sozaiya.com" />
         <link rel="preconnect" href="https://www.googletagservices.com" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
-        {/* Google AdSense */}
-        <Script
+        {/* Google AdSense - use native script tag to avoid data-nscript attribute */}
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6554623340823430"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
         {/* AdSense サイト所有権確認用メタタグ */}
         <meta name="google-adsense-account" content="ca-pub-6554623340823430" />

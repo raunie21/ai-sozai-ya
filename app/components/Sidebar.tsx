@@ -130,6 +130,7 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
   return (
     <aside className={className} style={style}>
       <div className="p-4">
+      
         <h2 className="text-base font-bold text-gray-800 mb-4 flex items-center">
           <span className="text-lg mr-2">📚</span>
           サイト内記事
@@ -179,6 +180,14 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
             </div>
           ))}
         </nav>
+          {/* クリスマス特集ボタン */}
+          <Link
+          href="/christmas"
+          aria-label="クリスマス特集ページへ"
+          className="block w-full mt-4 text-center py-3 rounded-xl text-white font-bold text-sm shadow-md hover:shadow-lg transition-all duration-200 bg-[url('/checkpattern2.png')] bg-cover bg-center transform hover:-translate-y-0.5"
+        >
+          🎄クリスマス特集を見る　
+        </Link>
 
         {/* 人気記事セクション */}
         <div className="mt-6 p-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-100">

@@ -42,18 +42,23 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     console.log('GET /api/downloads called');
-    // 既存のイラストIDを動的に列挙
-    const illustrationKeys = await redis.keys('illustration:*');
-    const ids = illustrationKeys
-      .map((k) => k.split(':')[1])
-      .filter(Boolean);
-    const keys = ids.map((id) => `downloads:${id}`);
-    const values = keys.length > 0 ? await redis.mget<number[]>(...keys) : [];
+    // keys/scan を避け、next_id から1..next_id の範囲で取得
+    const nextIdRaw = await redis.get('illustration:next_id');
+    const nextId = Number(nextIdRaw || 0);
     const downloads: Record<string, number> = {};
-    ids.forEach((id, idx) => {
-      const v = (values?.[idx] ?? 0) as number;
-      downloads[id.toString()] = Number(v || 0);
-    });
+    if (Number.isFinite(nextId) && nextId > 0) {
+      const CHUNK = 300;
+      for (let start = 1; start <= nextId; start += CHUNK) {
+        const end = Math.min(start + CHUNK - 1, nextId);
+        const keys = Array.from({ length: end - start + 1 }, (_, i) => `downloads:${start + i}`);
+        const values = await redis.mget<number[]>(...keys);
+        for (let i = 0; i < keys.length; i++) {
+          const id = (start + i).toString();
+          const v = (values?.[i] ?? 0) as number;
+          downloads[id] = Number(v || 0);
+        }
+      }
+    }
     
     console.log('Returning download counts:', downloads);
     
