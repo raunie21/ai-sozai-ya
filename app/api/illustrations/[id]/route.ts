@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Redis } from '@upstash/redis';
 
+export const runtime = 'edge';
+
 const redis = Redis.fromEnv();
 
 // 個別イラスト取得
@@ -38,6 +40,8 @@ export async function GET(
     response.headers.set('Access-Control-Allow-Origin', '*');
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    // Cache headers（CDNキャッシュを効かせてTTFB短縮）
+    response.headers.set('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=600');
 
     return response;
   } catch (error) {

@@ -32,7 +32,7 @@ export default function Footer() {
     {
       title: 'SNS',
       links: [
-        { name: 'Twitter', url: 'https://twitter.com/ai_sozaiya' }
+        { name: 'Xアカウント', url: 'https://twitter.com/ai_sozaiya' }
       ]
     }
   ];

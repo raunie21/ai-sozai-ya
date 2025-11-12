@@ -114,6 +114,11 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
       icon: '📋',
       items: [
         {
+          title: 'AI生成素材のポリシー',
+          href: '/articles/ai-policy',
+          description: '品質・権利リスク回避の方針とガイドライン'
+        },
+        {
           title: '利用規約',
           href: '/terms',
           description: '商用利用に関する重要な規約'
@@ -233,19 +238,19 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
         {/* SNSリンク */}
         <div className="mt-4 p-3 bg-gray-50 rounded-lg">
           <h3 className="font-medium text-sm text-gray-800 mb-2 flex items-center">
-            <span className="text-base mr-1">🐦</span>
-            フォロー
+            <span className="text-base mr-1">✖️</span>
+            SNSアカウント
           </h3>
           <a
             href="https://twitter.com/ai_sozaiya"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-md transition-colors duration-200"
+            className="inline-flex items-center px-3 py-1.5 bg-black hover:bg-black/90 text-white text-xs rounded-md transition-colors duration-200"
           >
-            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            <svg className="w-3 h-3 mr-1" viewBox="0 0 1200 1227" xmlns="http://www.w3.org/2000/svg">
+              <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z" fill="white"/>
             </svg>
-            Twitter
+            Xで開く
           </a>
         </div>
       </div>

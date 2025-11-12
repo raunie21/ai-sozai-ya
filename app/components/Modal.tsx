@@ -133,6 +133,21 @@ export default function Modal({
             <p className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800 mb-3 lg:mb-4">
               {illustration.title}
             </p>
+            {/* 個別ページへの小リンク */}
+            <div className="mb-4 -mt-2">
+              <a
+                href={`/illustrations/${illustration.id}/`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                個別ページを開く
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 3h7m0 0v7m0-7L10 14" />
+                </svg>
+              </a>
+            </div>
             
             <p className={`text-indigo-600 font-medium mb-6 lg:mb-8 transition-all duration-300 ${showCountUpdate ? 'scale-110 text-green-600' : ''}`}>
               <span className="inline-flex items-center gap-2 lg:justify-start">

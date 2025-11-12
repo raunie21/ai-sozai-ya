@@ -105,6 +105,26 @@ export default function IllustrationDetailPage() {
     );
   }
 
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const tweetText = encodeURIComponent(`${data.title} | AIそざいや`);
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(currentUrl)}`;
+
+  const copyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      alert('URLをコピーしました');
+    } catch {
+      // フォールバック
+      const input = document.createElement('input');
+      input.value = currentUrl;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      alert('URLをコピーしました');
+    }
+  };
+
   return (
     <main className="max-w-4xl mx-auto px-4 py-12">
       {jsonLd && (
@@ -149,11 +169,34 @@ export default function IllustrationDetailPage() {
         </div>
       )}
 
-      {data.originalUrl && (
-        <div className="mt-8">
+      {/* ダウンロード＋共有（横並び、同じ高さ） */}
+      <div className="mt-8 flex items-center justify-between gap-3 flex-wrap">
+        {data.originalUrl && (
           <a href={data.originalUrl} className="inline-flex items-center px-6 py-3 rounded-full bg-blue-600 text-white hover:bg-blue-700">高解像度をダウンロード</a>
+        )}
+        <div className="ml-auto flex items-center gap-2">
+          <a
+            href={tweetUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-3 py-3 rounded-full border text-xs text-gray-700 hover:bg-gray-50"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 1200 1227" xmlns="http://www.w3.org/2000/svg">
+              <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z" fill="currentColor"/>
+            </svg>
+            Xで共有
+          </a>
+          <button
+            onClick={copyUrl}
+            className="inline-flex items-center gap-2 px-3 py-3 rounded-full border text-xs text-gray-700 hover:bg-gray-50"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8z"/>
+            </svg>
+            URLをコピー
+          </button>
         </div>
-      )}
+      </div>
 
       {(prevItem || nextItem) && (
         <div className="mt-10 flex justify-between gap-3">
