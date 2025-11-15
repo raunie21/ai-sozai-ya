@@ -74,6 +74,11 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
           title: '素材使用例まとめ',
           href: '/articles/usage-examples',
           description: 'サムネ・動画編集・ポスターの作り方'
+        },
+        {
+          title: '画像生成AI比較と商用ガイド',
+          href: '/articles/ai-services-comparison',
+          description: '主要サービスの規約・商用可否まとめ'
         }
       ]
     },
@@ -238,7 +243,7 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
         {/* SNSリンク */}
         <div className="mt-4 p-3 bg-gray-50 rounded-lg">
           <h3 className="font-medium text-sm text-gray-800 mb-2 flex items-center">
-            <span className="text-base mr-1">✖️</span>
+            <span className="text-base mr-1">👤</span>
             SNSアカウント
           </h3>
           <a

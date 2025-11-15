@@ -106,7 +106,8 @@ export default function IllustrationDetailPage() {
   }
 
   const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const tweetText = encodeURIComponent(`${data.title} | AIそざいや`);
+  const newline = '\n';
+  const tweetText = encodeURIComponent(`${data.title} | AIそざいやで無料ダウンロード ${newline}商用利用も可能なフリー素材サイト${newline}${newline}#AI生成 #フリー素材 #商用利用 #無料ダウンロード #AIそざいや${newline}`);
   const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(currentUrl)}`;
 
   const copyUrl = async () => {

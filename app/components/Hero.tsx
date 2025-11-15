@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Category, Illustration } from '../types/illustration';
 import Link from 'next/link';
 import ImageSlideshow from './ImageSlideshow';
+import OptimizedImage from './OptimizedImage';
 
 interface HeroProps {
   onSearch: (query: string) => void;
@@ -179,6 +180,8 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
             <br />
             AI 素材 は背景透過済みで使いやすい状態で配布しています。
             <br />
+            全て<strong className="text-blue-600 font-semibold">手作業で背景透過</strong>を行うことで素材の品質を高めています。
+            <br />
             AIで生成だからこそできる高画質の無料素材画像
             <br />
             商用利用OK・クレジット表記不要の高品質AI生成画像
@@ -258,6 +261,50 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
             <p className="text-gray-500 text-sm mt-3">
               商用利用に関する重要な規約をお読みください
             </p>
+          </div>
+
+          {/* 記事カード（最大4件。優先: ai-policy, usage-examples） */}
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 px-2 sm:px-4 md:px-0">
+            {(() => {
+              const all = [
+                  { href: '/articles/ai-services-comparison', title: '画像生成AIサービス比較と商用ガイド', img: '/articles/ai-service-comparison/簡易的な背景削除機能の結果.png' },
+                { href: '/articles/ai-policy', title: 'AI生成素材のポリシー', img: '/favicon.svg' },
+                { href: '/articles/usage-examples', title: '素材使用例まとめ', img: '/articles/usage-examples/動画編集素材使用例.png' },
+                { href: '/ai-sozai/commercial', title: '商用利用ガイド', img: '/favicon.svg' },
+                { href: '/ai-sozai/how-to', title: '素材の使い方', img: '/favicon.svg' },
+                { href: '/ai-sozai/free', title: 'フリー素材まとめ', img: '/favicon.svg' },
+              ];
+              const priority = ['/articles/ai-services-comparison', '/articles/ai-policy', '/articles/usage-examples'];
+              const ordered = [
+                ...all.filter(a => priority.includes(a.href)),
+                ...all.filter(a => !priority.includes(a.href)),
+              ];
+              return ordered.slice(0, 4);
+            })().map((a, idx) => (
+              <a key={idx} href={a.href} className="group relative block rounded-xl border border-gray-200 hover:border-gray-300 overflow-hidden bg-white transition-shadow hover:shadow-md">
+                {/* NEWバッジ（最新の記事に表示） */}
+                {a.href === '/articles/ai-services-comparison' && (
+                  <span className="absolute top-2 right-2 z-10 rounded-full bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 shadow-md">
+                    NEW
+                  </span>
+                )}
+                <div className="aspect-[16/9] bg-gray-50">
+                  <OptimizedImage
+                    src={a.img}
+                    alt={a.title}
+                    width={800}
+                    height={450}
+                    className="w-full h-full object-cover"
+                    title={a.title}
+                  />
+                </div>
+                <div className="p-2 sm:p-3">
+                  <div className="text-xs sm:text-sm font-semibold text-gray-800 group-hover:text-blue-700 line-clamp-2">
+                    {a.title}
+                  </div>
+                </div>
+              </a>
+            ))}
           </div>
         </div>
       </section>
