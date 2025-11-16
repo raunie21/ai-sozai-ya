@@ -26,10 +26,13 @@ export default function NinjaBanner({ src, className = '', label = 'スポンサ
   return (
     <div className={`w-full flex items-center justify-center ${className}`}>
       <div className="w-full max-w-[728px]">
-        <div className="text-[11px] text-gray-500 mb-1"> {label} </div>
-        {/* 高さを確保してCLSを防止。SPでは高さ60、MD以上は90を目安 */}
-        <div className="w-full min-h-[60px] md:min-h-[90px] flex items-center justify-center border border-gray-200/60 rounded-md bg-white">
-          <div ref={containerRef} className="w-full flex items-center justify-center" />
+        <div className="text-[11px] text-gray-500 mb-1">{label}</div>
+        {/* 高さを固定して過度な余白を防止（SP: 60px / MD+: 90px） */}
+        <div className="w-full h-[60px] md:h-[90px] overflow-hidden flex items-center justify-center border border-gray-200/60 rounded-md bg-white">
+          <div
+            ref={containerRef}
+            className="w-full h-full flex items-center justify-center"
+          />
         </div>
       </div>
     </div>

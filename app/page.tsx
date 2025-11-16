@@ -12,6 +12,7 @@ import Breadcrumb from './components/Breadcrumb';
 import ResponsiveAd from './components/ResponsiveAd';
 import InFeedAd from './components/InFeedAd';
 import HorizontalAd from './components/HorizontalAd';
+import NinjaBanner from './components/NinjaBanner';
 import { ADS_CONFIG } from './config/ads';
 import { fetchIllustrations } from './utils/illustrations';
 import { Illustration, Category } from './types/illustration';
@@ -324,12 +325,7 @@ export default function Home() {
             <div className="w-full">
                 <Stats />
                 
-                {/* ヘッダー下横長広告 */}
-                <HorizontalAd 
-                  adSlot={ADS_CONFIG.AD_SLOTS.HEADER_BANNER} 
-                  className="mb-8" 
-                  position="header-below"
-                />
+                {/* ヘッダー下横長広告はHero直下のNinjaBannerに統一（ここでは非表示） */}
                 
                 {/* パンくずナビゲーション */}
                 <div id="breadcrumb">
@@ -441,9 +437,11 @@ export default function Home() {
                     </div>
                     
                     {/* コンテンツ下横長広告（忍者AdMax） */}
-                    <div className="mt-12">
-                      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-                      <script src="https://adm.shinobi.jp/s/919523c348364153cd672b6ea9f865dc"></script>
+                    <div className="mt-8">
+                      <NinjaBanner
+                        src="https://adm.shinobi.jp/s/919523c348364153cd672b6ea9f865dc"
+                        label="スポンサーリンク"
+                      />
                     </div>
                     </div>
                   </div>
@@ -473,8 +471,10 @@ export default function Home() {
         
         {/* フッター上横長広告（忍者AdMax） */}
         <div className="bg-gray-50 py-8">
-          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-          <script src="https://adm.shinobi.jp/s/919523c348364153cd672b6ea9f865dc"></script>
+          <NinjaBanner
+            src="https://adm.shinobi.jp/s/919523c348364153cd672b6ea9f865dc"
+            label="スポンサーリンク"
+          />
         </div>
         
         <Footer />
