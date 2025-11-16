@@ -5,6 +5,7 @@ import { Category, Illustration } from '../types/illustration';
 import Link from 'next/link';
 import ImageSlideshow from './ImageSlideshow';
 import OptimizedImage from './OptimizedImage';
+import NinjaBanner from './NinjaBanner';
 
 interface HeroProps {
   onSearch: (query: string) => void;
@@ -263,6 +264,7 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
             </p>
           </div>
 
+          
           {/* 記事カード（最大4件。優先: ai-policy, usage-examples） */}
           <div className="mt-6 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 px-2 sm:px-4 md:px-0">
             {(() => {
@@ -306,6 +308,14 @@ export default function Hero({ onSearch, illustrations }: HeroProps) {
               </a>
             ))}
           </div>
+          {/* 横長バナー（忍者AdMax） - ヒーロー直下 */}
+          <div className="mt-4 md:mt-6">
+            <NinjaBanner
+              src="https://adm.shinobi.jp/s/919523c348364153cd672b6ea9f865dc"
+              label="スポンサーリンク"
+            />
+          </div>
+
         </div>
       </section>
     </div>

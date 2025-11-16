@@ -6,6 +6,7 @@ import IllustrationCard from './IllustrationCard';
 import RankingItem from './RankingItem';
 import InFeedAd from './InFeedAd';
 import AdCard from './AdCard';
+import NinjaAdCard from './NinjaAdCard';
 import { ADS_CONFIG } from '../config/ads';
 
 interface GalleryProps {
@@ -76,12 +77,8 @@ export default function Gallery({ illustrations, currentCategory, searchQuery, o
             const items: React.ReactNode[] = [];
             // 10カードに1回広告（0始まりindexで9, 19, 29...の直後に差し込む）
             const shouldInsertAdAfter = (index: number) => (index + 1) % 10 === 0;
-            const adSlots = [
-              ADS_CONFIG.AD_SLOTS.CARD_AD_1,
-              ADS_CONFIG.AD_SLOTS.CARD_AD_2,
-              ADS_CONFIG.AD_SLOTS.CARD_AD_3,
-              ADS_CONFIG.AD_SLOTS.CARD_AD_4
-            ];
+            // 忍者AdMax ギャラリー用タグ
+            const ninjaSrc = 'https://adm.shinobi.jp/s/c49b04fbe543cca19f0fdad759004003';
             
             illustrations.forEach((illustration, index) => {
               // イラストカードを追加
@@ -95,16 +92,13 @@ export default function Gallery({ illustrations, currentCategory, searchQuery, o
                 </div>
               );
               
-              // 10件ごとに広告カードを挿入（用意済みの4枠を循環使用）
+              // 10件ごとに広告カードを挿入（忍者AdMaxタグ）
               if (shouldInsertAdAfter(index)) {
-                const cycle = Math.floor(index / 10) % adSlots.length;
                 items.push(
-                  <AdCard
-                    key={`ad-${index}`}
-                    adSlot={adSlots[cycle]}
-                    position={`gallery-${index + 1}`}
-                    index={index}
-                  />
+                  // SP: 行全幅（>=300px確保）、MD以上: 通常カード1枠として配置
+                  <div key={`ninja-ad-${index}`} className="col-span-2 sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1">
+                    <NinjaAdCard src={ninjaSrc} />
+                  </div>
                 );
               }
             });

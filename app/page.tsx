@@ -440,12 +440,11 @@ export default function Home() {
                       </a>
                     </div>
                     
-                    {/* コンテンツ下横長広告 */}
-                    <HorizontalAd 
-                      adSlot={ADS_CONFIG.AD_SLOTS.CONTENT_BANNER} 
-                      className="mt-12" 
-                      position="content-below"
-                    />
+                    {/* コンテンツ下横長広告（忍者AdMax） */}
+                    <div className="mt-12">
+                      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+                      <script src="https://adm.shinobi.jp/s/919523c348364153cd672b6ea9f865dc"></script>
+                    </div>
                     </div>
                   </div>
 
@@ -472,12 +471,11 @@ export default function Home() {
           onTagClick={handleTagClick}
         />
         
-        {/* フッター上横長広告 */}
-        <HorizontalAd 
-          adSlot={ADS_CONFIG.AD_SLOTS.FOOTER_BANNER} 
-          className="bg-gray-50 py-8" 
-          position="footer-above"
-        />
+        {/* フッター上横長広告（忍者AdMax） */}
+        <div className="bg-gray-50 py-8">
+          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+          <script src="https://adm.shinobi.jp/s/919523c348364153cd672b6ea9f865dc"></script>
+        </div>
         
         <Footer />
       </div>
