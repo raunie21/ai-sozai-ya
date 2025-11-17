@@ -84,7 +84,10 @@ export default function ChristmasPage() {
     return 'その他';
   };
 
-  const classified = useMemo(() => illustrations.map(ill => ({ ill, element: classify(ill) })), [illustrations]);
+  const classified = useMemo(
+    () => illustrations.map(ill => ({ ill, element: classify(ill) })),
+    [illustrations, classify]
+  );
 
   const elementCounts = useMemo(() => {
     const counts: Record<ElementKey, number> = {

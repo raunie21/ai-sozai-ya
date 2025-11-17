@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, CSSProperties } from 'react';
 
 interface NinjaAdCardProps {
   src: string; // shinobi script src
@@ -77,13 +77,13 @@ export default function NinjaAdCard({ src, className = '', label = 'スポンサ
     }
   }, []);
 
-  const innerStyle: React.CSSProperties = {
+  const innerStyle: CSSProperties = {
     width: 300,
     height: 250,
     transform: `scale(${scale})`,
     transformOrigin: 'top center',
   };
-  const outerStyle: React.CSSProperties = {
+  const outerStyle: CSSProperties = {
     height: 250 * scale, // スケールに応じて外枠の高さを調整してレイアウト崩れを防ぐ
   };
 
