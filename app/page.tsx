@@ -367,37 +367,37 @@ export default function Home() {
                     <div className="text-gray-600 mt-2 text-sm">
                       {currentCategory === 'people' && (
                         <>
-                          人物のAI 素材（無料）。<a href="/categories/people" className="text-blue-600 hover:underline">人物カテゴリ一覧</a> ／ <a href="/ai-sozai/how-to" className="text-blue-600 hover:underline">使い方</a>
+                          人物のAI 素材（無料）。<a href="/categories/people" className="text-blue-600 hover:underline">人物カテゴリ一覧（タグで絞り込む）</a> ／ <a href="/ai-sozai/how-to" className="text-blue-600 hover:underline">使い方</a>
                         </>
                       )}
                       {currentCategory === 'animals' && (
                         <>
-                          動物のAI 素材（無料）。<a href="/categories/animals" className="text-blue-600 hover:underline">動物カテゴリ一覧</a> ／ <a href="/ai-sozai/free" className="text-blue-600 hover:underline">フリー素材</a>
+                          動物のAI 素材（無料）。<a href="/categories/animals" className="text-blue-600 hover:underline">動物カテゴリ一覧（タグで絞り込む）</a> ／ <a href="/ai-sozai/free" className="text-blue-600 hover:underline">フリー素材</a>
                         </>
                       )}
                       {currentCategory === 'business' && (
                         <>
-                          ビジネス向けAI 素材（無料）。<a href="/categories/business" className="text-blue-600 hover:underline">ビジネスカテゴリ一覧</a> ／ <a href="/ai-sozai/commercial" className="text-blue-600 hover:underline">商用利用</a>
+                          ビジネス向けAI 素材（無料）。<a href="/categories/business" className="text-blue-600 hover:underline">ビジネスカテゴリ一覧（タグで絞り込む）</a> ／ <a href="/ai-sozai/commercial" className="text-blue-600 hover:underline">商用利用</a>
                         </>
                       )}
                       {currentCategory === 'food' && (
                         <>
-                          食べ物のAI 素材（無料）。<a href="/categories/food" className="text-blue-600 hover:underline">食べ物カテゴリ一覧</a>
+                          食べ物のAI 素材（無料）。<a href="/categories/food" className="text-blue-600 hover:underline">食べ物カテゴリ一覧（タグで絞り込む）</a>
                         </>
                       )}
                       {currentCategory === 'nature' && (
                         <>
-                          自然のAI 素材（無料）。<a href="/categories/nature" className="text-blue-600 hover:underline">自然カテゴリ一覧</a>
+                          自然のAI 素材（無料）。<a href="/categories/nature" className="text-blue-600 hover:underline">自然カテゴリ一覧（タグで絞り込む）</a>
                         </>
                       )}
                       {currentCategory === 'daily' && (
                         <>
-                          日常のAI 素材（無料）。<a href="/categories/daily" className="text-blue-600 hover:underline">日常カテゴリ一覧</a>
+                          日常のAI 素材（無料）。<a href="/categories/daily" className="text-blue-600 hover:underline">日常カテゴリ一覧（タグで絞り込む）</a>
                         </>
                       )}
                       {currentCategory === 'icons' && (
                         <>
-                          アイコン素材（無料）。<a href="/categories/icons" className="text-blue-600 hover:underline">アイコンカテゴリ一覧</a>
+                          アイコン素材（無料）。<a href="/categories/icons" className="text-blue-600 hover:underline">アイコンカテゴリ一覧（タグで絞り込む）</a>
                         </>
                       )}
                     </div>

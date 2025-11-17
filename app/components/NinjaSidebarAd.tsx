@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-interface NinjaBannerProps {
-  src: string; // shinobi script src
+interface NinjaSidebarAdProps {
+  src: string;
   className?: string;
   label?: string;
 }
 
-export default function NinjaBanner({ src, className = '', label = 'スポンサーリンク' }: NinjaBannerProps) {
+export default function NinjaSidebarAd({ src, className = '', label = 'スポンサーリンク' }: NinjaSidebarAdProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mountedRef = useRef(false);
   const [collapsed, setCollapsed] = useState(false);
@@ -17,9 +17,9 @@ export default function NinjaBanner({ src, className = '', label = 'スポンサ
     if (mountedRef.current) return;
     mountedRef.current = true;
     if (!containerRef.current) return;
-    containerRef.current.innerHTML = '';
 
-    // iframe を使ってそのドキュメント内で同期的に script を実行（document.write エラー回避）
+    // iframe 内で同期的に script を実行して document.write を許可
+    containerRef.current.innerHTML = '';
     const iframe = document.createElement('iframe');
     iframe.setAttribute('frameborder', '0');
     iframe.setAttribute('scrolling', 'no');
@@ -57,16 +57,11 @@ export default function NinjaBanner({ src, className = '', label = 'スポンサ
   if (collapsed) return null;
 
   return (
-    <div className={`w-full flex items-center justify-center ${className}`}>
-      <div className="w-full max-w-[728px]">
-        <div className="text-[11px] text-gray-500 mb-1">{label}</div>
-        {/* 高さを固定して過度な余白を防止（SP: 60px / MD+: 90px） */}
-        <div className="w-full h-[60px] md:h-[90px] overflow-hidden flex items-center justify-center border border-gray-200/60 rounded-md bg-white">
-          <div
-            ref={containerRef}
-            className="w-full h-full flex items-center justify-center"
-          />
-        </div>
+    <div className={className}>
+      <div className="text-[11px] text-gray-500 mb-2">{label}</div>
+      {/* サイドバー幅に合わせ、縦長（例: 300x600）を想定して高さ固定 */}
+      <div className="w-full h-[600px] overflow-hidden border border-gray-200/60 rounded-md bg-white flex items-center justify-center">
+        <div ref={containerRef} className="w-full h-full" />
       </div>
     </div>
   );

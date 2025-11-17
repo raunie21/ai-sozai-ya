@@ -22,12 +22,18 @@ export default function OptimizedImage({ src, alt = '', className = '', width = 
   // Cloudflare Image Resizing を使った srcset 生成（幅 320/480/600/900）
   const buildSrcSet = (url: string): string | undefined => {
     if (!url || url.indexOf('/cdn-cgi/image/') === -1) return undefined;
-    // width パラメータを置換
+    // 画像ファイル拡張子が無い/不正なURLは srcset 生成をスキップ
+    try {
+      const u = new URL(url, typeof window !== 'undefined' ? window.location.origin : 'https://dummy.local');
+      const pathname = u.pathname || '';
+      if (!/\.[a-zA-Z0-9]{2,4}$/.test(pathname)) return undefined;
+    } catch {
+      return undefined;
+    }
+    // width パラメータを置換。srcset の区切りと衝突しないようにカンマを %2C にエンコード
     const replaceWidth = (u: string, w: number) =>
-      u.replace(/(cdn-cgi\/image\/)([^/]+)/, (_m, p1) => `${p1}width=${w},height=${w},fit=cover,gravity=center`);
-    const candidates = [
-      { w: 320 }, { w: 480 }, { w: 600 }, { w: 900 }
-    ];
+      u.replace(/(cdn-cgi\/image\/)([^/]+)/, (_m, p1) => `${p1}${encodeURIComponent(`width=${w},height=${w},fit=cover,gravity=center`)}`);
+    const candidates = [{ w: 320 }, { w: 480 }, { w: 600 }, { w: 900 }];
     return candidates.map(c => `${replaceWidth(url, c.w)} ${c.w}w`).join(', ');
   };
 

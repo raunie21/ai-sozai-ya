@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import NinjaSidebarAd from './NinjaSidebarAd';
 
 interface SidebarProps {
   className?: string;
@@ -257,6 +258,14 @@ export default function Sidebar({ className = '', style }: SidebarProps) {
             </svg>
             Xで開く
           </a>
+        </div>
+
+        {/* サイドバー最下部の縦長バナー（忍者AdMax） */}
+        <div className="mt-6">
+          <NinjaSidebarAd
+            src="https://adm.shinobi.jp/s/c3330b0ac56f403342a1aeb8f9750083"
+            label="スポンサーリンク"
+          />
         </div>
       </div>
     </aside>
