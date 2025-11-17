@@ -13,6 +13,7 @@ export default function NinjaAdCard({ src, className = '', label = 'スポンサ
   const containerRef = useRef<HTMLDivElement | null>(null);  // 実際にタグを挿入する内枠（300x250想定）
   const mountedRef = useRef(false);
   const [scale, setScale] = useState(1);
+  const [offset, setOffset] = useState(0); // 内側キャンバスの左オフセット（px）で中央寄せ
 
   useEffect(() => {
     if (mountedRef.current) return;
@@ -49,8 +50,14 @@ export default function NinjaAdCard({ src, className = '', label = 'スポンサ
 
     const compute = () => {
       const w = el.clientWidth || 0;
-      const s = Math.min(1, Math.max(0, w / 300)); // 基準幅300、拡大はしない
-      setScale(s || 1);
+      // サブピクセル誤差を考慮して 1px 引いた値でスケールを算出（拡大はしない）
+      const sRaw = Math.min(1, Math.max(0, (w - 1) / 300));
+      const s = sRaw ? parseFloat(sRaw.toFixed(3)) : 1;
+      setScale(s);
+      // スケール後の実幅を基準に中央寄せのためのオフセット(px)を算出
+      const scaledW = 300 * s;
+      const off = Math.max(0, (w - scaledW) / 2);
+      setOffset(off);
     };
 
     // 初回計算
@@ -84,22 +91,27 @@ export default function NinjaAdCard({ src, className = '', label = 'スポンサ
   const innerStyle: CSSProperties = {
     width: 300,
     height: 250,
+    position: 'absolute',
+    left: offset,
+    top: 0,
     transform: `scale(${scale})`,
-    transformOrigin: 'top center',
+    transformOrigin: 'top left',
   };
   const outerStyle: CSSProperties = {
-    height: 250 * scale, // スケールに応じて外枠の高さを調整してレイアウト崩れを防ぐ
+    // 幅はグリッドの列幅に合わせる（100%）
+    // 高さのみスケールに応じて調整し、はみ出しを防ぐ
+    height: 250 * scale,
   };
 
   return (
     <div className={`bg-white/90 border border-white/20 rounded-2xl p-3 md:p-4 shadow-lg mb-3 md:mb-5 ${className}`}>
       <div
         ref={slotRef}
-        className="w-full overflow-hidden rounded-md flex justify-center items-start"
+        className="w-full overflow-hidden rounded-md relative"
         style={outerStyle}
       >
         {/* 300x250 の生キャンバスにタグを描画し、外枠に対してスケーリング */}
-        <div ref={containerRef} style={innerStyle} />
+        <div ref={containerRef} style={{ ...innerStyle, display: 'block' }} />
       </div>
       <div className="mt-2 text-[11px] text-gray-500 text-center">{label}</div>
     </div>
