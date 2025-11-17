@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import Head from 'next/head';
 import { Illustration } from '../types/illustration';
 import { fetchIllustrations } from '../utils/illustrations';
@@ -52,7 +52,7 @@ export default function ChristmasPage() {
   const ELEMENTS = ['サンタ','動物','食べ物','植物','装飾','フレーム','建物','その他'] as const;
   type ElementKey = typeof ELEMENTS[number];
 
-  const getFileName = (ill: Illustration): string => {
+  const getFileName = useCallback((ill: Illustration): string => {
     const url = ill.originalUrl || ill.imageUrl || ill.thumbnailUrl || '';
     try {
       const pathname = new URL(url).pathname;
@@ -61,9 +61,9 @@ export default function ChristmasPage() {
     } catch {
       return (url.split('/').pop() || '').toLowerCase();
     }
-  };
+  }, []);
 
-  const classify = (ill: Illustration): ElementKey => {
+  const classify = useCallback((ill: Illustration): ElementKey => {
     const file = getFileName(ill).replace(/\.[^.]+$/, '');
     // サンタ
     if (file.startsWith('santaclaus')) return 'サンタ';
@@ -82,12 +82,11 @@ export default function ChristmasPage() {
     // その他（スノーフレーク/スター/チェック/文字/バッジ/矢印など）
     if (/^(snowflake\d+|stars\d+|checkpattern\d*|merrychristmastext1|happyholidays(1|2)|badge(-sale)?\d+|arrowpointing\d+)$/.test(file)) return 'その他';
     return 'その他';
-  };
+  }, [getFileName]);
 
-  const classified = useMemo(
-    () => illustrations.map(ill => ({ ill, element: classify(ill) })),
-    [illustrations, classify]
-  );
+  const classified = useMemo(() => {
+    return illustrations.map(ill => ({ ill, element: classify(ill) }));
+  }, [illustrations, classify]);
 
   const elementCounts = useMemo(() => {
     const counts: Record<ElementKey, number> = {
