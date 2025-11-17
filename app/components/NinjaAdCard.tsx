@@ -69,14 +69,15 @@ export default function NinjaAdCard({ src, className = '', label = 'スポンサ
       };
     } else {
       // フォールバック: window.resize
-      if (typeof window !== 'undefined') {
+      const win: any = typeof window !== 'undefined' ? (window as any) : undefined;
+      if (win && typeof win.addEventListener === 'function') {
         const onResize = () => compute();
-        window.addEventListener('resize', onResize);
+        win.addEventListener('resize', onResize);
         return () => {
-          window.removeEventListener('resize', onResize);
+          win.removeEventListener('resize', onResize);
         };
       }
-      return;
+      return () => {};
     }
   }, []);
 
